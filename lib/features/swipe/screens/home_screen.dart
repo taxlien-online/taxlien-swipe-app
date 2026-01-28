@@ -42,6 +42,7 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
   bool _isLoading = true;
   String? _error;
   UserPreferences _preferences = UserPreferences.defaults;
+  bool _foreclosureFilterMode = false; // Foreclosure filter for Miw (sdd-miw-gift)
 
   @override
   void initState() {
@@ -74,10 +75,25 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
 
     try {
       final taxLienService = TaxLienService();
-      final properties = await taxLienService.searchLiens();
+      final List<TaxLien> properties;
+      
+      if (_foreclosureFilterMode) {
+        // Load foreclosure candidates (sdd-miw-gift integration)
+        properties = await taxLienService.searchForeclosureCandidates(
+          state: 'AZ',
+          priorYearsMin: 2,
+          maxAmount: 500,
+          foreclosureProbMin: 0.7,
+        );
+      } else {
+        // Regular search
+        properties = await taxLienService.searchLiens();
+      }
 
       setState(() {
+        _cardStack.clear();
         _cardStack.addAll(properties);
+        _currentIndex = 0;
         _isLoading = false;
       });
     } catch (e) {
@@ -86,6 +102,13 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
         _isLoading = false;
       });
     }
+  }
+
+  void _toggleForeclosureFilter() {
+    setState(() {
+      _foreclosureFilterMode = !_foreclosureFilterMode;
+    });
+    _loadProperties(); // Reload with new filter
   }
 
   Future<void> _loadMoreProperties() async {
@@ -410,6 +433,17 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
           ],
         ),
         actions: [
+          // Foreclosure Filter Toggle (sdd-miw-gift)
+          IconButton(
+            icon: Icon(
+              _foreclosureFilterMode ? Icons.filter_alt : Icons.filter_alt_outlined,
+              color: _foreclosureFilterMode ? Colors.orange : null,
+            ),
+            tooltip: _foreclosureFilterMode 
+                ? 'Foreclosure Mode: ON (High foreclosure probability)' 
+                : 'Foreclosure Mode: OFF',
+            onPressed: _toggleForeclosureFilter,
+          ),
           // Share button
           IconButton(
             icon: const Icon(Icons.share),

@@ -46,6 +46,16 @@ class TaxLien {
   final bool isLocked;
   final String? lockedForNFT; // NFT ID if tokenized
 
+  // ML Scores (from sdd-taxlien-ml and sdd-miw-gift)
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final double? foreclosureProbability; // 0.0 - 1.0
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final double? miwScore; // 0.0 - 1.0 (composite score for Miw)
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final double? karmaScore; // 0.0 - 1.0 (ethical filtering)
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final int? priorYearsOwed; // Years of delinquency
+
   const TaxLien({
     required this.id,
     required this.propertyAddress,
@@ -79,6 +89,10 @@ class TaxLien {
     this.isLocked = false,
     this.lockedForNFT,
     this.fvi,
+    this.foreclosureProbability,
+    this.miwScore,
+    this.karmaScore,
+    this.priorYearsOwed,
   });
 
   factory TaxLien.fromJson(Map<String, dynamic> json) =>
@@ -117,6 +131,11 @@ class TaxLien {
     bool? isAvailable,
     bool? isLocked,
     String? lockedForNFT,
+    FVI? fvi,
+    double? foreclosureProbability,
+    double? miwScore,
+    double? karmaScore,
+    int? priorYearsOwed,
   }) {
     return TaxLien(
       id: id ?? this.id,
@@ -150,6 +169,11 @@ class TaxLien {
       isAvailable: isAvailable ?? this.isAvailable,
       isLocked: isLocked ?? this.isLocked,
       lockedForNFT: lockedForNFT ?? this.lockedForNFT,
+      fvi: fvi ?? this.fvi,
+      foreclosureProbability: foreclosureProbability ?? this.foreclosureProbability,
+      miwScore: miwScore ?? this.miwScore,
+      karmaScore: karmaScore ?? this.karmaScore,
+      priorYearsOwed: priorYearsOwed ?? this.priorYearsOwed,
     );
   }
 

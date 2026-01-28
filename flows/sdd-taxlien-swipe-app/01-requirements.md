@@ -40,6 +40,11 @@
 
 ### 1. Discovery Swipe Screen (Home)
 - **FVI Overlay:** Индикатор "Индекса Полной Пользы".
+- **Foreclosure Filter Mode** (P1 - for Miw):
+  - Toggle to show only high foreclosure probability properties
+  - Filter: `foreclosure_probability >= 0.7`
+  - Sort by: `miw_score DESC`
+  - Display foreclosure score badge on cards
 - **Multi-dimensional Swipe:** 
   - ← Лево: Просмотр контекста/истории (Obituaries, статьи — важно для Антона).
   - → Право: Like (в шорт-лист семьи).
@@ -59,3 +64,23 @@
 ### 4. Family Collaborative Board
 - **Shared Interests:** Индикаторы совпадения (например, Miw нравится дом, а Khun Pho подтвердил фундамент).
 - **Decision Engine:** Рекомендация к покупке на основе FVI.
+
+---
+
+## Additional Features (sdd-miw-gift Integration)
+
+### Offline Mode (P2)
+- **Cached Properties:** Download top 20 foreclosure candidates for offline viewing
+- **Local Storage:** SQLite database for cached properties
+- **Sync:** Automatic sync when online
+
+### Export to PDF (P1 - for Miw)
+- **Property Analysis Sheet:** Export property card with all data
+- **Includes:** FVI breakdown, foreclosure score, photos, expert annotations
+- **Format:** PDF for printing/offline review
+- **Location:** `/data/exports/miw-preview/property_cards/{parcel_id}.pdf`
+
+### Integration with Gateway API
+- **Endpoint:** `GET /api/v1/liens/foreclosure-candidates?state=AZ&prior_years_min=2&max_amount=500`
+- **Sort by:** `miw_score DESC`
+- **Display:** Foreclosure probability, miw_score, karma_score on cards

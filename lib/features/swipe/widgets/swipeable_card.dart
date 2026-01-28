@@ -302,6 +302,29 @@ class _SwipeablePropertyCardState extends State<SwipeablePropertyCard>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Foreclosure Score Badge (sdd-miw-gift)
+            if (widget.property.foreclosureProbability != null && 
+                widget.property.foreclosureProbability! >= 0.7)
+              Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.red.withOpacity(0.9),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.warning, size: 14, color: Colors.white),
+                    const SizedBox(width: 4),
+                    Text(
+                      'FORECLOSURE: ${(widget.property.foreclosureProbability! * 100).toStringAsFixed(0)}%',
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10),
+                    ),
+                  ],
+                ),
+              ),
+            // X1000 Jackpot Badge
             if (fvi != null && fvi.isJackpot)
               Container(
                 margin: const EdgeInsets.only(bottom: 8),
@@ -343,6 +366,22 @@ class _SwipeablePropertyCardState extends State<SwipeablePropertyCard>
                   ),
                 ),
                 const Spacer(),
+                // Miw Score Badge (sdd-miw-gift)
+                if (widget.property.miwScore != null)
+                  Container(
+                    margin: const EdgeInsets.only(right: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.purple.withOpacity(0.8),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.white30),
+                    ),
+                    child: Text(
+                      'Miw: ${(widget.property.miwScore! * 100).toStringAsFixed(0)}',
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 11),
+                    ),
+                  ),
+                // FVI Badge
                 if (fvi != null)
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -380,6 +419,15 @@ class _SwipeablePropertyCardState extends State<SwipeablePropertyCard>
                   label: '${widget.property.interestRate}% APR',
                   color: Colors.orange,
                 ),
+                // Prior Years Owed (sdd-miw-gift)
+                if (widget.property.priorYearsOwed != null && widget.property.priorYearsOwed! >= 2)
+                  const SizedBox(width: 8),
+                if (widget.property.priorYearsOwed != null && widget.property.priorYearsOwed! >= 2)
+                  _buildStatChip(
+                    icon: Icons.calendar_today,
+                    label: '${widget.property.priorYearsOwed}yr',
+                    color: Colors.red,
+                  ),
               ],
             ),
           ],

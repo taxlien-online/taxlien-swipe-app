@@ -19,11 +19,16 @@
 ## Progress
 
 ```
-Phase 0: Navigation & Core  [▶] In Progress
-  0.1 GoRouter Setup         [ ]
-  0.2 Main Entry Update      [ ]
-  0.3 Screen Stubs           [ ]
-Phase 1: Profiles & FVI     [ ] Not Started
+Phase 0: Navigation & Core  [✅] COMPLETE
+  0.1 GoRouter Setup         [✅] Done
+  0.2 Main Entry Update      [✅] Done
+  0.3 Screen Stubs           [✅] Done
+Phase 1: Profiles & FVI     [✅] COMPLETE
+  1.1 ExpertProfileService   [✅] Done
+  1.2 FVI Model              [✅] Done
+  1.3 FVI Display on Card    [✅] Done
+  1.4 Profile Indicator      [✅] Done
+  1.5 Foreclosure Filter     [✅] Done (sdd-miw-gift integration)
 Phase 2: Property Details   [ ] Not Started
 Phase 3: Expert Canvas      [ ] Not Started
 Phase 4: Family Board       [ ] Not Started
@@ -44,6 +49,7 @@ None.
 ---
 
 ## Next Actions
-1. [ ] Утвердить обновленные требования (UI/UX).
-2. [ ] Утвердить спецификации навигации.
-3. [ ] Перейти к Phase 1 переноса кода с учетом GoRouter.
+1. [ ] Phase 2: Property Details Screen - FVI Breakdown visualization
+2. [ ] Phase 3: Expert Canvas - Annotation tools implementation
+3. [ ] Phase 4: Family Board - Collaborative decision engine
+4. [ ] Test Foreclosure Filter Mode with real API (when Gateway is ready)

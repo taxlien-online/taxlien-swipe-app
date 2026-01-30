@@ -6,6 +6,7 @@ import '../../../core/models/tax_lien_models.dart';
 import '../../../services/tax_lien_service.dart';
 import '../../profile/services/expert_profile_service.dart';
 import '../../profile/models/expert_profile.dart';
+import '../../family/services/family_board_service.dart';
 import '../widgets/swipeable_card.dart';
 import '../widgets/action_buttons.dart';
 import '../widgets/match_modal.dart';
@@ -128,15 +129,25 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
   }
 
   void _handleSwipeLeft() {
-    _recordSwipe(SwipeConstants.swipeLeft);
-    _moveToNextCard();
+    final profileService = Provider.of<ExpertProfileService>(context, listen: false);
+    if (profileService.isAnton) {
+      _showContextOverlay();
+    } else {
+      _recordSwipe(SwipeConstants.swipeLeft);
+      _moveToNextCard();
+    }
   }
 
   void _handleSwipeRight() async {
-    _recordSwipe(SwipeConstants.swipeRight);
+    final currentProperty = _cardStack[_currentIndex];
+    final expertId = Provider.of<ExpertProfileService>(context, listen: false).currentProfile.id;
+    
+    // Регистрируем интерес в семейном совете
+    FamilyBoardService.instance.registerInterest(currentProperty, expertId);
 
-    // Check for match
-    final property = _cardStack[_currentIndex];
+    _recordSwipe(SwipeConstants.swipeRight);
+    
+    // ... логика мэтча ...
     final matchService = MatchService.instance;
     final isMatch = matchService.isMatch(
       property: property,

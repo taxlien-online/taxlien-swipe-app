@@ -90,6 +90,33 @@ class TaxLienService {
     }
   }
 
+  /// Get a single tax lien by ID
+  Future<TaxLien?> getTaxLienById(String id) async {
+    if (_baseUrl == null) {
+      // Find in mock data
+      final allMock = [...getMockLiens(), ...getMockForeclosureCandidates()];
+      try {
+        return allMock.firstWhere((lien) => lien.id == id);
+      } catch (_) {
+        return null;
+      }
+    }
+
+    try {
+      final uri = Uri.parse('$_baseUrl/api/v1/liens/$id');
+      final response = await http.get(uri);
+
+      if (response.statusCode == 200) {
+        return TaxLien.fromJson(json.decode(response.body));
+      } else {
+        return null;
+      }
+    } catch (e) {
+      debugPrint('Error loading lien $id: $e');
+      return null;
+    }
+  }
+
   // Helper for mock foreclosure candidates (sdd-miw-gift)
   static List<TaxLien> getMockForeclosureCandidates() {
     return [

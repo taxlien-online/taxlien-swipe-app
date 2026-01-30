@@ -7,25 +7,25 @@
 ---
 
 ## Phase 0: Навигация и Основа (Current)
-- [ ] Интеграция `go_router` в `pubspec.yaml`.
-- [ ] Настройка `AppRouter` с путями: Home, Details, Annotate, Family.
-- [ ] Обновление `main.dart` для запуска `MaterialApp.router`.
+- [x] Интеграция `go_router` в `pubspec.yaml`.
+- [x] Настройка `AppRouter` с путями: Home, Details, Annotate, Family.
+- [x] Обновление `main.dart` для запуска `MaterialApp.router`.
 
 ## Phase 1: Профили и FVI
-- [ ] Реализация `ExpertProfileService` (хранение текущего эксперта).
-- [ ] Добавление UI-индикатора текущего профиля на главный экран.
-- [ ] Реализация базовой модели `FVI` и её отображение на карточке.
+- [x] Реализация `ExpertProfileService` (хранение текущего эксперта).
+- [x] Добавление UI-индикатора текущего профиля на главный экран.
+- [x] Реализация базовой модели `FVI` и её отображение на карточке.
 
 ## Phase 2: Property Deep-Dive (Details)
-- [ ] Создание `PropertyDetailsScreen`.
-- [ ] Интеграция галереи фото.
-- [ ] Отображение ROI и вклада экспертов (FVI Breakdown).
+- [x] Создание `PropertyDetailsScreen`.
+- [x] Интеграция галереи фото.
+- [x] Отображение ROI и вклада экспертов (FVI Breakdown).
 
 ## Phase 3: Expert Canvas (Annotation)
-- [ ] Создание `AnnotationCanvas`.
-- [ ] Реализация инструментов: Точка, Линия, Область.
-- [ ] Интеграция голосовых заметок (заглушка/сервис).
+- [x] Создание `AnnotationCanvas`.
+- [x] Реализация инструментов: Точка, Линия, Область.
+- [x] Интеграция голосовых заметок (заглушка/сервис).
 
 ## Phase 4: Family Board
-- [ ] Реализация `FamilyBoardScreen`.
-- [ ] Синхронизация лайков между профилями.
+- [x] Реализация `FamilyBoardScreen`.
+- [x] Синхронизация лайков между профилями.

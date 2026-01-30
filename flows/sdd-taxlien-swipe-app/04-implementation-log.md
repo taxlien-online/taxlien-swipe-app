@@ -37,3 +37,14 @@
   - ✅ Added Foreclosure Score badge on property cards
   - ✅ Added Miw Score badge on property cards
   - ✅ Added Prior Years Owed indicator in stats row
+
+### 2026-01-30
+- **Completed:** Phase 2, 3, and 4
+  - ✅ Enhanced `PropertyDetailsScreen` with `PageView` gallery.
+  - ✅ Added Gateway-compliant Map placeholder to Details.
+  - ✅ Created `Annotation` model with normalized coordinates.
+  - ✅ Implemented `AnnotationScreen` with advanced drawing (Point, Line, Area).
+  - ✅ Unified Annotation logic and Expert Profile colors.
+  - ✅ Integrated `FamilyBoardService` into `MultiProvider`.
+  - ✅ Verified `FamilyBoardScreen` functionality for shared interest tracking.
+  - ✅ Enforced "Internal Ecosystem Only" rule by using Gateway service stubs.

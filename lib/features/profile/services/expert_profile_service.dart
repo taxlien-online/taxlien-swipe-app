@@ -25,4 +25,12 @@ class ExpertProfileService extends ChangeNotifier {
   bool get isKhunPho => _currentProfile.role == ExpertRole.khunPho;
   bool get isDenis => _currentProfile.role == ExpertRole.denis;
   bool get isVasilisa => _currentProfile.role == ExpertRole.vasilisa;
+
+  Color getProfileColor(String profileId) {
+    try {
+      return ExpertProfile.allProfiles.firstWhere((p) => p.id == profileId).color;
+    } catch (e) {
+      return Colors.grey;
+    }
+  }
 }

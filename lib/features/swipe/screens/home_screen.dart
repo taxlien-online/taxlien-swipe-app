@@ -12,6 +12,7 @@ import '../widgets/action_buttons.dart';
 import '../widgets/match_modal.dart';
 import '../widgets/share_sheet.dart';
 import '../widgets/tutorial.dart';
+import '../../deeplink/widgets/smart_banner.dart';
 import 'preferences_screen.dart';
 import '../constants/swipe_constants.dart';
 import '../services/match_service.dart';
@@ -477,11 +478,18 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
           ),
         ],
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _error != null
-              ? _buildErrorState()
-              : _buildCardStack(),
+      body: Column(
+        children: [
+          const SmartBanner(),
+          Expanded(
+            child: _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : _error != null
+                    ? _buildErrorState()
+                    : _buildCardStack(),
+          ),
+        ],
+      ),
     );
   }
 

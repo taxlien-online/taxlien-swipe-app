@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
+import '../../../core/config/env_config.dart';
 import '../../../core/models/tax_lien_models.dart';
 
 /// Service for sharing properties via social platforms
@@ -81,12 +82,19 @@ class ShareService {
     );
   }
 
+  String _generateDeepLink(TaxLien property) {
+    final domain = EnvConfig.webDomain;
+    return 'https://$domain/property/${property.state.toLowerCase()}/${property.county.toLowerCase()}/${property.id}';
+  }
+
   /// Generate share text
   String _generateShareText(TaxLien property, String? referralCode) {
     final roi = ((property.estimatedValue - property.taxAmount) /
             property.taxAmount * 
             100)
         .toStringAsFixed(1);
+    
+    final link = _generateDeepLink(property);
 
     String text = 'Found an amazing tax lien deal!\n\n'
         'Address: ${property.propertyAddress}\n'
@@ -94,7 +102,7 @@ class ShareService {
         'Est. Value: \$${property.estimatedValue.toStringAsFixed(0)}\n'
         'Potential ROI: $roi%\n'
         'Interest Rate: ${property.interestRate}% APR\n\n'
-        'Check it out on TaxLien.online!';
+        'Check it out: $link';
 
     if (referralCode != null) {
       text += '\nUse my referral code: $referralCode';
@@ -111,6 +119,7 @@ class ShareService {
         .toStringAsFixed(1);
 
     final saleDateStr = property.saleDate?.toString().split(' ')[0] ?? 'N/A';
+    final link = _generateDeepLink(property);
 
     String body = 'Hi!\n\n'
         'I found this tax lien deal on TaxLien.online and thought you might be interested:\n\n'
@@ -133,7 +142,7 @@ class ShareService {
         '• High ROI potential\n'
         '• Competitive interest rate\n'
         '• Verified property information\n\n'
-        'Learn more at: https://taxlien.online';
+        'Learn more at: $link';
 
     if (referralCode != null) {
       body += '\n\nSign up with my referral code "$referralCode" for exclusive benefits!\n';

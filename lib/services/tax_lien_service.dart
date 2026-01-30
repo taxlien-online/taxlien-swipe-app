@@ -1,234 +1,106 @@
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../core/models/tax_lien_models.dart';
 import '../core/models/fvi.dart';
 
 class TaxLienService {
-  final String? _baseUrl = dotenv.env['API_URL'];
-  
-  /// Search for foreclosure candidates (sdd-miw-gift integration)
-  /// 
-  /// Fetches liens with high foreclosure probability for Miw's strategy
+  Future<List<TaxLien>> searchLiens() async {
+    // Имитация задержки сети
+    await Future.delayed(const Duration(milliseconds: 800));
+    return getMockLiens();
+  }
+
   Future<List<TaxLien>> searchForeclosureCandidates({
-    String state = 'AZ',
-    int? priorYearsMin,
-    double? maxAmount,
-    double? foreclosureProbMin = 0.7,
-    int limit = 100,
+    required String state,
+    required int priorYearsMin,
+    required int maxAmount,
+    required double foreclosureProbMin,
   }) async {
-    if (_baseUrl == null) {
-      // Return mock data during development
-      return getMockForeclosureCandidates();
-    }
-
-    try {
-      final queryParams = <String, String>{
-        'state': state,
-        'foreclosure_prob_min': foreclosureProbMin.toString(),
-        'limit': limit.toString(),
-      };
-      if (priorYearsMin != null) {
-        queryParams['prior_years_min'] = priorYearsMin.toString();
-      }
-      if (maxAmount != null) {
-        queryParams['max_amount'] = maxAmount.toString();
-      }
-
-      final uri = Uri.parse('$_baseUrl/api/v1/liens/foreclosure-candidates')
-          .replace(queryParameters: queryParams);
-
-      final response = await http.get(uri);
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body)['liens'] ?? [];
-        return data.map((json) => TaxLien.fromJson(json)).toList();
-      } else {
-        throw Exception('Failed to load foreclosure candidates: ${response.statusCode}');
-      }
-    } catch (e) {
-      debugPrint('Error loading foreclosure candidates: $e');
-      // Fallback to mock data
-      return getMockForeclosureCandidates();
-    }
+    // Имитация задержки сети
+    await Future.delayed(const Duration(milliseconds: 800));
+    return getMockLiens().where((lien) =>
+      lien.state == state &&
+      (lien.priorYearsOwed ?? 0) >= priorYearsMin &&
+      lien.taxAmount <= maxAmount &&
+      (lien.foreclosureProbability ?? 0.0) >= foreclosureProbMin
+    ).toList();
   }
 
-  /// Regular search for liens
-  Future<List<TaxLien>> searchLiens({
-    String? state,
-    String? county,
-    int limit = 50,
-  }) async {
-    if (_baseUrl == null) {
-      // Return mock data during development
-      return getMockLiens();
-    }
-
-    try {
-      final queryParams = <String, String>{
-        'limit': limit.toString(),
-      };
-      if (state != null) queryParams['state'] = state;
-      if (county != null) queryParams['county'] = county;
-
-      final uri = Uri.parse('$_baseUrl/api/v1/liens/search')
-          .replace(queryParameters: queryParams);
-
-      final response = await http.get(uri);
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body)['liens'] ?? [];
-        return data.map((json) => TaxLien.fromJson(json)).toList();
-      } else {
-        throw Exception('Failed to load liens: ${response.statusCode}');
-      }
-    } catch (e) {
-      debugPrint('Error loading liens: $e');
-      // Fallback to mock data
-      return getMockLiens();
-    }
+  Future<TaxLien> getTaxLienById(String id) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return getMockLiens().firstWhere((lien) => lien.id == id);
   }
 
-  /// Get a single tax lien by ID
-  Future<TaxLien?> getTaxLienById(String id) async {
-    if (_baseUrl == null) {
-      // Find in mock data
-      final allMock = [...getMockLiens(), ...getMockForeclosureCandidates()];
-      try {
-        return allMock.firstWhere((lien) => lien.id == id);
-      } catch (_) {
-        return null;
-      }
-    }
-
-    try {
-      final uri = Uri.parse('$_baseUrl/api/v1/liens/$id');
-      final response = await http.get(uri);
-
-      if (response.statusCode == 200) {
-        return TaxLien.fromJson(json.decode(response.body));
-      } else {
-        return null;
-      }
-    } catch (e) {
-      debugPrint('Error loading lien $id: $e');
-      return null;
-    }
-  }
-
-  // Helper for mock foreclosure candidates (sdd-miw-gift)
-  static List<TaxLien> getMockForeclosureCandidates() {
-    return [
-      TaxLien(
-        id: 'fc-1',
-        parcelId: 'AZ-MAR-001',
-        propertyAddress: '789 Foreclosure St',
-        city: 'Phoenix',
-        county: 'Maricopa',
-        state: 'AZ',
-        taxAmount: 450.0,
-        interestRate: 0.16,
-        auctionDate: DateTime(2026, 2, 12),
-        status: 'active',
-        propertyType: 'Residential',
-        estimatedValue: 250000.0,
-        assessedValue: 210000.0,
-        description: 'High foreclosure potential property',
-        images: ['https://images.unsplash.com/photo-1568605114967-8130f3a36994'],
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-        foreclosureProbability: 0.85,
-        miwScore: 0.92,
-        karmaScore: 0.7,
-        priorYearsOwed: 3,
-        fvi: const FVI(
-          financialScore: 8.0,
-          expertScores: {'khun_pho': 7.5},
-          propertyCost: 450.0,
-        ),
-      ),
-      TaxLien(
-        id: 'fc-2',
-        parcelId: 'AZ-PIN-002',
-        propertyAddress: '321 OTC Lane',
-        city: 'Casa Grande',
-        county: 'Pinal',
-        state: 'AZ',
-        taxAmount: 320.0,
-        interestRate: 0.16,
-        auctionDate: DateTime(2026, 2, 10),
-        status: 'otc',
-        propertyType: 'Vacant Land',
-        estimatedValue: 45000.0,
-        assessedValue: 40000.0,
-        description: 'OTC lien with high foreclosure probability',
-        images: ['https://images.unsplash.com/photo-1500382017468-9049fed747ef'],
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-        foreclosureProbability: 0.78,
-        miwScore: 0.88,
-        karmaScore: 0.6,
-        priorYearsOwed: 2,
-        fvi: const FVI(
-          financialScore: 7.5,
-          expertScores: {'denis': 8.0},
-          propertyCost: 320.0,
-        ),
-      ),
-    ];
-  }
-
-  // Helper for mock data during development
   static List<TaxLien> getMockLiens() {
     return [
       TaxLien(
         id: '1',
-        parcelId: '123-45-678',
-        propertyAddress: '123 Phoenix Way',
+        propertyAddress: '123 Oak Street',
         city: 'Phoenix',
-        county: 'Maricopa',
         state: 'AZ',
-        taxAmount: 450.0,
+        county: 'Maricopa',
+        estimatedValue: 150000,
+        assessedValue: 120000,
+        taxAmount: 450,
         interestRate: 0.16,
-        auctionDate: DateTime(2026, 2, 12),
+        auctionDate: DateTime(2026, 2, 15),
         status: 'active',
         propertyType: 'Residential',
-        estimatedValue: 250000.0,
-        assessedValue: 210000.0,
-        description: 'Single family home in Phoenix',
-        images: ['https://images.unsplash.com/photo-1568605114967-8130f3a36994'],
+        description: 'Single family home in a quiet neighborhood.',
+        images: [
+          'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800',
+          'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800',
+        ],
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
-        fvi: const FVI(
-          financialScore: 7.5,
-          expertScores: {'anton': 9.8, 'khun_pho': 8.0}, // Антон нашел что-то крутое!
-          propertyCost: 450.0,
-        ),
+        fvi: FVI.mock(),
+        foreclosureProbability: 0.75,
+        priorYearsOwed: 3,
       ),
       TaxLien(
         id: '2',
-        parcelId: '987-65-432',
-        propertyAddress: '456 Tucson Dr',
-        city: 'Tucson',
-        county: 'Pima',
-        state: 'AZ',
-        taxAmount: 320.0,
-        interestRate: 0.16,
-        auctionDate: DateTime(2026, 2, 26),
+        propertyAddress: '742 Evergreen Terrace',
+        city: 'Springfield',
+        state: 'IL',
+        county: 'Sangamon',
+        estimatedValue: 220000,
+        assessedValue: 200000,
+        taxAmount: 1200,
+        interestRate: 0.18,
+        auctionDate: DateTime(2026, 3, 1),
         status: 'active',
-        propertyType: 'Vacant Land',
-        estimatedValue: 45000.0,
-        assessedValue: 40000.0,
-        description: 'Buildable lot in Tucson',
-        images: ['https://images.unsplash.com/photo-1500382017468-9049fed747ef'],
+        propertyType: 'Residential',
+        description: 'Classic American family home.',
+        images: [
+          'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=800',
+          'https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?w=800',
+        ],
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
-        fvi: const FVI(
-          financialScore: 6.0,
-          expertScores: {'denis': 7.0, 'khun_pho': 9.0}, // Кхун Пхо подтвердил фундамент
-          propertyCost: 320.0,
-        ),
+        fvi: FVI.mock(),
+        foreclosureProbability: 0.6,
+        priorYearsOwed: 2,
+      ),
+      TaxLien(
+        id: '3',
+        propertyAddress: 'Desert Plot 42',
+        city: 'Mojave',
+        state: 'CA',
+        county: 'San Bernardino',
+        estimatedValue: 15000,
+        assessedValue: 10000,
+        taxAmount: 300,
+        interestRate: 0.10,
+        auctionDate: DateTime(2026, 4, 1),
+        status: 'active',
+        propertyType: 'Land',
+        description: 'Undeveloped desert land.',
+        images: [
+          'https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?w=800',
+        ],
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        fvi: FVI.mock(),
+        foreclosureProbability: 0.1,
+        priorYearsOwed: 1,
       ),
     ];
   }

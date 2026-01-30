@@ -149,4 +149,15 @@ class DatabaseService {
       )
     ''', [keepCount]);
   }
+
+  Future<int> getPropertyCount({String? contextHash}) async {
+    final db = await database;
+    final List<Map<String, dynamic>> result = await db.query(
+      'properties',
+      columns: ['COUNT(*) as count'],
+      where: contextHash != null ? 'filter_context_hash = ?' : null,
+      whereArgs: contextHash != null ? [contextHash] : null,
+    );
+    return Sqflite.firstIntValue(result) ?? 0;
+  }
 }

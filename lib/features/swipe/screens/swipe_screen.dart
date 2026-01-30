@@ -37,124 +37,77 @@ class _SwipeScreenState extends State<SwipeScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (provider.currentProperty == null) {
-            return _buildEmptyState(context);
+          if (provider.properties.isEmpty) {
+            return const OfflineEmptyState();
           }
 
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Stack(
-              children: [
-                // Display two cards for stack effect
-                if (provider.currentIndex + 1 < provider.properties.length)
-                  Opacity(
-                    opacity: 0.5,
-                    child: Transform.scale(
-                      scale: 0.95,
-                      child: PropertyCardBeginner(
-                        property: provider.properties[provider.currentIndex + 1],
-                        onLike: () {}, // These will be handled by Draggable
-                        onPass: () {}, // These will be handled by Draggable
-                      ),
-                    ),
-                  ),
-                
-                // Top Draggable Card
-                Draggable(
-                  feedback: Material(
-                    color: Colors.transparent,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width - 32,
-                      height: MediaQuery.of(context).size.height - 200,
-                      child: PropertyCardBeginner(
-                        property: provider.currentProperty!,
-                        onLike: () {},
-                        onPass: () {},
-                      ),
-                    ),
-                  ),
-                  childWhenDragging: const SizedBox.shrink(),
-                  onDragEnd: (details) {
-                    // Simple swipe logic
-                    if (details.offset.dx > 100) {
-                      provider.handleLike(provider.currentProperty!.id);
-                    } else if (details.offset.dx < -100) {
-                      provider.handlePass(provider.currentProperty!.id);
-                    } else {
-                      // If dropped without significant swipe, advance to next as if passed
-                      // This is a UX choice; could also revert position or prompt
-                      provider.handlePass(provider.currentProperty!.id); 
-                    }
-                  },
-                  child: PropertyCardBeginner(
-                    property: provider.currentProperty!,
-                    onLike: () => provider.handleLike(provider.currentProperty!.id),
-                    onPass: () => provider.handlePass(provider.currentProperty!.id),
-                  ),
-                ),
-              ],
-            ),
-          );
+          if (provider.swipeMode == SwipeMode.beginner) {
+            return _buildBeginnerModeStack(provider);
+          } else {
+            return AdvancedSwipeStack(
+              properties: provider.properties,
+              currentIndex: provider.currentIndex,
+              onLike: (id) => provider.handleLike(id),
+              onPass: (id) => provider.handlePass(id),
+              onPageChanged: (index) => provider.setCurrentIndex(index),
+            );
+          }
         },
       ),
     );
   }
 
-  Widget _buildEmptyState(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.wifi_off,
-              size: 80,
-              color: Colors.grey,
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'No more properties to swipe!',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey,
+  Widget _buildBeginnerModeStack(SwipeProvider provider) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Stack(
+        children: [
+          // Display two cards for stack effect
+          if (provider.currentIndex + 1 < provider.properties.length)
+            Opacity(
+              opacity: 0.5,
+              child: Transform.scale(
+                scale: 0.95,
+                child: PropertyCardBeginner(
+                  property: provider.properties[provider.currentIndex + 1],
+                  onLike: () {},
+                  onPass: () {},
+                ),
               ),
             ),
-            const SizedBox(height: 10),
-            const Text(
-              'Connect to the internet to load more properties or review your liked deals.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
+          
+          // Top Draggable Card
+          Draggable(
+            feedback: Material(
+              color: Colors.transparent,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width - 32,
+                height: MediaQuery.of(context).size.height - 200, // Adjust height if needed
+                child: PropertyCardBeginner(
+                  property: provider.currentProperty!,
+                  onLike: () {},
+                  onPass: () {},
+                ),
               ),
             ),
-            const SizedBox(height: 30),
-            ElevatedButton.icon(
-              onPressed: () {
-                // TODO: Navigate to 'Liked' properties screen
-                // For now, let's assume a route like '/liked-properties'
-                context.go('/liked-properties'); 
-              },
-              icon: const Icon(Icons.favorite),
-              label: const Text('Review Liked Properties'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                textStyle: const TextStyle(fontSize: 18),
-              ),
+            childWhenDragging: const SizedBox.shrink(),
+            onDragEnd: (details) {
+              // Simple swipe logic
+              if (details.offset.dx > 100) {
+                provider.handleLike(provider.currentProperty!.id);
+              } else if (details.offset.dx < -100) {
+                provider.handlePass(provider.currentProperty!.id);
+              } else {
+                // If not swiped far enough, reset position (not implemented here for simplicity)
+              }
+            },
+            child: PropertyCardBeginner(
+              property: provider.currentProperty!,
+              onLike: () => provider.handleLike(provider.currentProperty!.id),
+              onPass: () => provider.handlePass(provider.currentProperty!.id),
             ),
-            const SizedBox(height: 10),
-            TextButton(
-              onPressed: () {
-                // Optionally allow user to manually retry loading
-                context.read<SwipeProvider>().loadProperties();
-              },
-              child: const Text('Try loading again'),
-            )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -163,12 +116,32 @@ class _SwipeScreenState extends State<SwipeScreen> {
     return Consumer<SwipeProvider>(
       builder: (context, provider, child) {
         return PopupMenuButton<ExpertRole>(
-          icon: const Icon(Icons.person_outline),
+          icon: Icon(Icons.person_outline, color: Theme.of(context).primaryColor),
           onSelected: (role) => provider.setRole(role),
           itemBuilder: (context) => ExpertRole.values.map((role) {
             return PopupMenuItem(
               value: role,
               child: Text(role.name.toUpperCase()),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
+  Widget _buildSwipeModeSwitcher() {
+    return Consumer<SwipeProvider>(
+      builder: (context, provider, child) {
+        return PopupMenuButton<SwipeMode>(
+          icon: Icon(
+            provider.swipeMode == SwipeMode.beginner ? Icons.flash_on : Icons.settings,
+            color: Theme.of(context).primaryColor,
+          ),
+          onSelected: (mode) => provider.setSwipeMode(mode),
+          itemBuilder: (context) => SwipeMode.values.map((mode) {
+            return PopupMenuItem(
+              value: mode,
+              child: Text(mode.name.toUpperCase()),
             );
           }).toList(),
         );

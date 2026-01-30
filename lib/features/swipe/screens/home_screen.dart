@@ -140,11 +140,11 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
   }
 
   void _handleSwipeRight() async {
-    final currentProperty = _cardStack[_currentIndex];
+    final TaxLien property = _cardStack[_currentIndex];
     final expertId = Provider.of<ExpertProfileService>(context, listen: false).currentProfile.id;
     
     // Регистрируем интерес в семейном совете
-    FamilyBoardService.instance.registerInterest(currentProperty, expertId);
+    FamilyBoardService.instance.registerInterest(property, expertId);
 
     _recordSwipe(SwipeConstants.swipeRight);
     
@@ -410,7 +410,7 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
     final currentProfile = profileService.currentProfile;
 
     return Scaffold(
-      app_bar: AppBar(
+      appBar: AppBar(
         leading: PopupMenuButton<String>(
           icon: CircleAvatar(
             backgroundColor: currentProfile.color,

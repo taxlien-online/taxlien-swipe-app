@@ -37,4 +37,16 @@ class FVI {
 
   /// Есть ли у объекта потенциал "Jackpot" (x1000)
   bool get isJackpot => expertScores.values.any((score) => score >= 9.5);
+
+  Map<String, dynamic> toJson() => {
+    'financialScore': financialScore,
+    'expertScores': expertScores,
+    'propertyCost': propertyCost,
+  };
+
+  factory FVI.fromJson(Map<String, dynamic> json) => FVI(
+    financialScore: json['financialScore'] as double,
+    expertScores: Map<String, double>.from(json['expertScores'] as Map),
+    propertyCost: json['propertyCost'] as double,
+  );
 }

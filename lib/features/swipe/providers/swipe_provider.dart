@@ -79,6 +79,13 @@ class SwipeProvider extends ChangeNotifier {
     }
   }
 
+  void setCurrentIndex(int index) {
+    if (index >= 0 && index < _properties.length) {
+      _currentIndex = index;
+      notifyListeners();
+    }
+  }
+
   void setRole(ExpertRole role) {
     _currentRole = role;
     // TODO: When filter context is properly implemented, this should trigger a new stream from DataRepository

@@ -189,7 +189,11 @@ class _PropertyCardBeginnerState extends State<PropertyCardBeginner> {
                     IconButton(
                       icon: const Icon(Icons.info_outline, color: Colors.white),
                       onPressed: () {
-                        // Show financial breakdown
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) => FinancialDetailsSheet(property: widget.property),
+                        );
                       },
                     ),
                   ],

@@ -86,17 +86,14 @@ class DataRepository implements IDataRepository {
     // TODO: Implement actual API call to /discovery with filter_context
     // For now, using mock or existing search
     try {
-      final List<TaxLien> newProperties = await _apiService.searchLiens(limit: limit); // Using existing for now
+      final List<TaxLien> newProperties = await _apiService.searchLiens(limit: limit);
       final List<String> imageUrlsToPrefetch = [];
 
       for (var property in newProperties) {
+        // Prepare property data for DB storage
+        // ML scores and FVI are already part of the TaxLien object and will be serialized in property.toJson()
+        // No need to manually add them back if toJson() already handles them.
         final Map<String, dynamic> propertyJson = property.toJson();
-        // Add ML scores and FVI back for DB storage, as they are excluded from toJson() by @JsonKey(includeToJson: false)
-        propertyJson['foreclosureProbability'] = property.foreclosureProbability;
-        propertyJson['miwScore'] = property.miwScore;
-        propertyJson['karmaScore'] = property.karmaScore;
-        propertyJson['priorYearsOwed'] = property.priorYearsOwed;
-        // FVI needs special handling as it's a complex object
         if (property.fvi != null) {
           propertyJson['fvi'] = property.fvi!.toJson();
         }
@@ -106,7 +103,7 @@ class DataRepository implements IDataRepository {
         if (property.miwScore != null) priorityScore += property.miwScore!;
         if (property.foreclosureProbability != null) priorityScore += property.foreclosureProbability!;
         // Assigning is_priority for ML/Social content based on some criteria (TBD from API)
-        bool isPriority = (property.miwScore ?? 0.0) > 0.7; // Example criteria
+        bool isPriority = (property.miwScore ?? 0.0) > 0.7 || (property.karmaScore ?? 0.0) > 0.7; // Example criteria
 
         await _dbService.saveProperty(
           {
@@ -114,8 +111,9 @@ class DataRepository implements IDataRepository {
             'data': json.encode(propertyJson),
             'priority_score': priorityScore,
             'is_priority': isPriority ? 1 : 0,
-            // is_liked will be 0 initially for new items
+            'is_liked': 0, // New items are not liked initially
             'last_accessed': DateTime.now().millisecondsSinceEpoch,
+            'last_updated': DateTime.now().millisecondsSinceEpoch,
             // filter_context_hash TBD: needs to come from the API request or UI state
           },
         );
@@ -147,12 +145,16 @@ class DataRepository implements IDataRepository {
     debugPrint('Syncing ${actions.length} actions.');
     // TODO: Implement actual API call to /sync/actions
     // For now, simulate success and delete
-    for (var action in actions) {
+    for (var actionMap in actions) {
       try {
-        // await _apiService.syncAction(action); // Placeholder
-        await _dbService.removeAction(action['id']);
+        final String type = actionMap['type'];
+        final Map<String, dynamic> payload = json.decode(actionMap['payload']);
+        debugPrint('Simulating sync for action type: $type, payload: $payload');
+        // await _apiService.syncAction(type, payload); // Placeholder for actual API call
+        await _dbService.removeAction(actionMap['id']); // Remove after successful sync
       } catch (e) {
-        debugPrint('Failed to sync action ${action['id']}: $e. Will retry later.');
+        debugPrint('Failed to sync action ${actionMap['id']}: $e. Will retry later.');
+        await _dbService.updateActionStatus(actionMap['id'], 'failed'); // Mark as failed
         // Increment retry count, potentially mark for manual review if too many retries
       }
     }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../../../core/models/property_card_data.dart';
+import '../../../core/models/tax_lien_models.dart'; // Changed from PropertyCardData
 import 'dart:math' as math;
 
 class PropertyCardBeginner extends StatefulWidget {
-  final PropertyCardData property;
+  final TaxLien property; // Changed type
   final VoidCallback onLike;
   final VoidCallback onPass;
 
@@ -25,7 +25,9 @@ class _PropertyCardBeginnerState extends State<PropertyCardBeginner> {
 
   void _cyclePhoto() {
     setState(() {
-      _currentPhotoIndex = (_currentPhotoIndex + 1) % widget.property.imageUrls.length;
+      _currentPhotoIndex = (widget.property.images.isNotEmpty) 
+          ? (_currentPhotoIndex + 1) % widget.property.images.length
+          : 0;
     });
   }
 
@@ -66,6 +68,11 @@ class _PropertyCardBeginnerState extends State<PropertyCardBeginner> {
   }
 
   Widget _buildFrontCard() {
+    // Determine the image URL. Use a placeholder if no images are available.
+    final imageUrl = (widget.property.images.isNotEmpty)
+        ? widget.property.images[_currentPhotoIndex]
+        : 'https://via.placeholder.com/400x300.png?text=No+Image'; // Placeholder
+
     return Container(
       key: const ValueKey(false),
       decoration: BoxDecoration(
@@ -84,10 +91,11 @@ class _PropertyCardBeginnerState extends State<PropertyCardBeginner> {
         children: [
           // Main Photo
           CachedNetworkImage(
-            imageUrl: widget.property.imageUrls[_currentPhotoIndex],
+            imageUrl: imageUrl,
             fit: BoxFit.cover,
             placeholder: (context, url) => Container(color: Colors.grey[300]),
             errorWidget: (context, url, error) => const Icon(Icons.error),
+            // TODO: Integrate ImageCacheService for optimized URL construction if CachedNetworkImage doesn't do it implicitly.
           ),
           
           // Bottom Gradient
@@ -113,42 +121,43 @@ class _PropertyCardBeginnerState extends State<PropertyCardBeginner> {
             top: 20,
             left: 20,
             child: _buildBadge(
-              'FVI: ${widget.property.fvi}', 
+              'FVI: ${widget.property.fvi?.financialScore?.toStringAsFixed(1) ?? 'N/A'}', 
               Colors.greenAccent[700]!,
             ),
           ),
-          Positioned(
-            top: 20,
-            right: 20,
-            child: _buildBadge(
-              'ROI: ${widget.property.roi}x', 
-              Colors.orangeAccent[700]!,
-            ),
-          ),
+          // TODO: Reintegrate ROI if TaxLien provides it or it's derived.
+          // Positioned(
+          //   top: 20,
+          //   right: 20,
+          //   child: _buildBadge(
+          //     'ROI: ${widget.property.roi}x', 
+          //     Colors.orangeAccent[700]!,
+          //   ),
+          // ),
           
-          // Reassurance Bridge
-          if (widget.property.expertReassurance != null)
-            Positioned(
-              top: 80,
-              left: 20,
-              right: 20,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.9),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.blueAccent.withOpacity(0.5)),
-                ),
-                child: Text(
-                  widget.property.expertReassurance!,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.blueGrey,
-                  ),
-                ),
-              ),
-            ),
+          // TODO: Reintegrate Expert Reassurance if TaxLien provides it.
+          // if (widget.property.expertReassurance != null)
+          //   Positioned(
+          //     top: 80,
+          //     left: 20,
+          //     right: 20,
+          //     child: Container(
+          //       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          //       decoration: BoxDecoration(
+          //         color: Colors.white.withOpacity(0.9),
+          //         borderRadius: BorderRadius.circular(12),
+          //         border: Border.all(color: Colors.blueAccent.withOpacity(0.5)),
+          //       ),
+          //       child: Text(
+          //         widget.property.expertReassurance!,
+          //         style: const TextStyle(
+          //           fontSize: 14,
+          //           fontWeight: FontWeight.w600,
+          //           color: Colors.blueGrey,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
           
           // Bottom Info
           Positioned(
@@ -159,7 +168,7 @@ class _PropertyCardBeginnerState extends State<PropertyCardBeginner> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${widget.property.address}, ${widget.property.city}',
+                  '${widget.property.propertyAddress}, ${widget.property.city ?? ''}', // Use propertyAddress
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -171,7 +180,7 @@ class _PropertyCardBeginnerState extends State<PropertyCardBeginner> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Lien Cost: \$${widget.property.lienCost.toStringAsFixed(0)}',
+                      'Lien Cost: \$${widget.property.taxAmount.toStringAsFixed(0)}', // Use taxAmount
                       style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 18,
@@ -209,9 +218,9 @@ class _PropertyCardBeginnerState extends State<PropertyCardBeginner> {
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const Divider(height: 40),
-          _buildFactRow(Icons.home, 'Type', 'Single Family'),
-          _buildFactRow(Icons.square_foot, 'Lot Size', '0.25 Acres'),
-          _buildFactRow(Icons.calendar_today, 'Auction Date', 'Feb 10, 2026'),
+          _buildFactRow(Icons.home, 'Type', widget.property.propertyType), // Use propertyType
+          _buildFactRow(Icons.square_foot, 'Lot Size', 'N/A'), // TODO: Need lot size from TaxLien
+          _buildFactRow(Icons.calendar_today, 'Auction Date', '${widget.property.auctionDate.month}/${widget.property.auctionDate.day}/${widget.property.auctionDate.year}'), // Use auctionDate
           const Spacer(),
           const Text('Tap to flip back', style: TextStyle(color: Colors.grey)),
         ],

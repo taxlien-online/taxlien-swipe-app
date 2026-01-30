@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'package:connectivity_plus/connectivity_plus.dart'; // New Import
+
 import 'core/navigation/app_router.dart';
 import 'features/deeplink/services/deep_link_service.dart';
 import 'features/profile/services/expert_profile_service.dart';
 import 'features/family/services/family_board_service.dart';
+
+import 'core/database/database_service.dart'; // New Import
+import 'core/repositories/data_repository.dart'; // New Import
+import 'services/tax_lien_service.dart'; // Existing but will be used by DataRepository
+import 'services/image_cache_service.dart'; // New Import
+import 'services/sync_manager.dart'; // New Import
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,11 +22,47 @@ Future<void> main() async {
   final deepLinkService = DeepLinkService.instance;
   await deepLinkService.init();
 
+  // Instantiate core services
+  final databaseService = DatabaseService();
+  final taxLienService = TaxLienService();
+  final imageCacheService = ImageCacheService();
+  final connectivity = Connectivity();
+
+  // Instantiate DataRepository and SyncManager with their dependencies
+  final dataRepository = DataRepository(
+    dbService: databaseService,
+    apiService: taxLienService,
+    imageCacheService: imageCacheService,
+  );
+  final syncManager = SyncManager(
+    dataRepository: dataRepository,
+    connectivity: connectivity,
+  );
+
   runApp(
     MultiProvider(
       providers: [
+        // Core services
+        Provider<DatabaseService>(create: (_) => databaseService),
+        Provider<TaxLienService>(create: (_) => taxLienService),
+        Provider<ImageCacheService>(create: (_) => imageCacheService),
+        Provider<Connectivity>(create: (_) => connectivity),
+        Provider<IDataRepository>(create: (_) => dataRepository),
+        Provider<SyncManager>(create: (_) => syncManager),
+
+        // Existing providers
         ChangeNotifierProvider(create: (_) => ExpertProfileService.instance),
         ChangeNotifierProvider(create: (_) => FamilyBoardService.instance),
+        ChangeNotifierProxyProvider2<IDataRepository, SyncManager, SwipeProvider>(
+          create: (context) => SwipeProvider(
+            dataRepository: Provider.of<IDataRepository>(context, listen: false),
+            syncManager: Provider.of<SyncManager>(context, listen: false),
+          ),
+          update: (context, dataRepo, syncMan, previousProvider) => previousProvider ?? SwipeProvider(
+            dataRepository: dataRepo,
+            syncManager: syncMan,
+          ),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -37,6 +81,10 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _initDeepLinks();
+    // Initialize SyncManager with context after the first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<SyncManager>(context, listen: false).initialize(context);
+    });
   }
 
   void _initDeepLinks() {

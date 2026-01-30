@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/swipe_provider.dart';
 import '../widgets/property_card_beginner.dart';
 import '../../../core/models/expert_role.dart';
+import 'package:go_router/go_router.dart'; // Import for navigation
 
 class SwipeScreen extends StatefulWidget {
   const SwipeScreen({super.key});
@@ -32,14 +33,12 @@ class _SwipeScreenState extends State<SwipeScreen> {
       ),
       body: Consumer<SwipeProvider>(
         builder: (context, provider, child) {
-          if (provider.isLoading) {
+          if (provider.isLoading && provider.properties.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
 
           if (provider.currentProperty == null) {
-            return const Center(
-              child: Text('No more properties! Check back later.'),
-            );
+            return _buildEmptyState(context);
           }
 
           return Padding(
@@ -54,8 +53,8 @@ class _SwipeScreenState extends State<SwipeScreen> {
                       scale: 0.95,
                       child: PropertyCardBeginner(
                         property: provider.properties[provider.currentIndex + 1],
-                        onLike: () {},
-                        onPass: () {},
+                        onLike: () {}, // These will be handled by Draggable
+                        onPass: () {}, // These will be handled by Draggable
                       ),
                     ),
                   ),
@@ -81,6 +80,10 @@ class _SwipeScreenState extends State<SwipeScreen> {
                       provider.handleLike(provider.currentProperty!.id);
                     } else if (details.offset.dx < -100) {
                       provider.handlePass(provider.currentProperty!.id);
+                    } else {
+                      // If dropped without significant swipe, advance to next as if passed
+                      // This is a UX choice; could also revert position or prompt
+                      provider.handlePass(provider.currentProperty!.id); 
                     }
                   },
                   child: PropertyCardBeginner(
@@ -93,6 +96,65 @@ class _SwipeScreenState extends State<SwipeScreen> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.wifi_off,
+              size: 80,
+              color: Colors.grey,
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'No more properties to swipe!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'Connect to the internet to load more properties or review your liked deals.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 30),
+            ElevatedButton.icon(
+              onPressed: () {
+                // TODO: Navigate to 'Liked' properties screen
+                // For now, let's assume a route like '/liked-properties'
+                context.go('/liked-properties'); 
+              },
+              icon: const Icon(Icons.favorite),
+              label: const Text('Review Liked Properties'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                textStyle: const TextStyle(fontSize: 18),
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextButton(
+              onPressed: () {
+                // Optionally allow user to manually retry loading
+                context.read<SwipeProvider>().loadProperties();
+              },
+              child: const Text('Try loading again'),
+            )
+          ],
+        ),
       ),
     );
   }

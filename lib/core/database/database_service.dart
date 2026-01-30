@@ -6,10 +6,19 @@ import 'package:path_provider/path_provider.dart';
 
 class DatabaseService {
   static final DatabaseService _instance = DatabaseService._internal();
-  factory DatabaseService() => _instance;
+  factory DatabaseService({String? databasePath}) => _instance._init(databasePath);
   DatabaseService._internal();
 
   Database? _database;
+  String? _testDatabasePath; // Used only for testing
+
+  DatabaseService _init(String? databasePath) {
+    if (databasePath != null) {
+      _testDatabasePath = databasePath;
+      _database = null; // Reset database for new path
+    }
+    return _instance;
+  }
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -18,8 +27,7 @@ class DatabaseService {
   }
 
   Future<Database> _initDatabase() async {
-    final documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, 'taxlien_offline.db');
+    final path = _testDatabasePath ?? join((await getApplicationDocumentsDirectory()).path, 'taxlien_offline.db');
 
     return await openDatabase(
       path,
@@ -134,19 +142,17 @@ class DatabaseService {
 
   Future<void> clearOldProperties(int keepCount) async {
     final db = await database;
-    // Keep Liked and Priority items, delete others based on LRU
     await db.execute('''
-      DELETE FROM properties 
-      WHERE is_liked = 0 
-      AND is_priority = 0 
-      AND id NOT IN (
-        SELECT id FROM properties 
-        WHERE is_liked = 1 OR is_priority = 1
-        UNION
-        SELECT id FROM properties 
-        ORDER BY last_accessed DESC 
-        LIMIT ?
-      )
+      DELETE FROM properties
+      WHERE
+          is_liked = 0 AND is_priority = 0 AND -- Only consider non-liked, non-priority properties for deletion
+          id NOT IN (
+              SELECT id
+              FROM properties
+              WHERE is_liked = 0 AND is_priority = 0 -- Only select non-liked, non-priority for LRU
+              ORDER BY last_accessed DESC
+              LIMIT ?
+          );
     ''', [keepCount]);
   }
 
@@ -159,5 +165,21 @@ class DatabaseService {
       whereArgs: contextHash != null ? [contextHash] : null,
     );
     return Sqflite.firstIntValue(result) ?? 0;
+  }
+
+  Future<Map<String, dynamic>?> getPropertyById(String id) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'properties',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    if (maps.isNotEmpty) {
+      final data = json.decode(maps.first['data']) as Map<String, dynamic>;
+      data['is_liked'] = maps.first['is_liked'] == 1; // Re-add is_liked from DB column
+      return data;
+    }
+    return null;
   }
 }

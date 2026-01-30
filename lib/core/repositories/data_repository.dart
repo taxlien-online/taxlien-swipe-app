@@ -1,29 +1,30 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart'; // For debugPrint
 
 import '../../services/tax_lien_service.dart';
-import '../../services/image_cache_service.dart'; // New Import
+import '../../services/image_cache_service.dart';
 import '../config/env_config.dart';
 import '../database/database_service.dart';
 import '../models/tax_lien_models.dart';
-import '../models/device_capabilities.dart'; // New Import
+import '../models/device_capabilities.dart';
 
 /// Abstract interface for the Data Repository.
 /// Defined in 02-specifications.md
 abstract class IDataRepository {
   Stream<List<TaxLien>> getPropertiesStream(String filterContextHash);
+  Future<TaxLien?> getPropertyById(String propertyId);
   Future<void> queueAction(String type, Map<String, dynamic> payload);
   Future<void> prefetchBatch({required int limit, required int ultraResLimit, required DeviceCapabilities caps});
   Future<void> updatePropertyLikedStatus(String propertyId, bool isLiked);
+  Future<int> getCachedPropertyCount({String? filterContextHash});
+  Future<void> syncQueuedActions();
 }
 
 class DataRepository implements IDataRepository {
   final DatabaseService _dbService;
   final TaxLienService _apiService;
-  final Connectivity _connectivity;
-  final ImageCacheService _imageCacheService; // New Field
+  final ImageCacheService _imageCacheService;
 
   // Stream controller to emit property updates to the UI
   final _propertiesController = StreamController<List<TaxLien>>.broadcast();
@@ -31,13 +32,10 @@ class DataRepository implements IDataRepository {
   DataRepository({
     required DatabaseService dbService,
     required TaxLienService apiService,
-    required Connectivity connectivity,
-    required ImageCacheService imageCacheService, // New Parameter
+    required ImageCacheService imageCacheService,
   })  : _dbService = dbService,
         _apiService = apiService,
-        _connectivity = connectivity,
-        _imageCacheService = imageCacheService { // Initialize new field
-    _connectivity.onConnectivityChanged.listen(_handleConnectivityChange);
+        _imageCacheService = imageCacheService {
     // Initial fetch to populate the stream
     _fetchAndEmitProperties();
   }
@@ -60,8 +58,7 @@ class DataRepository implements IDataRepository {
   @override
   Future<void> queueAction(String type, Map<String, dynamic> payload) async {
     await _dbService.queueAction(type, payload);
-    // Optionally trigger sync if online
-    _handleConnectivityChange(await _connectivity.checkConnectivity());
+    // DataRepository no longer directly triggers sync, SyncManager handles it.
   }
 
   @override
@@ -84,11 +81,7 @@ class DataRepository implements IDataRepository {
     required int ultraResLimit,
     required DeviceCapabilities caps,
   }) async {
-    final connectivityResult = await _connectivity.checkConnectivity();
-    if (connectivityResult == ConnectivityResult.none) {
-      debugPrint('Offline. Cannot prefetch.');
-      return;
-    }
+    // DataRepository no longer checks connectivity, SyncManager handles it.
 
     // TODO: Implement actual API call to /discovery with filter_context
     // For now, using mock or existing search
@@ -142,28 +135,9 @@ class DataRepository implements IDataRepository {
     }
   }
 
-  // --- Connectivity Handling ---
-  Future<void> _handleConnectivityChange(ConnectivityResult result) async {
-    if (result != ConnectivityResult.none) {
-      debugPrint('Online. Attempting to sync actions and prefetch.');
-      await _syncActions();
-      // Only prefetch if we are below a certain threshold of items
-      final currentCount = await _dbService.getPropertyCount();
-      if (currentCount < EnvConfig.offlineBatchSize * 0.5) { // If less than 50% buffer, prefetch
-        // TODO: Get actual device capabilities
-        final placeholderCaps = DeviceCapabilities(maxWidth: 1080, maxHeight: 1920, pixelRatio: 2.0);
-        await prefetchBatch(
-          limit: EnvConfig.offlineBatchSize,
-          ultraResLimit: (EnvConfig.offlineBatchSize * EnvConfig.ultraResPercent / 100).round(),
-          caps: placeholderCaps,
-        );
-      }
-    } else {
-      debugPrint('Offline. Actions will be queued.');
-    }
-  }
-
-  Future<void> _syncActions() async {
+  // --- Sync Actions ---
+  @override
+  Future<void> syncQueuedActions() async {
     final actions = await _dbService.getQueuedActions();
     if (actions.isEmpty) {
       debugPrint('No actions to sync.');
@@ -183,6 +157,25 @@ class DataRepository implements IDataRepository {
       }
     }
     debugPrint('Actions sync complete (simulated).');
+  }
+
+  // --- Exposed for SyncManager ---
+  @override
+  Future<int> getCachedPropertyCount({String? filterContextHash}) {
+    return _dbService.getPropertyCount(contextHash: filterContextHash);
+  }
+
+  @override
+  Future<TaxLien?> getPropertyById(String propertyId) async {
+    final Map<String, dynamic>? propertyMap = await _dbService.getPropertyById(propertyId);
+    if (propertyMap != null) {
+      // Update last_accessed for LRU
+      await _dbService.saveProperty(propertyMap); // This will update last_accessed
+      return TaxLien.fromJson(propertyMap);
+    }
+    // TODO: If not found locally, attempt to fetch from API if online?
+    // This is for "Liked" properties that should always be cached first.
+    return null;
   }
 
   // --- Cleanup ---

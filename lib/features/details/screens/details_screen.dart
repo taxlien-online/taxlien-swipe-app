@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart'; // New Import
+
 import '../../../core/models/tax_lien_models.dart';
-import '../../../services/tax_lien_service.dart';
+import '../../../core/repositories/data_repository.dart'; // New Import
+import '../../../core/models/device_capabilities.dart'; // New Import
+import '../../../services/image_cache_service.dart'; // New Import
+
 import '../../deeplink/widgets/smart_banner.dart';
 import '../../profile/models/expert_profile.dart';
 import '../../swipe/widgets/share_sheet.dart';
@@ -24,22 +29,20 @@ class PropertyDetailsScreen extends StatefulWidget {
 }
 
 class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
-  late Future<TaxLien> _propertyFuture;
+  late Future<TaxLien?> _propertyFuture; // Allow null
 
   @override
   void initState() {
     super.initState();
-    // В реальном приложении здесь будет запрос к Gateway API
-    // Для демо используем мок из сервиса
-    _propertyFuture = Future.value(
-      TaxLienService.getMockLiens().firstWhere((p) => p.id == widget.propertyId)
-    );
+    // Fetch property from DataRepository
+    _propertyFuture = Provider.of<IDataRepository>(context, listen: false)
+        .getPropertyById(widget.propertyId);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<TaxLien>(
+      body: FutureBuilder<TaxLien?>( // Allow null
         future: _propertyFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -49,14 +52,64 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
           
-          final property = snapshot.data!;
+          final property = snapshot.data;
+
+          if (property == null) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.warning_amber_rounded,
+                      size: 80,
+                      color: Colors.orange,
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Property Not Found Offline',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'This property may not have been preloaded or is no longer available.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        context.go('/swipe'); // Go back to swipe screen
+                      },
+                      icon: const Icon(Icons.arrow_back),
+                      label: const Text('Back to Swiping'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                        textStyle: const TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
           return Column(
             children: [
               const SmartBanner(),
               Expanded(
                 child: CustomScrollView(
                   slivers: [
-                    _buildAppBar(property),
+                    _buildAppBar(property, context), // Pass context for DeviceCapabilities
                     SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -82,10 +135,14 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
           );
         },
       ),
+
     );
   }
 
-  Widget _buildAppBar(TaxLien property) {
+  Widget _buildAppBar(TaxLien property, BuildContext context) {
+    final imageCacheService = Provider.of<ImageCacheService>(context, listen: false);
+    final caps = DeviceCapabilities.of(context);
+
     return SliverAppBar(
       expandedHeight: 400,
       pinned: true,
@@ -107,10 +164,18 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                   PageView.builder(
                     itemCount: property.images.length,
                     itemBuilder: (context, index) {
-                      return Image.network(
+                      // Request Ultra-Res images for details screen
+                      final imageUrl = imageCacheService.buildOptimizedImageUrl(
                         property.images[index],
+                        caps,
+                        isUltraRes: true,
+                      ).toString();
+                      
+                      return CachedNetworkImage( // Using CachedNetworkImage for consistency and caching
+                        imageUrl: imageUrl,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Container(
+                        placeholder: (context, url) => Container(color: Colors.grey[300]),
+                        errorWidget: (context, url, error) => Container(
                           color: Colors.grey,
                           child: const Icon(Icons.broken_image, size: 100),
                         ),

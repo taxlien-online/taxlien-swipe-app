@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class FVI {
   final double financialScore; // 0.0 - 10.0 (ROI, Tax history)
   final Map<String, double> expertScores; // { "khun_pho": 8.0, "denis": 9.5 }
@@ -10,6 +8,18 @@ class FVI {
     required this.expertScores,
     required this.propertyCost,
   });
+
+  factory FVI.mock() {
+    return const FVI(
+      financialScore: 7.5,
+      expertScores: {
+        'khun-pho': 8.0,
+        'denis': 9.5,
+        'anton': 7.0,
+      },
+      propertyCost: 1000, // Example cost for calculation
+    );
+  }
 
   /// Главная метрика: Индекс Полной Пользы
   double get totalIndex {

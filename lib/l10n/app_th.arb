@@ -1,0 +1,18 @@
+{
+  "@@locale": "th",
+  "appTitle": "TaxLien Swipe",
+  "profileTitle": "โปรไฟล์ผู้เชี่ยวชาญ",
+  "language": "ภาษา",
+  "settings": "การตั้งค่า",
+  "roles": "บทบาท",
+  "switchProfile": "เปลี่ยนโปรไฟล์",
+  "retry": "ลองใหม่",
+  "startOver": "เริ่มใหม่",
+  "noMoreProperties": "ไม่มีทรัพย์สินเพิ่มเติม!",
+  "checkBackLater": "กลับมาตรวจสอบรายการใหม่ในภายหลัง",
+  "dailyLimitReached": "ถึงขีดจำกัดรายวันแล้ว",
+  "maybeLater": "ไว้วันหลัง",
+  "upgradeNow": "อัปเกรดตอนนี้",
+  "expert": "ผู้เชี่ยวชาญ",
+  "foreclosureMode": "โหมดบังคับคดี"
+}

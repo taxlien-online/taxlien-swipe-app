@@ -57,6 +57,7 @@ class DataRepository implements IDataRepository {
   // --- Offline Actions ---
   @override
   Future<void> queueAction(String type, Map<String, dynamic> payload) async {
+    debugPrint('DEBUG: DataRepository.queueAction called. _dbService type: ${_dbService.runtimeType}');
     await _dbService.queueAction(type, payload);
     // DataRepository no longer directly triggers sync, SyncManager handles it.
   }
@@ -147,15 +148,14 @@ class DataRepository implements IDataRepository {
     // For now, simulate success and delete
     for (var actionMap in actions) {
       try {
-        final String type = actionMap['type'];
+        final String type = actionMap['action_type']; // Corrected key
         final Map<String, dynamic> payload = json.decode(actionMap['payload']);
         debugPrint('Simulating sync for action type: $type, payload: $payload');
         // await _apiService.syncAction(type, payload); // Placeholder for actual API call
         await _dbService.removeAction(actionMap['id']); // Remove after successful sync
       } catch (e) {
         debugPrint('Failed to sync action ${actionMap['id']}: $e. Will retry later.');
-        await _dbService.updateActionStatus(actionMap['id'], 'failed'); // Mark as failed
-        // Increment retry count, potentially mark for manual review if too many retries
+        // TODO: Implement retry logic or update action status in DB if needed later.
       }
     }
     debugPrint('Actions sync complete (simulated).');

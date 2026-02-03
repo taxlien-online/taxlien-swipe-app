@@ -1,0 +1,18 @@
+{
+  "@@locale": "bn",
+  "appTitle": "TaxLien Swipe",
+  "profileTitle": "বিশেষজ্ঞ প্রোফাইল",
+  "language": "ভাষা",
+  "settings": "সেটিংস",
+  "roles": "ভূমিকা",
+  "switchProfile": "প্রোফাইল পরিবর্তন করুন",
+  "retry": "আবার চেষ্টা করুন",
+  "startOver": "আবার শুরু করুন",
+  "noMoreProperties": "আর কোন সম্পত্তি নেই!",
+  "checkBackLater": "নতুন তালিকার জন্য পরে আবার আসুন",
+  "dailyLimitReached": "দৈনিক সীমা পৌঁছে গেছে",
+  "maybeLater": "পরে হতে পারে",
+  "upgradeNow": "এখনই আপগ্রেড করুন",
+  "expert": "বিশেষজ্ঞ",
+  "foreclosureMode": "ফোরক্লোজার মোড"
+}

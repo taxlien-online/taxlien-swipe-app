@@ -3,10 +3,15 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart'; // New Import
 
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'core/navigation/app_router.dart';
+import 'core/localization/locale_provider.dart';
 import 'features/deeplink/services/deep_link_service.dart';
 import 'features/profile/services/expert_profile_service.dart';
 import 'features/family/services/family_board_service.dart';
+import 'features/swipe/providers/swipe_provider.dart';
 
 import 'core/database/database_service.dart'; // New Import
 import 'core/repositories/data_repository.dart'; // New Import
@@ -27,6 +32,9 @@ Future<void> main() async {
   final taxLienService = TaxLienService();
   final imageCacheService = ImageCacheService();
   final connectivity = Connectivity();
+  final localeProvider = LocaleProvider();
+
+  await localeProvider.loadSavedLocale();
 
   // Instantiate DataRepository and SyncManager with their dependencies
   final dataRepository = DataRepository(
@@ -43,6 +51,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         // Core services
+        ChangeNotifierProvider<LocaleProvider>.value(value: localeProvider),
         Provider<DatabaseService>(create: (_) => databaseService),
         Provider<TaxLienService>(create: (_) => taxLienService),
         Provider<ImageCacheService>(create: (_) => imageCacheService),
@@ -100,12 +109,22 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final localeProvider = Provider.of<LocaleProvider>(context);
+
     return MaterialApp.router(
       title: 'TaxLien Swipe - Deal Detective',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       routerConfig: AppRouter.router,
+      locale: localeProvider.locale,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../core/models/tax_lien_models.dart';
 import '../../../services/tax_lien_service.dart';
 import '../../profile/services/expert_profile_service.dart';
@@ -137,6 +138,18 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
       _recordSwipe(SwipeConstants.swipeLeft);
       _moveToNextCard();
     }
+  }
+
+  void _showContextOverlay() {
+    // Placeholder for context overlay (Anton mode)
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Context overlay triggered'),
+        duration: Duration(milliseconds: 500),
+      ),
+    );
+    _recordSwipe(SwipeConstants.swipeLeft);
+    _moveToNextCard();
   }
 
   void _handleSwipeRight() async {
@@ -406,6 +419,7 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final profileService = Provider.of<ExpertProfileService>(context);
     final currentProfile = profileService.currentProfile;
 
@@ -437,9 +451,9 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('TaxLien Swipe', style: TextStyle(fontSize: 16)),
+            Text(l10n.appTitle, style: const TextStyle(fontSize: 16)),
             Text(
-              'Expert: ${currentProfile.name}',
+              '${l10n.expert}: ${currentProfile.name}',
               style: TextStyle(fontSize: 11, color: currentProfile.color),
             ),
           ],
@@ -504,7 +518,7 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: _loadProperties,
-            child: const Text('Retry'),
+            child: Text(AppLocalizations.of(context)!.retry),
           ),
         ],
       ),
@@ -512,6 +526,7 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
   }
 
   Widget _buildCardStack() {
+    final l10n = AppLocalizations.of(context)!;
     if (_currentIndex >= _cardStack.length) {
       return Center(
         child: Column(
@@ -519,12 +534,12 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
           children: [
             const Icon(Icons.check_circle, size: 64, color: Colors.green),
             const SizedBox(height: 16),
-            const Text(
-              'No more properties!',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              l10n.noMoreProperties,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            const Text('Check back later for new listings'),
+            Text(l10n.checkBackLater),
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () {
@@ -535,7 +550,7 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
                 });
                 _loadProperties();
               },
-              child: const Text('Start Over'),
+              child: Text(l10n.startOver),
             ),
           ],
         ),

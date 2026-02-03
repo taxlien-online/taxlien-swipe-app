@@ -113,7 +113,7 @@ class FamilyBoardScreen extends StatelessWidget {
                       const Spacer(),
                       ElevatedButton(
                         onPressed: () {}, // Перейти в чат обсуждения
-                        style: ElevatedButton.fromSize(
+                        style: ElevatedButton.styleFrom(
                           fixedSize: const Size(80, 32),
                           backgroundColor: Colors.green.shade50,
                           elevation: 0,

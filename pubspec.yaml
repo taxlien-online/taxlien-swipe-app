@@ -10,6 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   
   # Core
   flutter_dotenv: ^5.1.0
@@ -33,7 +35,7 @@ dependencies:
   flutter_animate: ^4.2.0+1
   
   # Utils
-  intl: ^0.19.0
+  intl: ^0.20.2
   uuid: ^4.2.2
   json_annotation: ^4.8.1
   
@@ -41,6 +43,8 @@ dependencies:
   sqflite: ^2.3.0
   path: ^1.8.3
   connectivity_plus: ^7.0.0
+  geolocator: ^14.0.0
+  geocoding: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -50,8 +54,10 @@ dev_dependencies:
   json_serializable: ^6.7.1
   sqflite_common_ffi: ^2.3.0 # For testing sqflite
   mocktail: ^1.0.0 # For mocking dependencies
+  file: ^7.0.0 # For mocking File in flutter_cache_manager tests
   
 flutter:
+  generate: true
   uses-material-design: true
   assets:
     - .env

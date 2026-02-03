@@ -1,11 +1,40 @@
 # Requirements: Swipe Screen & Deal Detective
 
-**Version:** 0.1 (Draft)
-**Status:** 🟡 DRAFT
+**Version:** 0.2
+**Status:** ✅ APPROVED
 **Source:** Derived from `sdd-miw-gift` (Deal Detective concept)
+**Last Updated:** 2026-02-03
 
 ## Context
-This flow focuses on implementing the "Swipe Screen" for the Tax Lien Swipe App ("Deal Detective"). Unlike traditional swipe interfaces (Tinder-style), this screen serves as a primary data collection and expert annotation tool.
+
+This flow focuses on implementing the "Swipe Screen" for the Tax Lien Swipe App ("Deal Detective").
+
+> **CORE CONCEPT:** We are hunting **FORECLOSURE CANDIDATES** — properties with high probability of going to foreclosure through tax lien OR deed acquisition. This is NOT a generic property browser.
+
+### What is a Foreclosure Candidate?
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  FORECLOSURE CANDIDATE = Property likely to be acquired         │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  Acquisition Paths:                                             │
+│  ├── TAX LIEN: Buy lien → collect interest OR foreclose        │
+│  ├── DEED: Buy deed directly at auction                         │
+│  └── OTC: Over-the-counter purchase (post-auction)             │
+│                                                                 │
+│  Key Metrics:                                                   │
+│  • foreclosureProbability (0.0-1.0) — ML prediction             │
+│  • priorYearsOwed — delinquency indicator                       │
+│  • x1000Score — hidden treasure potential (antiques, cars)      │
+│  • FVI — Family Value Index (combined expert scores)            │
+│                                                                 │
+│  NOT showing: random properties, already redeemed liens         │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+Unlike traditional swipe interfaces (Tinder-style), this screen serves as a primary data collection and expert annotation tool for finding foreclosure opportunities.
 
 ## Core Concepts from sdd-miw-gift
 
@@ -28,11 +57,17 @@ The screen must support different "lenses" or user profiles.
 ### 4. Data Collection for ML
 - Every interaction (especially annotations) is a training signal for the backend ML models (x1000 detectors).
 
-## User Stories (Draft)
+## User Stories
+
+### US-0: Foreclosure Candidate Focus
+- As a user, I want to see **only foreclosure candidates** (high foreclosure probability), not random properties.
+- As a user, I want to see **foreclosure probability** prominently displayed on each card.
+- As a user, I want to understand the **acquisition path** (tax lien vs deed vs OTC).
+- As a user, I want to see **x1000 potential** indicator when ML detects hidden treasures (antiques, vintage cars, scientific equipment).
 
 ### US-1: Basic Navigation
-- As a user, I want to swipe through a stack of property cards.
-- As a user, I want to see key property details (price, location, image) on the card.
+- As a user, I want to swipe through a stack of **foreclosure candidate cards**.
+- As a user, I want to see key metrics (foreclosure probability, lien cost, FVI) on the card.
 
 ### US-2: Expert Annotation
 - As an expert (e.g., Anton), I want to tap on a specific part of a photo (e.g., a car in a garage) to mark it.

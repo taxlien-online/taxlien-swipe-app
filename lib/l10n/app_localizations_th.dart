@@ -1,0 +1,55 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Thai (`th`).
+class AppLocalizationsTh extends AppLocalizations {
+  AppLocalizationsTh([String locale = 'th']) : super(locale);
+
+  @override
+  String get appTitle => 'TaxLien Swipe';
+
+  @override
+  String get profileTitle => 'โปรไฟล์ผู้เชี่ยวชาญ';
+
+  @override
+  String get language => 'ภาษา';
+
+  @override
+  String get settings => 'การตั้งค่า';
+
+  @override
+  String get roles => 'บทบาท';
+
+  @override
+  String get switchProfile => 'เปลี่ยนโปรไฟล์';
+
+  @override
+  String get retry => 'ลองใหม่';
+
+  @override
+  String get startOver => 'เริ่มใหม่';
+
+  @override
+  String get noMoreProperties => 'ไม่มีทรัพย์สินเพิ่มเติม!';
+
+  @override
+  String get checkBackLater => 'กลับมาตรวจสอบรายการใหม่ในภายหลัง';
+
+  @override
+  String get dailyLimitReached => 'ถึงขีดจำกัดรายวันแล้ว';
+
+  @override
+  String get maybeLater => 'ไว้วันหลัง';
+
+  @override
+  String get upgradeNow => 'อัปเกรดตอนนี้';
+
+  @override
+  String get expert => 'ผู้เชี่ยวชาญ';
+
+  @override
+  String get foreclosureMode => 'โหมดบังคับคดี';
+}

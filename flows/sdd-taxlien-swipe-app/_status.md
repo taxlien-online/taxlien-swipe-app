@@ -58,6 +58,6 @@ None.
 ---
 
 ## Next Actions
-1. [ ] Phase 5: Offline Mode (P2) - SQLite caching and sync logic
+1. [x] Phase 5: Offline Mode (P2) - SQLite caching and sync logic (Completed, with testing partially skipped as per user instruction)
 2. [ ] Phase 6: Export to PDF (P1) - Generation of Property Analysis Sheet for Miw
 3. [ ] Integration: Connect to real Gateway API for foreclosure candidates

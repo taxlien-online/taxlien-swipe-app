@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../services/tax_lien_service.dart';
+import '../../../core/models/tax_lien_models.dart';
 import '../models/family_match.dart';
 
 class FamilyBoardService extends ChangeNotifier {

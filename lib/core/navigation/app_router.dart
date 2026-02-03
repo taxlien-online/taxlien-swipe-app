@@ -5,11 +5,59 @@ import '../../features/details/screens/details_screen.dart';
 import '../../features/annotation/screens/annotation_screen.dart';
 import '../../features/family/screens/family_screen.dart';
 import '../../features/profile/screens/profile_screen.dart';
+// Onboarding screens
+import '../../features/onboarding/screens/welcome_screen.dart';
+import '../../features/onboarding/screens/mode_selection_screen.dart';
+import '../../features/onboarding/screens/role_selection_screen.dart';
+import '../../features/onboarding/screens/geography_screen.dart';
+import '../../features/onboarding/screens/county_selection_screen.dart';
+import '../../features/onboarding/screens/tutorial_screen.dart';
+import '../../features/onboarding/screens/ready_screen.dart';
 
 class AppRouter {
   static final router = GoRouter(
     initialLocation: '/',
     routes: [
+      // Onboarding routes
+      GoRoute(
+        path: '/onboarding/welcome',
+        name: 'onboarding_welcome',
+        builder: (context, state) => const WelcomeScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding/mode',
+        name: 'onboarding_mode',
+        builder: (context, state) => const ModeSelectionScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding/role',
+        name: 'onboarding_role',
+        builder: (context, state) => const RoleSelectionScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding/geo',
+        name: 'onboarding_geo',
+        builder: (context, state) => const GeographyScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding/county',
+        name: 'onboarding_county',
+        builder: (context, state) {
+          final stateCode = state.uri.queryParameters['state'] ?? 'AZ';
+          return CountySelectionScreen(stateCode: stateCode);
+        },
+      ),
+      GoRoute(
+        path: '/onboarding/tutorial',
+        name: 'onboarding_tutorial',
+        builder: (context, state) => const TutorialScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding/ready',
+        name: 'onboarding_ready',
+        builder: (context, state) => const ReadyScreen(),
+      ),
+      // Main app routes
       GoRoute(
         path: '/',
         name: 'home',

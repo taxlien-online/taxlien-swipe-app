@@ -25,16 +25,17 @@ class SyncManager {
   void initialize(BuildContext context) {
     _context = context;
     _startPrefetchTimer();
-    _handleConnectivityChange(ConnectivityResult.none); // Check initial state
+    _connectivity.checkConnectivity().then(_handleConnectivityChange);
   }
 
   void _startPrefetchTimer() {
     // Prefetch periodically (e.g., every 5 minutes if online)
     _prefetchTimer = Timer.periodic(const Duration(minutes: 5), (timer) async {
-      final connectivityResult = await _connectivity.checkConnectivity();
-      if (connectivityResult != ConnectivityResult.none && _context != null) {
+      final results = await _connectivity.checkConnectivity();
+      final result = results.isNotEmpty ? results.first : ConnectivityResult.none;
+      if (result != ConnectivityResult.none && _context != null) {
         debugPrint('SyncManager: Periodic prefetch triggered.');
-        await _triggerPrefetch();
+        await triggerPrefetchIfNeeded();
       }
     });
   }
@@ -42,8 +43,9 @@ class SyncManager {
   /// Triggers a prefetch operation if needed.
   /// This can be called proactively by UI (e.g., after a swipe) or by the timer.
   Future<void> triggerPrefetchIfNeeded() async {
-    final connectivityResult = await _connectivity.checkConnectivity();
-    if (connectivityResult == ConnectivityResult.none) {
+    final results = await _connectivity.checkConnectivity();
+    final result = results.isNotEmpty ? results.first : ConnectivityResult.none;
+    if (result == ConnectivityResult.none) {
       debugPrint('SyncManager: Offline. Cannot prefetch.');
       return;
     }
@@ -68,7 +70,8 @@ class SyncManager {
   }
 
 
-  Future<void> _handleConnectivityChange(ConnectivityResult result) async {
+  Future<void> _handleConnectivityChange(List<ConnectivityResult> results) async {
+    final result = results.isNotEmpty ? results.first : ConnectivityResult.none;
     if (result != ConnectivityResult.none) {
       debugPrint('SyncManager: Online. Attempting to sync actions and trigger prefetch.');
       await _dataRepository.syncQueuedActions();

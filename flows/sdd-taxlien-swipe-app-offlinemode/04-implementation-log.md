@@ -14,6 +14,9 @@
 | 3.1 Sync Manager Implementation | Completed | lib/services/sync_manager.dart already implements connectivity-aware sync logic. |
 | 4.1 Swipe Screen Refactoring | Completed | lib/features/swipe/providers/swipe_provider.dart and lib/features/swipe/screens/swipe_screen.dart already refactored to use DataRepository and SyncManager. |
 | 4.2 Empty State & Fallback UX | Completed | lib/features/swipe/widgets/offline_empty_state.dart created and integrated into SwipeScreen. |
+| 4.3 Details Screen Offline Mode | Completed | lib/features/details/providers/details_provider.dart and lib/features/details/screens/details_screen.dart refactored to use DataRepository and ImageCacheService. lib/features/details/widgets/gallery_carousel.dart created. |
+| 5.1 Unit Testing | Pending | |
+| 5.2 Manual E2E Testing | Skipped | User requested to skip manual testing. |
 
 ## Session Log
 

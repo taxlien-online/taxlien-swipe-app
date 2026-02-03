@@ -1,9 +1,12 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/swipe_provider.dart';
 import 'property_card_advanced.dart';
-import '../../../../core/models/property_card_data.dart';
-import '../../../../core/models/expert_role.dart';
+import '../../../core/models/property_card_data.dart';
+import '../../../core/models/expert_role.dart';
+import '../../../core/models/marker.dart';
 import '../views/context_view.dart';
 import '../views/details_view.dart';
 
@@ -63,11 +66,62 @@ class _AdvancedSwipeStackState extends State<AdvancedSwipeStack> {
     super.dispose();
   }
 
-  // Helper to determine the main image based on role
   String _getMainImageUrl(PropertyCardData property, ExpertRole role) {
     // Implement role-based image selection here
-    // For now, just return the first image
-    return property.imageUrls.first;
+    // Default to the first image if no specific category is found or role is guest
+    String? imageUrl;
+
+    // Prioritize specific image categories based on role
+    switch (role) {
+      case ExpertRole.builder:
+        imageUrl = property.imageCategories.entries.firstWhere(
+          (entry) => entry.value == 'roof' || entry.value == 'exterior',
+          orElse: () => MapEntry('', ''),
+        ).key;
+        break;
+      case ExpertRole.inventor:
+        imageUrl = property.imageCategories.entries.firstWhere(
+          (entry) => entry.value == 'garage' || entry.value == 'lab' || entry.value == 'interior_science',
+          orElse: () => MapEntry('', ''),
+        ).key;
+        break;
+      case ExpertRole.restorer:
+        imageUrl = property.imageCategories.entries.firstWhere(
+          (entry) => entry.value == 'interior_furniture' || entry.value == 'interior',
+          orElse: () => MapEntry('', ''),
+        ).key;
+        break;
+      case ExpertRole.caregiver:
+        imageUrl = property.imageCategories.entries.firstWhere(
+          (entry) => entry.value == 'exterior' || entry.value == 'yard' || entry.value == 'neighborhood',
+          orElse: () => MapEntry('', ''),
+        ).key;
+        break;
+      case ExpertRole.lifestyle:
+        imageUrl = property.imageCategories.entries.firstWhere(
+          (entry) => entry.value == 'exterior' || entry.value == 'balcony' || entry.value == 'view',
+          orElse: () => MapEntry('', ''),
+        ).key;
+        break;
+      case ExpertRole.explorer:
+        imageUrl = property.imageCategories.entries.firstWhere(
+          (entry) => entry.value == 'backyard' || entry.value == 'playground' || entry.value == 'park',
+          orElse: () => MapEntry('', ''),
+        ).key;
+        break;
+      case ExpertRole.businessman:
+      case ExpertRole.guest:
+      default:
+        // Default for businessman and guest, or if no specific image is found
+        imageUrl = property.imageCategories.entries.firstWhere(
+          (entry) => entry.value == 'exterior',
+          orElse: () => MapEntry('', ''),
+        ).key;
+        break;
+    }
+
+    // Fallback to the first image if no specific image category was found
+    return imageUrl?.isNotEmpty == true ? imageUrl! : property.imageUrls.first;
   }
 
   Widget _buildTopHUD(ExpertRole role, PropertyCardData property) {
@@ -97,11 +151,13 @@ class _AdvancedSwipeStackState extends State<AdvancedSwipeStack> {
 
     return Container(
       padding: const EdgeInsets.all(16),
-      color: Colors.black.withOpacity(0.5),
+      color: Colors.black.withValues(alpha: 0.5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _buildHudBadge(primaryMetric, Colors.green),
+          if (property.hasBridgePotential)
+            _buildBridgeBadge(property.bridgeRoles),
           _buildHudBadge(secondaryMetrics, Colors.blue),
           IconButton(
             icon: const Icon(Icons.info_outline, color: Colors.white),
@@ -114,11 +170,40 @@ class _AdvancedSwipeStackState extends State<AdvancedSwipeStack> {
     );
   }
 
+  Widget _buildBridgeBadge(List<String> roles) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF9C27B0), Color(0xFF673AB7)],
+        ),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.5)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.link, color: Colors.white, size: 14),
+          const SizedBox(width: 4),
+          Text(
+            'BRIDGE',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildHudBadge(String text, Color color) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.8),
+        color: color.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Text(text, style: const TextStyle(color: Colors.white, fontSize: 12)),
@@ -128,7 +213,7 @@ class _AdvancedSwipeStackState extends State<AdvancedSwipeStack> {
   Widget _buildBottomActionButtons(PropertyCardData property) {
     return Container(
       padding: const EdgeInsets.all(16),
-      color: Colors.black.withOpacity(0.5),
+      color: Colors.black.withValues(alpha: 0.5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -137,9 +222,15 @@ class _AdvancedSwipeStackState extends State<AdvancedSwipeStack> {
             onPressed: () => widget.onPass(property.id),
           ),
           IconButton(
-            icon: const Icon(Icons.brush, color: Colors.blue, size: 36),
+            icon: Icon(
+              _isAnnotationMode ? Icons.brush : Icons.brush_outlined,
+              color: _isAnnotationMode ? Colors.amber : Colors.blue,
+              size: 36,
+            ),
             onPressed: () {
-              // Open Annotation Mode
+              setState(() {
+                _isAnnotationMode = !_isAnnotationMode;
+              });
             },
           ),
           IconButton(
@@ -230,6 +321,14 @@ class _AdvancedSwipeStackState extends State<AdvancedSwipeStack> {
                   property: property,
                   topOverlay: _buildTopHUD(currentRole, property),
                   bottomOverlay: _buildBottomActionButtons(property),
+                  isAnnotationMode: _isAnnotationMode,
+                  markers: _currentPropertyMarkers,
+                  mainImageUrl: currentMainImageUrl,
+                  onAddMarker: (marker) {
+                    setState(() {
+                      _currentPropertyMarkers = [..._currentPropertyMarkers, marker];
+                    });
+                  },
                 ),
               ),
             ],

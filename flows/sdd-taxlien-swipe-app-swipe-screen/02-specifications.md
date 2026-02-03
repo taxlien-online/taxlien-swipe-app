@@ -1,11 +1,21 @@
 # Specifications: Swipe Screen & Deal Detective
 
-**Version:** 0.1
-**Status:** 🟡 DRAFT
+**Version:** 0.2
+**Status:** ✅ APPROVED
+**Last Updated:** 2026-02-03
 
 ## 1. Data Models
 
-### 1.1 SwipeMode
+### 1.1 AcquisitionPath (NEW)
+```dart
+enum AcquisitionPath {
+  taxLien,    // Buy lien → collect interest OR foreclose
+  deed,       // Buy deed directly at auction
+  otc,        // Over-the-counter (post-auction)
+}
+```
+
+### 1.2 SwipeMode
 ```dart
 enum SwipeMode {
   beginner,
@@ -13,7 +23,43 @@ enum SwipeMode {
 }
 ```
 
-### 1.2 UserPreferences (Extension)
+### 1.3 ForeclosureCandidateCard (Renamed from PropertyCardData)
+```dart
+class ForeclosureCandidateCard {
+  final String id;
+  final String address;
+  final String city;
+  final String state;
+  final String county;
+
+  // Financial
+  final double estimatedValue;
+  final double lienCost;
+  final double totalCost; // Including fees
+  final double roi;
+
+  // FORECLOSURE METRICS (KEY!)
+  final double foreclosureProbability; // 0.0 - 1.0 (ML prediction)
+  final int priorYearsOwed;            // Delinquency indicator
+  final AcquisitionPath acquisitionPath;
+
+  // VALUE METRICS
+  final double fvi;                    // Family Value Index 0-10
+  final double karmaScore;             // -1.0 to 1.0 (ethical)
+  final double? x1000Score;            // Hidden treasure potential 0-10
+
+  // Images
+  final List<String> imageUrls;
+  final Map<String, String> imageCategories;
+
+  // Expert annotations
+  final List<AnnotationMarker> markers;
+  final String? expertReassurance;
+  final Map<String, dynamic> roleMetrics;
+}
+```
+
+### 1.4 UserPreferences (Extension)
 ```dart
 class UserPreferences {
   final SwipeMode swipeMode;

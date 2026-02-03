@@ -1,0 +1,21 @@
+{
+  "@@locale": "en",
+  "appTitle": "TaxLien Swipe",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "profileTitle": "Expert Profile",
+  "language": "Language",
+  "settings": "Settings",
+  "roles": "Roles",
+  "switchProfile": "Switch Profile",
+  "retry": "Retry",
+  "startOver": "Start Over",
+  "noMoreProperties": "No more properties!",
+  "checkBackLater": "Check back later for new listings",
+  "dailyLimitReached": "Daily Limit Reached",
+  "maybeLater": "Maybe Later",
+  "upgradeNow": "Upgrade Now",
+  "expert": "Expert",
+  "foreclosureMode": "Foreclosure Mode"
+}

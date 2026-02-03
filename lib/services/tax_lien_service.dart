@@ -1,174 +1,431 @@
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../core/models/tax_lien_models.dart';
+import '../core/models/fvi.dart';
 import '../core/models/property_card_data.dart';
-import '../core/models/marker.dart';
-import 'package:flutter/material.dart'; // Import for Offset
 
 class TaxLienService {
-  Future<List<PropertyCardData>> getPropertyCards() async {
-    // Имитация задержки сети
-    await Future.delayed(const Duration(milliseconds: 800));
+  final String? _baseUrl = dotenv.env['API_URL'];
+  
+  /// Search for foreclosure candidates (sdd-miw-gift integration)
+  /// 
+  /// Fetches liens with high foreclosure probability for Miw's strategy
+  Future<List<TaxLien>> searchForeclosureCandidates({
+    String state = 'AZ',
+    int? priorYearsMin,
+    double? maxAmount,
+    double? foreclosureProbMin = 0.7,
+    int limit = 100,
+  }) async {
+    if (_baseUrl == null) {
+      return _getMockForeclosureCandidates();
+    }
 
+    try {
+      final queryParams = <String, String>{
+        'state': state,
+        'foreclosure_prob_min': foreclosureProbMin.toString(),
+        'limit': limit.toString(),
+      };
+      if (priorYearsMin != null) {
+        queryParams['prior_years_min'] = priorYearsMin.toString();
+      }
+      if (maxAmount != null) {
+        queryParams['max_amount'] = maxAmount.toString();
+      }
+
+      final uri = Uri.parse('$_baseUrl/api/v1/liens/foreclosure-candidates')
+          .replace(queryParameters: queryParams);
+
+      final response = await http.get(uri);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body)['liens'] ?? [];
+        return data.map((json) => TaxLien.fromJson(json)).toList();
+      } else {
+        throw Exception('Failed to load foreclosure candidates: ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('Error loading foreclosure candidates: $e');
+      return _getMockForeclosureCandidates();
+    }
+  }
+
+  /// Regular search for liens
+  /// This is the method DataRepository will call.
+  Future<List<TaxLien>> searchLiens({
+    String? state,
+    String? county,
+    int limit = 50, // Default limit
+  }) async {
+    if (_baseUrl == null) {
+      return _getMockLiens();
+    }
+
+    try {
+      final queryParams = <String, String>{
+        'limit': limit.toString(),
+      };
+      if (state != null) queryParams['state'] = state;
+      if (county != null) queryParams['county'] = county;
+
+      final uri = Uri.parse('$_baseUrl/api/v1/liens/search')
+          .replace(queryParameters: queryParams);
+
+      final response = await http.get(uri);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body)['liens'] ?? [];
+        return data.map((json) => TaxLien.fromJson(json)).toList();
+      } else {
+        throw Exception('Failed to load liens: ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('Error loading liens: $e');
+      return _getMockLiens();
+    }
+  }
+
+  /// Get foreclosure candidates as PropertyCardData (ready for UI)
+  Future<List<PropertyCardData>> getForeclosureCandidateCards({
+    String state = 'AZ',
+    double? foreclosureProbMin = 0.7,
+    int limit = 100,
+  }) async {
+    final liens = await searchForeclosureCandidates(
+      state: state,
+      foreclosureProbMin: foreclosureProbMin,
+      limit: limit,
+    );
+    return liens.map((lien) => PropertyCardData.fromTaxLien(lien)).toList();
+  }
+
+  /// Get a single tax lien by ID
+  Future<TaxLien?> getTaxLienById(String id) async {
+    if (_baseUrl == null) {
+      final allMock = [..._getMockLiens(), ..._getMockForeclosureCandidates()];
+      try {
+        return allMock.firstWhere((lien) => lien.id == id);
+      } catch (_) {
+        return null;
+      }
+    }
+
+    try {
+      final uri = Uri.parse('$_baseUrl/api/v1/liens/$id');
+      final response = await http.get(uri);
+
+      if (response.statusCode == 200) {
+        return TaxLien.fromJson(json.decode(response.body));
+      } else {
+        return null;
+      }
+    } catch (e) {
+      debugPrint('Error loading lien $id: $e');
+      return null;
+    }
+  }
+
+  // Helper for mock foreclosure candidates (sdd-miw-gift)
+  // These represent properties with HIGH foreclosure probability
+  // that we're actively hunting for Miw's strategy
+  static List<TaxLien> _getMockForeclosureCandidates() {
     return [
-      // Property 1: Focus on Builder/Caregiver/Lifestyle
-      PropertyCardData(
-        id: '1',
-        address: '123 Oak Street',
+      // HIGH FORECLOSURE + x1000 POTENTIAL (Vintage Car in garage!)
+      TaxLien(
+        id: 'fc-1',
+        parcelId: 'AZ-MAR-001',
+        propertyAddress: '789 Foreclosure St',
         city: 'Phoenix',
+        county: 'Maricopa',
         state: 'AZ',
-        estimatedValue: 180000,
-        lienCost: 750,
-        totalCost: 2500,
-        roi: 15.0, // 15x multiplier potential (for foreclosure)
-        fvi: 8.5,
-        karmaScore: 0.7, // Good karma (blighted)
-        imageUrls: [
-          'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&h=600&fit=crop', // Exterior
-          'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&h=600&fit=crop', // Roof
-          'https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?w=800&h=600&fit=crop', // Kitchen (needs update)
-          'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=600&fit=crop', // Living Room
+        taxAmount: 450.0,
+        interestRate: 16.0,
+        auctionDate: DateTime(2026, 2, 12),
+        status: 'active',
+        propertyType: 'Residential',
+        estimatedValue: 250000.0,
+        assessedValue: 210000.0,
+        description: 'Estate of retired mechanic. Garage visible in photos.',
+        images: [
+          'https://images.unsplash.com/photo-1568605114967-8130f3a36994',
+          'https://images.unsplash.com/photo-1558618666-fcd25c85cd64', // garage
         ],
-        imageCategories: {
-          'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&h=600&fit=crop': 'exterior',
-          'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&h=600&fit=crop': 'roof',
-          'https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?w=800&h=600&fit=crop': 'kitchen',
-          'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=600&fit=crop': 'living_room',
-        },
-        expertReassurance: '🏗️ Khun Pho: "Foundation is solid. Roof needs minor patch."',
-        roleMetrics: {
-          'businessman': {'risk': 'Low (Blighted, High Profit)', 'yield': 'Potential 1200% on flip'},
-          'builder': {'structure': 'A-', 'roof_age': '12 years (needs minor repair)', 'foundation': 'Excellent'},
-          'caregiver': {'safety_score': '7/10', 'school_rating': '8/10 (Elementary)', 'hospital_dist_miles': '3.2'},
-          'lifestyle': {'walk_score': '65 (Car Dependent)', 'cafes_nearby': '2', 'vibe': 'Quiet Suburban'},
-          'explorer': {'backyard_size_sqft': '5000', 'park_dist_miles': '0.8', 'treehouse_potential': 'High'},
-          'inventor': {'rarity_score': '1/10', 'authenticity': 'N/A'},
-          'restorer': {'furniture_potential': 'Low', 'era': 'Modern'},
-        },
-        markers: [
-          AnnotationMarker(
-            id: 'm1',
-            position: const Offset(100, 200),
-            authorId: 'khun-pho',
-            category: 'structure',
-            comment: 'No visible cracks here',
-            type: MarkerType.point,
-            createdAt: DateTime.now(),
-          ),
-          AnnotationMarker(
-            id: 'm2',
-            position: const Offset(50, 50),
-            authorId: 'khun-pho',
-            category: 'roof',
-            comment: 'Minor shingle damage',
-            type: MarkerType.point,
-            createdAt: DateTime.now().subtract(const Duration(hours: 1)),
-          ),
-        ],
-      ),
-
-      // Property 2: Focus on Restorer/Lifestyle
-      PropertyCardData(
-        id: '2',
-        address: '742 Evergreen Terrace',
-        city: 'Springfield',
-        state: 'IL',
-        estimatedValue: 220000,
-        lienCost: 1200,
-        totalCost: 2500,
-        roi: 0.18, // 18% interest if redeemed
-        fvi: 9.2,
-        karmaScore: 0.8,
-        imageUrls: [
-          'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=800&h=600&fit=crop', // Exterior
-          'https://images.unsplash.com/photo-1519710164239-da187a6cd545?w=800&h=600&fit=crop', // Interior with vintage furniture
-          'https://images.unsplash.com/photo-1599696200230-077553b6f0e4?w=800&h=600&fit=crop', // Another interior shot
-        ],
-        imageCategories: {
-          'https://images.unsplash.com/photo-1519710164239-da187a6cd545?w=800&h=600&fit=crop': 'interior_furniture',
-        },
-        expertReassurance: '🛋️ Denis: "Vintage mahogany dining set inside!"',
-        roleMetrics: {
-          'businessman': {'risk': 'Low (High Redemption)', 'yield': '18% interest'},
-          'builder': {'structure': 'B', 'roof_age': '5 years', 'foundation': 'Good'},
-          'restorer': {'furniture_potential': 'High (Mahogany set)', 'era': 'Mid-century', 'restoration_cost_est': '\$500'},
-          'lifestyle': {'walk_score': '92 (Walker\'s Paradise)', 'cafes_nearby': '5+', 'vibe': 'Lively Urban'},
-          'caregiver': {'safety_score': '6/10', 'school_rating': '6/10'},
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        foreclosureProbability: 0.85,
+        miwScore: 0.92,
+        karmaScore: 0.7,
+        priorYearsOwed: 3,
+        fvi: const FVI(
+          financialScore: 8.0,
+          expertScores: {'khun_pho': 7.5, 'anton': 9.5},
+          propertyCost: 450.0,
+        ),
+        metadata: {
+          'hasVintageCar': true,
+          'x1000Hint': 'Ford Mustang 1967 spotted in garage photo',
+          'structureScore': 7.5,
+          'roofAge': '15 years',
+          'ownerDeceased': true,
+          'noHeirs': true,
         },
       ),
 
-      // Property 3: Focus on Inventor/Explorer (land)
-      PropertyCardData(
-        id: '3',
-        address: 'Desert Plot 42',
-        city: 'Mojave',
-        state: 'CA',
-        estimatedValue: 15000,
-        lienCost: 300,
-        totalCost: 450,
-        roi: 10.0, // 10x land value potential
-        fvi: 7.0,
-        karmaScore: 0.4,
-        imageUrls: [
-          'https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?w=800&h=600&fit=crop', // Satellite style
-          'https://images.unsplash.com/photo-1536431316694-82f913d8ca80?w=800&h=600&fit=crop', // Another desert view
-        ],
-        imageCategories: {
-          'https://images.unsplash.com/photo-1473580044384-7ba913d8ca80?w=800&h=600&fit=crop': 'satellite',
-        },
-        expertReassurance: '🔬 Anton: "Near a historical research site. Rare minerals suspected."',
-        roleMetrics: {
-          'businessman': {'risk': 'High (Speculative Land)', 'yield': 'Variable'},
-          'inventor': {'rarity_score': '9/10 (Historical)', 'authenticity': 'Unconfirmed', 'x1000_potential': 'High'},
-          'explorer': {'adventure_score': '10/10', 'secret_spots': 'Many', 'bike_score': '1/10 (No roads)'},
-        },
-        markers: [
-          AnnotationMarker(
-            id: 'm3',
-            position: const Offset(300, 400),
-            authorId: 'anton',
-            category: 'research',
-            comment: 'Possible Rife machine components buried here.',
-            type: MarkerType.point,
-            createdAt: DateTime.now(),
-          ),
-        ],
-      ),
-      // Property 4: Focus on Builder/Inventor (house, but land potential)
-      PropertyCardData(
-        id: '4',
-        address: '456 Juniper Lane',
-        city: 'Tucson',
+      // HIGH FORECLOSURE + Antique Furniture potential
+      TaxLien(
+        id: 'fc-2',
+        parcelId: 'AZ-PIN-002',
+        propertyAddress: '321 OTC Lane',
+        city: 'Casa Grande',
+        county: 'Pinal',
         state: 'AZ',
-        estimatedValue: 90000,
-        lienCost: 400,
-        totalCost: 650,
-        roi: 8.0, 
-        fvi: 7.5,
+        taxAmount: 320.0,
+        interestRate: 16.0,
+        auctionDate: DateTime(2026, 2, 10),
+        status: 'otc',
+        propertyType: 'Residential',
+        estimatedValue: 185000.0,
+        assessedValue: 160000.0,
+        description: 'Victorian-era home, original interior visible.',
+        images: [
+          'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9',
+          'https://images.unsplash.com/photo-1555041469-a586c61ea9bc', // furniture
+        ],
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        foreclosureProbability: 0.78,
+        miwScore: 0.88,
         karmaScore: 0.6,
-        imageUrls: [
-          'https://images.unsplash.com/photo-1582268481498-8c17377855b9?w=800&h=600&fit=crop', // Exterior (older house)
-          'https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=800&h=600&fit=crop', // Old garage
-          'https://images.unsplash.com/photo-1520302685710-bb65636384f6?w=800&h=600&fit=crop', // Interior (old)
-        ],
-        imageCategories: {
-          'https://images.unsplash.com/photo-1582268481498-8c17377855b9?w=800&h=600&fit=crop': 'exterior',
-          'https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=800&h=600&fit=crop': 'garage',
+        priorYearsOwed: 2,
+        fvi: const FVI(
+          financialScore: 7.5,
+          expertScores: {'denis': 9.0, 'khun_pho': 6.5},
+          propertyCost: 320.0,
+        ),
+        metadata: {
+          'hasAntiques': true,
+          'x1000Hint': 'Victorian furniture, possible Eames chair',
+          'structureScore': 6.5,
+          'roofAge': '25 years',
+          'ownerDeceased': true,
         },
-        expertReassurance: '🔬 Anton: "Check the garage! Old tech could be there."',
-        roleMetrics: {
-          'builder': {'structure': 'C+', 'roof_age': '20 years (needs replacement)', 'foundation': 'Fair'},
-          'inventor': {'rarity_score': '7/10', 'authenticity': 'Needs Verification', 'x1000_potential': 'Medium'},
-          'businessman': {'risk': 'Medium (Fixer-upper)', 'yield': '200% on flip'},
-        },
-        markers: [
-          AnnotationMarker(
-            id: 'm4',
-            position: const Offset(500, 300),
-            authorId: 'anton',
-            category: 'technology',
-            comment: 'Looks like a custom-built antenna in the garage.',
-            type: MarkerType.point,
-            createdAt: DateTime.now(),
-          ),
+      ),
+
+      // HIGH FORECLOSURE - Good structure (Khun Pho approved)
+      TaxLien(
+        id: 'fc-3',
+        parcelId: 'AZ-YAV-003',
+        propertyAddress: '555 Prescott Valley Rd',
+        city: 'Prescott',
+        county: 'Yavapai',
+        state: 'AZ',
+        taxAmount: 280.0,
+        interestRate: 16.0,
+        auctionDate: DateTime(2026, 2, 15),
+        status: 'active',
+        propertyType: 'Residential',
+        estimatedValue: 320000.0,
+        assessedValue: 280000.0,
+        description: 'Modern construction, excellent bones. Needs cosmetic work.',
+        images: [
+          'https://images.unsplash.com/photo-1564013799919-ab600027ffc6',
         ],
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        foreclosureProbability: 0.72,
+        miwScore: 0.85,
+        karmaScore: 0.8,
+        priorYearsOwed: 2,
+        fvi: const FVI(
+          financialScore: 8.5,
+          expertScores: {'khun_pho': 9.5, 'miw': 8.0},
+          propertyCost: 280.0,
+        ),
+        metadata: {
+          'structureScore': 9.5,
+          'roofAge': '5 years',
+          'foundationCondition': 'excellent',
+          'expertReassurance': 'Khun Pho: Solid structure, needs paint only',
+        },
+      ),
+
+      // VERY HIGH FORECLOSURE - Scientific equipment x1000!!!
+      TaxLien(
+        id: 'fc-4',
+        parcelId: 'AZ-MAR-004',
+        propertyAddress: '1942 Tesla Ave',
+        city: 'Scottsdale',
+        county: 'Maricopa',
+        state: 'AZ',
+        taxAmount: 890.0,
+        interestRate: 16.0,
+        auctionDate: DateTime(2026, 2, 20),
+        status: 'active',
+        propertyType: 'Residential',
+        estimatedValue: 450000.0,
+        assessedValue: 400000.0,
+        description: 'Estate of retired physics professor. Lab equipment in basement.',
+        images: [
+          'https://images.unsplash.com/photo-1600585154340-be6161a56a0c',
+          'https://images.unsplash.com/photo-1532094349884-543bc11b234d', // lab
+        ],
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        foreclosureProbability: 0.91,
+        miwScore: 0.95,
+        karmaScore: 0.9,
+        priorYearsOwed: 4,
+        fvi: const FVI(
+          financialScore: 7.0,
+          expertScores: {'anton': 10.0, 'khun_pho': 7.0},
+          propertyCost: 890.0,
+        ),
+        metadata: {
+          'hasScientificEquipment': true,
+          'ownerWasCollector': true,
+          'x1000Hint': 'Owner was physics professor, possible rare equipment',
+          'structureScore': 7.0,
+          'roofAge': '20 years',
+          'ownerDeceased': true,
+          'noHeirs': true,
+          'rarityScore': 9.5,
+          'authenticityScore': 8.0,
+        },
+      ),
+
+      // DEED sale - Vacant Land near Denis family
+      TaxLien(
+        id: 'fc-5',
+        parcelId: 'SD-LAW-001',
+        propertyAddress: 'Lot 42 Spearfish Canyon',
+        city: 'Spearfish',
+        county: 'Lawrence',
+        state: 'SD',
+        taxAmount: 150.0,
+        interestRate: 12.0,
+        auctionDate: DateTime(2026, 3, 1),
+        status: 'deed',
+        propertyType: 'Vacant Land',
+        estimatedValue: 35000.0,
+        assessedValue: 30000.0,
+        description: 'Buildable lot near Denis family in Spearfish.',
+        images: [
+          'https://images.unsplash.com/photo-1500382017468-9049fed747ef',
+        ],
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        foreclosureProbability: 0.95, // Deed = guaranteed acquisition
+        miwScore: 0.80,
+        karmaScore: 0.85,
+        priorYearsOwed: 5,
+        fvi: const FVI(
+          financialScore: 9.0,
+          expertScores: {'denis': 8.5, 'miw': 7.0},
+          propertyCost: 150.0,
+        ),
+        metadata: {
+          'nearDenisFamily': true,
+          'structureScore': 0.0, // vacant land
+          'buildable': true,
+          'roadAccess': true,
+        },
+      ),
+
+      // Paintings potential x1000
+      TaxLien(
+        id: 'fc-6',
+        parcelId: 'AZ-PIM-006',
+        propertyAddress: '888 Art Collector Way',
+        city: 'Tucson',
+        county: 'Pima',
+        state: 'AZ',
+        taxAmount: 520.0,
+        interestRate: 16.0,
+        auctionDate: DateTime(2026, 2, 25),
+        status: 'active',
+        propertyType: 'Residential',
+        estimatedValue: 380000.0,
+        assessedValue: 340000.0,
+        description: 'Estate of art dealer. Paintings visible in listing photos.',
+        images: [
+          'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c',
+          'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5', // paintings
+        ],
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        foreclosureProbability: 0.75,
+        miwScore: 0.82,
+        karmaScore: 0.65,
+        priorYearsOwed: 2,
+        fvi: const FVI(
+          financialScore: 7.0,
+          expertScores: {'anton': 8.5, 'miw': 9.0},
+          propertyCost: 520.0,
+        ),
+        metadata: {
+          'hasPaintings': true,
+          'ownerWasCollector': true,
+          'x1000Hint': 'Art dealer estate, Russian paintings spotted',
+          'structureScore': 8.0,
+          'roofAge': '10 years',
+        },
+      ),
+    ];
+  }
+
+  // Helper for mock data during development
+  static List<TaxLien> _getMockLiens() {
+    return [
+      TaxLien(
+        id: '1',
+        parcelId: '123-45-678',
+        propertyAddress: '123 Phoenix Way',
+        city: 'Phoenix',
+        county: 'Maricopa',
+        state: 'AZ',
+        taxAmount: 450.0,
+        interestRate: 0.16,
+        auctionDate: DateTime(2026, 2, 12),
+        status: 'active',
+        propertyType: 'Residential',
+        estimatedValue: 250000.0,
+        assessedValue: 210000.0,
+        description: 'Single family home in Phoenix',
+        images: ['https://images.unsplash.com/photo-1568605114967-8130f3a36994'],
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        fvi: const FVI(
+          financialScore: 7.5,
+          expertScores: {'anton': 9.8, 'khun_pho': 8.0},
+          propertyCost: 450.0,
+        ),
+      ),
+      TaxLien(
+        id: '2',
+        parcelId: '987-65-432',
+        propertyAddress: '456 Tucson Dr',
+        city: 'Tucson',
+        county: 'Pima',
+        state: 'AZ',
+        taxAmount: 320.0,
+        interestRate: 0.16,
+        auctionDate: DateTime(2026, 2, 26),
+        status: 'active',
+        propertyType: 'Vacant Land',
+        estimatedValue: 45000.0,
+        assessedValue: 40000.0,
+        description: 'Buildable lot in Tucson',
+        images: ['https://images.unsplash.com/photo-1500382017468-9049fed747ef'],
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        fvi: const FVI(
+          financialScore: 6.0,
+          expertScores: {'denis': 7.0, 'khun_pho': 9.0},
+          propertyCost: 320.0,
+        ),
       ),
     ];
   }

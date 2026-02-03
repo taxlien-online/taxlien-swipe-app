@@ -1,0 +1,18 @@
+{
+  "@@locale": "zh",
+  "appTitle": "TaxLien Swipe",
+  "profileTitle": "专家个人资料",
+  "language": "语言",
+  "settings": "设置",
+  "roles": "角色",
+  "switchProfile": "切换个人资料",
+  "retry": "重试",
+  "startOver": "重新开始",
+  "noMoreProperties": "没有更多房产！",
+  "checkBackLater": "稍后回来查看新列表",
+  "dailyLimitReached": "达到每日限制",
+  "maybeLater": "以后再说",
+  "upgradeNow": "现在升级",
+  "expert": "专家",
+  "foreclosureMode": "法拍模式"
+}

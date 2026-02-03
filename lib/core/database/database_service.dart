@@ -142,18 +142,38 @@ class DatabaseService {
 
   Future<void> clearOldProperties(int keepCount) async {
     final db = await database;
-    await db.execute('''
-      DELETE FROM properties
-      WHERE
-          is_liked = 0 AND is_priority = 0 AND -- Only consider non-liked, non-priority properties for deletion
-          id NOT IN (
-              SELECT id
-              FROM properties
-              WHERE is_liked = 0 AND is_priority = 0 -- Only select non-liked, non-priority for LRU
-              ORDER BY last_accessed DESC
-              LIMIT ?
-          );
-    ''', [keepCount]);
+
+    // 1. Get IDs of liked or priority properties
+    final likedAndPriorityIds = (await db.query(
+      'properties',
+      columns: ['id'],
+      where: 'is_liked = 1 OR is_priority = 1',
+    )).map((e) => e['id'] as String).toList();
+
+    // 2. Get IDs of the most recently accessed non-liked/non-priority properties
+    final lruNonProtectedIds = (await db.query(
+      'properties',
+      columns: ['id'],
+      where: 'is_liked = 0 AND is_priority = 0',
+      orderBy: 'last_accessed DESC',
+      limit: keepCount,
+    )).map((e) => e['id'] as String).toList();
+
+    // 3. Combine all IDs to keep
+    final allIdsToKeep = {...likedAndPriorityIds, ...lruNonProtectedIds}.toList();
+
+    // 4. Delete properties that are not in allIdsToKeep and are non-liked/non-priority
+    if (allIdsToKeep.isNotEmpty) {
+      // Delete properties that are NOT in allIdsToKeep
+      await db.delete(
+        'properties',
+        where: 'id NOT IN (${allIdsToKeep.map((_) => '?').join(',')})',
+        whereArgs: allIdsToKeep,
+      );
+    } else {
+      // If no properties to keep, delete all properties
+      await db.delete('properties');
+    }
   }
 
   Future<int> getPropertyCount({String? contextHash}) async {

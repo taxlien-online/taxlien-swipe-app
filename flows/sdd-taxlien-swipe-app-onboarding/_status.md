@@ -69,12 +69,20 @@ None.
 
 ## Next Steps
 
-1. [x] Get Requirements APPROVED ✅
-2. [x] Get Specifications APPROVED ✅
-3. [x] Create implementation plan ✅
-4. [x] Implementation Complete ✅
+1. [x] Get Requirements APPROVED
+2. [x] Get Specifications APPROVED
+3. [x] Create implementation plan
+4. [x] Implementation Complete
 5. [ ] Integration with main app flow (redirect logic)
-6. [ ] Connect to real Gateway API (when available)
+6. [x] ~~Connect to real Gateway API~~ → **REMOVED** (using local mock data)
+7. [ ] Add Analytics Events tracking (see specifications.md)
+
+## Key Changes (2026-02-03)
+
+- **Removed Gateway API dependency** - onboarding uses local mock data
+- **Added Analytics Events** - full funnel tracking required
+- **Added OAuth screen** - optional step before Ready (see `sdd-taxlien-swipe-app-oauth`)
+- See `sdd-taxlien-swipe-app-firebaseanalytics` for analytics implementation
 
 ---
 

@@ -49,10 +49,16 @@
     │              /onboarding/tutorial              │
     │                    │                           │
     │                    ↓                           │
+    │              /onboarding/auth (optional) ← NEW │
+    │                    │                           │
+    │                    ↓                           │
     └──────────────→ /onboarding/ready              │
                          │                           │
                          ↓                           │
                     / (home) ←───────────────────────┘
+
+NOTE: /onboarding/auth is OAuth screen for Google/Facebook sign-in.
+      Can be skipped. See sdd-taxlien-swipe-app-oauth for details.
 ```
 
 ### Component Architecture
@@ -65,6 +71,7 @@ lib/features/onboarding/
 │   ├── geography_screen.dart
 │   ├── county_selection_screen.dart
 │   ├── tutorial_screen.dart
+│   ├── auth_screen.dart            # NEW - OAuth (Google/Facebook)
 │   └── ready_screen.dart
 ├── widgets/
 │   ├── mode_card.dart              # Animated mode preview
@@ -260,15 +267,14 @@ AnimationController _expertAnim;
 - Primary CTA: "Продолжить"
 - Skip button, Back button
 
-**API Integration:**
+**Data Source: Local Mock Data (NO Gateway API)**
 ```dart
-// Fetch available states
-GET /api/v1/states
-Response: List<StateInfo>
+// States и counties загружаются из локальных mock данных
+// OnboardingService._mockStates и _mockCounties
+// Gateway API НЕ используется в onboarding
 
-// Geolocation → nearest states
-GET /api/v1/states/nearby?lat={lat}&lng={lng}
-Response: List<StateInfo> (sorted by distance)
+// При появлении реального API - можно включить через:
+// OnboardingService._useApi = true (currently false)
 ```
 
 **Behavior:**
@@ -294,11 +300,10 @@ Response: List<StateInfo> (sorted by distance)
 - Primary CTA: "Продолжить"
 - Skip button, Back button
 
-**API Integration:**
+**Data Source: Local Mock Data (NO Gateway API)**
 ```dart
-// Fetch counties for state
-GET /api/v1/states/{stateCode}/counties
-Response: List<CountyInfo>
+// Counties загружаются из OnboardingService._mockCounties[stateCode]
+// Gateway API НЕ используется
 ```
 
 **Behavior:**
@@ -378,14 +383,11 @@ final demoCards = [
 - Tip: "💡 Совет: Тапните на карточку чтобы увидеть детали"
 - Primary CTA: "🔍 Начать поиск"
 
-**API Integration:**
+**Data Source: Local Mock Stats (NO Gateway API)**
 ```dart
-// Fetch counts for selected geography
-GET /api/v1/stats?states={states}&counties={counties}
-Response: {
-  totalProperties: 15650,
-  foreclosureCandidates: 2340,
-}
+// Statistics вычисляются из mock данных
+// OnboardingService.getStats() суммирует mock counties/states
+// Gateway API НЕ используется
 ```
 
 **Behavior:**
@@ -474,6 +476,11 @@ final onboardingRoutes = [
     builder: (context, state) => const TutorialScreen(),
   ),
   GoRoute(
+    path: '/onboarding/auth',
+    name: 'onboarding_auth',
+    builder: (context, state) => const AuthScreen(),
+  ),
+  GoRoute(
     path: '/onboarding/ready',
     name: 'onboarding_ready',
     builder: (context, state) => const ReadyScreen(),
@@ -528,12 +535,58 @@ redirect: (context, state) {
 
 ---
 
+## Analytics Events (REQUIRED)
+
+**Onboarding Funnel Events:**
+| Event | Screen | Parameters | When |
+|-------|--------|------------|------|
+| `onboarding_start` | Welcome | - | При показе welcome screen |
+| `onboarding_skip` | Any | `from_screen` | При нажатии Skip |
+| `mode_selected` | Mode Selection | `mode: beginner/expert` | При выборе режима |
+| `role_selected` | Role Selection | `role: builder/furniture/...` | При выборе роли (Expert) |
+| `geography_selected` | Geography | `states: [], search_everywhere: bool` | При продолжении |
+| `county_selected` | County | `state, counties: [], whole_state: bool` | При продолжении |
+| `tutorial_step_completed` | Tutorial | `step: 1/2/3, mode` | После каждого жеста |
+| `tutorial_skipped` | Tutorial | `at_step: 1/2/3` | При skip tutorial |
+| `onboarding_complete` | Ready | `mode, role, states, duration_sec` | При нажатии "Начать" |
+
+**User Properties (set once):**
+| Property | Type | Description |
+|----------|------|-------------|
+| `user_mode` | string | beginner / expert |
+| `user_role` | string | builder / furniture / investor / ... / null |
+| `preferred_states` | string[] | ["AZ", "SD"] или [] для "везде" |
+| `onboarding_completed` | bool | true после завершения |
+| `onboarding_skipped` | bool | true если skip на welcome |
+
+**Implementation:**
+```dart
+// lib/core/services/analytics_service.dart
+class AnalyticsService {
+  Future<void> logOnboardingStart();
+  Future<void> logOnboardingSkip(String fromScreen);
+  Future<void> logModeSelected(SwipeMode mode);
+  Future<void> logRoleSelected(ExpertRole role);
+  Future<void> logGeographySelected(List<String> states, bool searchEverywhere);
+  Future<void> logTutorialStepCompleted(int step, SwipeMode mode);
+  Future<void> logOnboardingComplete(UserPreferences prefs, Duration duration);
+
+  // Set user properties
+  Future<void> setUserMode(SwipeMode mode);
+  Future<void> setUserRole(ExpertRole? role);
+  Future<void> setPreferredStates(List<String> states);
+}
+```
+
+---
+
 ## Dependencies
 
 ### Requires
-- Gateway API endpoints for states/counties
 - Local storage (SharedPreferences or Hive)
 - Geolocation package (geolocator)
+- Analytics service (Firebase + Facebook)
+- **NO Gateway API** - all data from local mock
 
 ### Blocks
 - Main swipe screen (needs UserPreferences)

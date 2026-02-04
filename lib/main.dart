@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart'; // New Import
 
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:taxlien_swipe_app/l10n/app_localizations.dart';
 
 import 'core/navigation/app_router.dart';
 import 'core/localization/locale_provider.dart';

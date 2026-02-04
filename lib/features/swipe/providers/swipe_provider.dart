@@ -8,6 +8,7 @@ import '../../../core/models/tax_lien_models.dart'; // Use TaxLien instead of Pr
 import '../../../core/models/swipe_mode.dart';
 import '../../../core/repositories/data_repository.dart'; // New Import
 import '../../../services/sync_manager.dart'; // New Import
+import '../../../core/config/env_config.dart';
 
 class SwipeProvider extends ChangeNotifier {
   final IDataRepository _dataRepository;

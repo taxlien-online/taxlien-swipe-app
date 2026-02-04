@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:taxlien_swipe_app/l10n/app_localizations.dart';
 import '../../../core/models/tax_lien_models.dart';
 import '../../../services/tax_lien_service.dart';
 import '../../profile/services/expert_profile_service.dart';

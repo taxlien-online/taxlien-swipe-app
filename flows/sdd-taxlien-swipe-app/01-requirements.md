@@ -74,12 +74,6 @@
 - **Local Storage:** SQLite database for cached properties
 - **Sync:** Automatic sync when online
 
-### Export to PDF (P1 - for Miw)
-- **Property Analysis Sheet:** Export property card with all data
-- **Includes:** FVI breakdown, foreclosure score, photos, expert annotations
-- **Format:** PDF for printing/offline review
-- **Location:** `/data/exports/miw-preview/property_cards/{parcel_id}.pdf`
-
 ### Integration with Gateway API
 - **Endpoint:** `GET /api/v1/liens/foreclosure-candidates?state=AZ&prior_years_min=2&max_amount=500`
 - **Sort by:** `miw_score DESC`

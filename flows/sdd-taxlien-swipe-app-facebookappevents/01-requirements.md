@@ -82,7 +82,7 @@ Deal Detective нуждается в отслеживании маркетинг
 | `dd_swipe_left` | Pass на property | property_id, foreclosure_prob |
 | `dd_swipe_right` | Like на property | property_id, foreclosure_prob, fvi |
 | `dd_annotation_added` | Добавление annotation | property_id, expert_role |
-| `dd_export_pdf` | Экспорт в PDF | property_id |
+| `dd_export_pdf` | Экспорт в PDF (в taxlien-flutter-app) | property_id |
 | `dd_foreclosure_filter_on` | Включение foreclosure фильтра | - |
 | `dd_mode_switch` | Переключение Beginner/Expert | new_mode |
 

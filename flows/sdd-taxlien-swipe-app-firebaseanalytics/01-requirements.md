@@ -2,7 +2,9 @@
 
 **Version:** 1.0
 **Status:** DRAFT
-**Last Updated:** 2026-02-03
+**Last Updated:** 2026-02-04
+
+**Note:** PDF export is implemented in **taxlien-flutter-app** (`flows/sdd-taxlien-flutter-app-export-pdf`). The `pdf_exported` / `has_exported_pdf` events below apply when that flow is used (e.g. from main app or cross-app integration).
 
 ---
 

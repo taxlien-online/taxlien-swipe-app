@@ -23,6 +23,11 @@ class _PropertyCardBeginnerState extends State<PropertyCardBeginner> {
   int _currentPhotoIndex = 0;
   bool _isFlipped = false;
 
+  String? get _expertReassurance {
+    final v = widget.property.metadata?['expertReassurance'];
+    return v is String ? v : null;
+  }
+
   void _cyclePhoto() {
     setState(() {
       _currentPhotoIndex = (widget.property.images.isNotEmpty) 
@@ -135,29 +140,50 @@ class _PropertyCardBeginnerState extends State<PropertyCardBeginner> {
           //   ),
           // ),
           
-          // TODO: Reintegrate Expert Reassurance if TaxLien provides it.
-          // if (widget.property.expertReassurance != null)
-          //   Positioned(
-          //     top: 80,
-          //     left: 20,
-          //     right: 20,
-          //     child: Container(
-          //       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          //       decoration: BoxDecoration(
-          //         color: Colors.white.withOpacity(0.9),
-          //         borderRadius: BorderRadius.circular(12),
-          //         border: Border.all(color: Colors.blueAccent.withOpacity(0.5)),
-          //       ),
-          //       child: Text(
-          //         widget.property.expertReassurance!,
-          //         style: const TextStyle(
-          //           fontSize: 14,
-          //           fontWeight: FontWeight.w600,
-          //           color: Colors.blueGrey,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
+          // Photo position indicator (e.g. 1/5)
+          if (widget.property.images.length > 1)
+            Positioned(
+              top: 20,
+              right: 20,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.black54,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  '${_currentPhotoIndex + 1}/${widget.property.images.length}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          // Expert reassurance from metadata (e.g. "Khun Pho: Solid structure")
+          if (_expertReassurance != null)
+            Positioned(
+              top: 56,
+              left: 20,
+              right: 20,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.9),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.blueAccent.withOpacity(0.5)),
+                ),
+                child: Text(
+                  _expertReassurance!,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.blueGrey,
+                  ),
+                ),
+              ),
+            ),
           
           // Bottom Info
           Positioned(

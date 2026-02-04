@@ -136,7 +136,27 @@ class _PropertyCardAdvancedState extends State<PropertyCardAdvanced> {
                 child: widget.topOverlay!,
               ),
             
-            // Photo Indicators (dots)
+            // Photo position indicator (1/5 style) and dots
+            if (photoCount > 1)
+              Positioned(
+                top: 16,
+                right: 16,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.black54,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    '${_currentPhotoIndex + 1}/$photoCount',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
             if (photoCount > 1)
               Positioned(
                 bottom: widget.bottomOverlay != null ? 80 : 16,

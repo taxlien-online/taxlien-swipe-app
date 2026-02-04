@@ -96,7 +96,9 @@ class PropertyCardData {
       imageUrls: lien.images,
       imageCategories: const {},
       markers: const [],
-      expertReassurance: null,
+      expertReassurance: lien.metadata?['expertReassurance'] is String
+          ? lien.metadata!['expertReassurance'] as String
+          : null,
       roleMetrics: _buildRoleMetrics(lien),
     );
   }

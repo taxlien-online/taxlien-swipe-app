@@ -2,15 +2,15 @@
 
 ## Current Phase
 
-**REQUIREMENTS** | SPECIFICATIONS | PLAN | IMPLEMENTATION
+REQUIREMENTS | SPECIFICATIONS | PLAN | **IMPLEMENTATION**
 
 ## Phase Status
 
-**DRAFTING** | REVIEW | APPROVED | BLOCKED
+DRAFTING | REVIEW | APPROVED | BLOCKED
 
 ## Last Updated
 
-2026-02-03 by Claude
+2026-02-04 by Claude
 
 ## Blockers
 
@@ -20,12 +20,12 @@
 
 - [x] Requirements drafted
 - [ ] Requirements approved
-- [ ] Specifications drafted
+- [x] Specifications drafted
 - [ ] Specifications approved
-- [ ] Plan drafted
+- [x] Plan drafted
 - [ ] Plan approved
-- [ ] Implementation started
-- [ ] Implementation complete
+- [x] Implementation started
+- [x] Implementation complete
 
 ## Context Notes
 
@@ -36,6 +36,12 @@ Key decisions and context for resuming:
 - Support for iOS ATT (App Tracking Transparency)
 - Events for swipe actions, property views, conversions
 
+**Implemented (2026-02-04):**
+- Phase 1: Dependencies, EnvConfig, FacebookAppEventsService
+- Phase 2: iOS Info.plist (ATT, Facebook), Android strings.xml + manifest
+- Phase 3: AttService, main.dart init, Provider registration
+- Phase 4: Events in SwipeProvider, FilterProvider, ReadyScreen, ModeSelectionScreen, PropertyDetailsScreen, AnnotationScreen
+
 ## References
 
 - `sdd-taxlien-swipe-app` - Main app architecture
@@ -43,6 +49,6 @@ Key decisions and context for resuming:
 
 ## Next Actions
 
-1. Draft requirements with key events to track
-2. Define ATT handling strategy
-3. User review and approval
+1. Manual test: run with FACEBOOK_APP_ID/FACEBOOK_CLIENT_TOKEN
+2. Verify events in Facebook Events Manager
+3. User approval

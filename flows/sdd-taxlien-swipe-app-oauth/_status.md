@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-**REQUIREMENTS** | SPECIFICATIONS | PLAN | IMPLEMENTATION
+REQUIREMENTS | **SPECIFICATIONS** | **PLAN** | IMPLEMENTATION
 
 ## Phase Status
 
@@ -19,13 +19,16 @@
 ## Progress
 
 - [x] Requirements drafted
-- [ ] Requirements approved
-- [ ] Specifications drafted
-- [ ] Specifications approved
-- [ ] Plan drafted
-- [ ] Plan approved
-- [ ] Implementation started
-- [ ] Implementation complete
+- [x] Specifications drafted
+- [x] Plan drafted
+- [x] Implementation started (placeholder OAuth screen in onboarding flow)
+- [x] AuthService, AuthProvider, FirebaseAuthService, NoOpAuthService
+- [x] OAuthScreen wired to AuthProvider (Google/Facebook buttons, Skip, success/error handling)
+- [ ] Task 1.2: Firebase project setup (manual)
+- [ ] Tasks 2.1–2.3: Google Sign-In config (OAuth client IDs, iOS/Android)
+- [ ] Tasks 3.1–3.3: Facebook Login config
+- [x] Tasks 5.1–5.2: ProfileScreen Account section (Sign In / Out, Delete)
+- [x] Task 7.1: SyncManager auth check (enable sync only when signed in)
 
 ## Context Notes
 
@@ -33,15 +36,15 @@ Key decisions and context for resuming:
 
 - OAuth via Google and Facebook for cloud features
 - Optional step at end of onboarding (can skip)
-- Brief explanation of why auth is needed
-- Enables: cloud sync, family sharing, cross-device access
+- AuthService chosen at startup: FirebaseAuthService when Firebase.apps.isNotEmpty, else NoOpAuthService
+- flutter_facebook_auth AccessToken uses `tokenString`, not `token`
 
 ## Integration Point
 
 ```
 ONBOARDING FLOW (updated):
 Welcome → Mode → [Role] → Geography → [County] → Tutorial →
-→ **[OAuth - NEW, optional]** → Ready → Home
+→ **[OAuth - optional]** → Ready → Home
 ```
 
 ## References
@@ -52,6 +55,7 @@ Welcome → Mode → [Role] → Geography → [County] → Tutorial →
 
 ## Next Actions
 
-1. User review and approve requirements
-2. Draft specifications with OAuth flow details
-3. Update onboarding flow to include OAuth step
+1. (Manual) Task 1.2: Add google-services.json / GoogleService-Info.plist if not present; enable Auth in Firebase Console
+2. Tasks 2.1–2.3: Google Cloud OAuth client IDs, iOS URL scheme, Android default_web_client_id
+3. Tasks 3.1–3.3: Facebook Developer App, Info.plist / AndroidManifest
+4. Task 6.1: Account linking (same email, different provider)

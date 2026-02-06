@@ -47,5 +47,11 @@
 	<true/>
 	<key>FlutterDeepLinkingEnabled</key>
 	<true/>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Deal Detective uses your data to show relevant ads about foreclosure properties in your region.</string>
+	<key>FacebookAppID</key>
+	<string>0</string>
+	<key>FacebookClientToken</key>
+	<string>0</string>
 </dict>
 </plist>

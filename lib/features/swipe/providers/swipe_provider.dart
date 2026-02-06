@@ -1,18 +1,24 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:provider/provider.dart';
-
 import '../../../core/models/expert_role.dart';
-import '../../../core/models/tax_lien_models.dart'; // Use TaxLien instead of PropertyCardData
+import '../../../core/models/tax_lien_models.dart';
 import '../../../core/models/swipe_mode.dart';
-import '../../../core/repositories/data_repository.dart'; // New Import
-import '../../../services/sync_manager.dart'; // New Import
+import '../../../core/repositories/data_repository.dart';
+import '../../../services/sync_manager.dart';
+import '../../../services/analytics_service.dart';
 import '../../../core/config/env_config.dart';
+import '../../analytics/facebook_app_events_service.dart';
+import '../../tutorial/services/tutorial_service.dart';
+import '../../tutorial/services/achievement_service.dart';
 
 class SwipeProvider extends ChangeNotifier {
   final IDataRepository _dataRepository;
   final SyncManager _syncManager;
+  final AnalyticsService? _analytics;
+  final FacebookAppEventsService? _fbEvents;
+  final TutorialService? _tutorial;
+  final AchievementService? _achievement;
   StreamSubscription? _propertiesSubscription;
 
   List<TaxLien> _properties = [];
@@ -36,7 +42,16 @@ class SwipeProvider extends ChangeNotifier {
   SwipeProvider({
     required IDataRepository dataRepository,
     required SyncManager syncManager,
-  }) : _dataRepository = dataRepository, _syncManager = syncManager {
+    AnalyticsService? analytics,
+    FacebookAppEventsService? fbEvents,
+    TutorialService? tutorial,
+    AchievementService? achievement,
+  })  : _dataRepository = dataRepository,
+        _syncManager = syncManager,
+        _analytics = analytics,
+        _fbEvents = fbEvents,
+        _tutorial = tutorial,
+        _achievement = achievement {
     _propertiesSubscription = _dataRepository.getPropertiesStream('default_filter_context').listen((newProperties) {
       _properties = newProperties;
       if (_properties.isEmpty && !_isLoading) {
@@ -100,14 +115,45 @@ class SwipeProvider extends ChangeNotifier {
 
   Future<void> handleLike(String propertyId) async {
     debugPrint('Liked property: $propertyId');
+    final property = currentProperty?.id == propertyId ? currentProperty : null;
+    final fp = property?.foreclosureProbability;
+    final fviVal = property?.fvi?.totalIndex;
+    _analytics?.logEvent('swipe_action', parameters: {
+      'direction': 'like',
+      'property_id': propertyId,
+      if (fp != null) 'foreclosure_prob': fp,
+    });
+    _analytics?.logEvent('property_liked', parameters: {
+      'property_id': propertyId,
+      if (fviVal != null) 'fvi_score': fviVal,
+      if (property?.taxAmount != null) 'tax_amount': property!.taxAmount,
+    });
+    _fbEvents?.logAddToWishlist(propertyId, price: property?.taxAmount);
+    _fbEvents?.logSwipeRight(propertyId, foreclosureProb: fp, fvi: fviVal);
     await _dataRepository.queueAction('LIKE', {'propertyId': propertyId});
-    await _dataRepository.updatePropertyLikedStatus(propertyId, true); // Mark as liked in DB
+    await _dataRepository.updatePropertyLikedStatus(propertyId, true);
+    await _tutorial?.incrementSwipes();
+    await _tutorial?.incrementLikes();
+    final stats = await _tutorial?.getStats();
+    if (stats != null) await _achievement?.checkAndUnlock(stats);
     nextProperty();
   }
 
   Future<void> handlePass(String propertyId) async {
     debugPrint('Passed property: $propertyId');
+    final property = currentProperty?.id == propertyId ? currentProperty : null;
+    final fp = property?.foreclosureProbability;
+    _analytics?.logEvent('swipe_action', parameters: {
+      'direction': 'pass',
+      'property_id': propertyId,
+      if (fp != null) 'foreclosure_prob': fp,
+    });
+    _analytics?.logEvent('property_passed', parameters: {'property_id': propertyId});
+    _fbEvents?.logSwipeLeft(propertyId, foreclosureProb: fp);
     await _dataRepository.queueAction('PASS', {'propertyId': propertyId});
+    await _tutorial?.incrementSwipes();
+    final stats = await _tutorial?.getStats();
+    if (stats != null) await _achievement?.checkAndUnlock(stats);
     nextProperty();
   }
 

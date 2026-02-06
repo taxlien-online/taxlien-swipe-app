@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taxlien_swipe_app/features/onboarding/widgets/skip_button.dart';
+import '../../../helpers/app_localization.dart';
 
 void main() {
   group('SkipButton', () {
     testWidgets('renders "Пропустить" text', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: SkipButton(onSkip: () {}),
-          ),
+        wrapWithMaterialApp(
+          child: Scaffold(body: SkipButton(onSkip: () {})),
         ),
       );
 
@@ -20,10 +19,8 @@ void main() {
       var tapped = false;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: SkipButton(onSkip: () => tapped = true),
-          ),
+        wrapWithMaterialApp(
+          child: Scaffold(body: SkipButton(onSkip: () => tapped = true)),
         ),
       );
 
@@ -33,10 +30,8 @@ void main() {
 
     testWidgets('is a TextButton', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: SkipButton(onSkip: () {}),
-          ),
+        wrapWithMaterialApp(
+          child: Scaffold(body: SkipButton(onSkip: () {})),
         ),
       );
 

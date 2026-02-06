@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../../../core/models/swipe_mode.dart';
+import '../../../services/analytics_service.dart';
+import '../../analytics/facebook_app_events_service.dart';
+import '../providers/onboarding_provider.dart';
 import '../widgets/skip_button.dart';
 import '../widgets/mode_card.dart';
 
@@ -13,7 +17,7 @@ class ModeSelectionScreen extends StatelessWidget {
       appBar: AppBar(
         leading: BackButton(onPressed: () => context.pop()),
         actions: [
-          SkipButton(onSkip: () => context.go('/')),
+          SkipButton(onSkip: () => _skip(context)),
         ],
       ),
       body: SafeArea(
@@ -62,11 +66,19 @@ class ModeSelectionScreen extends StatelessWidget {
   }
 
   void _selectMode(BuildContext context, SwipeMode mode) {
-    // TODO: Save mode to provider
+    context.read<OnboardingProvider>().selectMode(mode);
+    context.read<AnalyticsService>().logEvent('mode_selected', parameters: {'mode': mode.name});
+    context.read<FacebookAppEventsService>().logModeSwitch(mode.name);
     if (mode == SwipeMode.advanced) {
       context.push('/onboarding/role');
     } else {
       context.push('/onboarding/geo');
     }
+  }
+
+  void _skip(BuildContext context) async {
+    context.read<AnalyticsService>().logEvent('onboarding_skipped');
+    await context.read<OnboardingProvider>().skipOnboarding();
+    if (context.mounted) context.go('/');
   }
 }

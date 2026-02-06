@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:taxlien_swipe_app/l10n/app_localizations.dart';
+import '../../tutorial/services/tutorial_service.dart';
 import '../providers/swipe_provider.dart';
 import '../widgets/property_card_beginner.dart';
+import '../widgets/advanced_swipe_stack.dart';
+import '../widgets/filter_sheet.dart';
+import '../widgets/offline_empty_state.dart';
 import '../../../core/models/expert_role.dart';
-import 'package:go_router/go_router.dart'; // Import for navigation
+import '../../../core/models/property_card_data.dart';
+import '../../../core/models/swipe_mode.dart';
 
 class SwipeScreen extends StatefulWidget {
   const SwipeScreen({super.key});
@@ -28,6 +34,11 @@ class _SwipeScreenState extends State<SwipeScreen> {
       appBar: AppBar(
         title: const Text('Deal Detective'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.filter_list),
+            onPressed: () => _onFilterPressed(context),
+          ),
+          _buildSwipeModeSwitcher(),
           _buildRolePicker(),
         ],
       ),
@@ -44,8 +55,11 @@ class _SwipeScreenState extends State<SwipeScreen> {
           if (provider.swipeMode == SwipeMode.beginner) {
             return _buildBeginnerModeStack(provider);
           } else {
+            final cardData = provider.properties
+                .map((l) => PropertyCardData.fromTaxLien(l))
+                .toList();
             return AdvancedSwipeStack(
-              properties: provider.properties,
+              properties: cardData,
               currentIndex: provider.currentIndex,
               onLike: (id) => provider.handleLike(id),
               onPass: (id) => provider.handlePass(id),
@@ -54,6 +68,45 @@ class _SwipeScreenState extends State<SwipeScreen> {
           }
         },
       ),
+    );
+  }
+
+  Future<void> _onFilterPressed(BuildContext context) async {
+    final tutorial = context.read<TutorialService>();
+    final showHint = await tutorial.shouldShowHint('filter_button');
+    if (!context.mounted) return;
+    if (showHint) {
+      final l10n = AppLocalizations.of(context)!;
+      final dontShowAgain = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Row(
+            children: [
+              Icon(Icons.lightbulb_outline, color: Theme.of(ctx).colorScheme.primary),
+              const SizedBox(width: 8),
+              Text(l10n.hintFilterTitle),
+            ],
+          ),
+          content: Text(l10n.hintFilterBody),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: Text(l10n.hintDontShowAgain),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: Text(l10n.hintGotIt),
+            ),
+          ],
+        ),
+      );
+      await tutorial.markHintShown('filter_button', dontShowAgain: dontShowAgain == true);
+      if (!context.mounted) return;
+    }
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => const FilterSheet(),
     );
   }
 

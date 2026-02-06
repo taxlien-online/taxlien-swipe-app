@@ -1,4 +1,5 @@
 import 'expert_role.dart';
+import 'filter_options.dart';
 import 'swipe_mode.dart';
 
 class UserPreferences {
@@ -12,6 +13,9 @@ class UserPreferences {
   final List<String> states;   // ['AZ', 'FL'] or empty = search everywhere
   final List<String> counties; // ['Maricopa', 'Pinal'] or empty = whole state
 
+  // Search filters (sdd-taxlien-swipe-app-filter)
+  final FilterOptions filter;
+
   // Onboarding status
   final bool onboardingCompleted;
   final DateTime? onboardingCompletedAt;
@@ -24,6 +28,7 @@ class UserPreferences {
     this.interests = const [],
     this.states = const [],
     this.counties = const [],
+    this.filter = const FilterOptions(),
     this.onboardingCompleted = false,
     this.onboardingCompletedAt,
   });
@@ -38,6 +43,7 @@ class UserPreferences {
       interests: const [],
       states: const [],        // Search everywhere
       counties: const [],
+      filter: const FilterOptions(),
       onboardingCompleted: true,
       onboardingCompletedAt: DateTime.now(),
     );
@@ -51,6 +57,7 @@ class UserPreferences {
     List<String>? interests,
     List<String>? states,
     List<String>? counties,
+    FilterOptions? filter,
     bool? onboardingCompleted,
     DateTime? onboardingCompletedAt,
   }) {
@@ -62,6 +69,7 @@ class UserPreferences {
       interests: interests ?? this.interests,
       states: states ?? this.states,
       counties: counties ?? this.counties,
+      filter: filter ?? this.filter,
       onboardingCompleted: onboardingCompleted ?? this.onboardingCompleted,
       onboardingCompletedAt: onboardingCompletedAt ?? this.onboardingCompletedAt,
     );

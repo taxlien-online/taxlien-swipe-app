@@ -48,3 +48,8 @@
   - ✅ Integrated `FamilyBoardService` into `MultiProvider`.
   - ✅ Verified `FamilyBoardScreen` functionality for shared interest tracking.
   - ✅ Enforced "Internal Ecosystem Only" rule by using Gateway service stubs.
+
+### 2026-02-04 (SDD doimplement)
+- **Swipe screen integration:** SwipeScreen converts List<TaxLien> to List<PropertyCardData> for AdvancedSwipeStack; PropertyCardBeginner opens FinancialDetailsSheet.fromTaxLien(lien:); AppBar: SwipeMode switcher + Filter icon.
+- **Filter (sdd-taxlien-swipe-app-filter):** FilterOptions, UserPreferences.filter, TaxLienService filter params, FilterProvider, FilterSheet, CountySelectorScreen, filter button in SwipeScreen.
+- **Tests:** property_card_data_test.dart covers fromTaxLien (21 tests pass).

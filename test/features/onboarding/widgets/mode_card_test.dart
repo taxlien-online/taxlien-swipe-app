@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taxlien_swipe_app/core/models/swipe_mode.dart';
 import 'package:taxlien_swipe_app/features/onboarding/widgets/mode_card.dart';
+import '../../../helpers/app_localization.dart';
 
 void main() {
   group('ModeCard', () {
@@ -13,8 +14,8 @@ void main() {
       bool isSelected = false,
       VoidCallback? onTap,
     }) {
-      return MaterialApp(
-        home: Scaffold(
+      return wrapWithMaterialApp(
+        child: Scaffold(
           body: ModeCard(
             mode: mode,
             title: title,
@@ -29,10 +30,7 @@ void main() {
 
     testWidgets('renders title and description', (tester) async {
       await tester.pumpWidget(
-        buildTestWidget(
-          title: 'Beginner Mode',
-          description: 'Simple swiping',
-        ),
+        buildTestWidget(title: 'Beginner Mode', description: 'Simple swiping'),
       );
 
       expect(find.text('Beginner Mode'), findsOneWidget);
@@ -40,9 +38,7 @@ void main() {
     });
 
     testWidgets('renders icon', (tester) async {
-      await tester.pumpWidget(
-        buildTestWidget(icon: Icons.swipe_right),
-      );
+      await tester.pumpWidget(buildTestWidget(icon: Icons.swipe_right));
 
       expect(find.byIcon(Icons.swipe_right), findsOneWidget);
     });
@@ -50,18 +46,14 @@ void main() {
     testWidgets('calls onTap when tapped', (tester) async {
       var tapped = false;
 
-      await tester.pumpWidget(
-        buildTestWidget(onTap: () => tapped = true),
-      );
+      await tester.pumpWidget(buildTestWidget(onTap: () => tapped = true));
 
       await tester.tap(find.byType(ModeCard));
       expect(tapped, isTrue);
     });
 
     testWidgets('shows selected state with border', (tester) async {
-      await tester.pumpWidget(
-        buildTestWidget(isSelected: true),
-      );
+      await tester.pumpWidget(buildTestWidget(isSelected: true));
 
       final card = tester.widget<Card>(find.byType(Card));
       final shape = card.shape as RoundedRectangleBorder;
@@ -69,9 +61,7 @@ void main() {
     });
 
     testWidgets('unselected state has no border', (tester) async {
-      await tester.pumpWidget(
-        buildTestWidget(isSelected: false),
-      );
+      await tester.pumpWidget(buildTestWidget(isSelected: false));
 
       final card = tester.widget<Card>(find.byType(Card));
       final shape = card.shape as RoundedRectangleBorder;
@@ -79,27 +69,21 @@ void main() {
     });
 
     testWidgets('has higher elevation when selected', (tester) async {
-      await tester.pumpWidget(
-        buildTestWidget(isSelected: true),
-      );
+      await tester.pumpWidget(buildTestWidget(isSelected: true));
 
       final card = tester.widget<Card>(find.byType(Card));
       expect(card.elevation, 4);
     });
 
     testWidgets('has lower elevation when not selected', (tester) async {
-      await tester.pumpWidget(
-        buildTestWidget(isSelected: false),
-      );
+      await tester.pumpWidget(buildTestWidget(isSelected: false));
 
       final card = tester.widget<Card>(find.byType(Card));
       expect(card.elevation, 1);
     });
 
     testWidgets('starts animation on init', (tester) async {
-      await tester.pumpWidget(
-        buildTestWidget(mode: SwipeMode.beginner),
-      );
+      await tester.pumpWidget(buildTestWidget(mode: SwipeMode.beginner));
 
       // Pump a few frames to verify animation runs
       await tester.pump(const Duration(milliseconds: 100));

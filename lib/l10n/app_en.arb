@@ -17,5 +17,15 @@
   "maybeLater": "Maybe Later",
   "upgradeNow": "Upgrade Now",
   "expert": "Expert",
-  "foreclosureMode": "Foreclosure Mode"
+  "foreclosureMode": "Foreclosure Mode",
+  "hintFviTitle": "FVI",
+  "hintFviBody": "FVI shows value for your family. Tap the badge for details.",
+  "hintForeclosureTitle": "Foreclosure %",
+  "hintForeclosureBody": "Probability of acquiring the property. 85%+ = high chance.",
+  "hintFilterTitle": "Filters",
+  "hintFilterBody": "Use filters to find the best foreclosure matches.",
+  "hintGotIt": "Got it",
+  "hintDontShowAgain": "Don't show again",
+  "disableAllHints": "Disable all hints",
+  "showHints": "Show hints"
 }

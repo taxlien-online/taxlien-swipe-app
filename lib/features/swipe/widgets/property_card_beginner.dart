@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../../../core/models/tax_lien_models.dart'; // Changed from PropertyCardData
+import 'package:taxlien_swipe_app/l10n/app_localizations.dart';
+import '../../../core/models/tax_lien_models.dart';
+import '../../tutorial/widgets/hint_trigger.dart';
 import 'dart:math' as math;
+import 'financial_details_sheet.dart';
 
 class PropertyCardBeginner extends StatefulWidget {
   final TaxLien property; // Changed type
@@ -121,13 +124,18 @@ class _PropertyCardBeginnerState extends State<PropertyCardBeginner> {
             ),
           ),
           
-          // Top Badges
+          // Top Badges (FVI with first-time hint)
           Positioned(
             top: 20,
             left: 20,
-            child: _buildBadge(
-              'FVI: ${widget.property.fvi?.financialScore?.toStringAsFixed(1) ?? 'N/A'}', 
-              Colors.greenAccent[700]!,
+            child: HintTrigger(
+              hintId: 'fvi_badge',
+              title: AppLocalizations.of(context)!.hintFviTitle,
+              body: AppLocalizations.of(context)!.hintFviBody,
+              child: _buildBadge(
+                'FVI: ${widget.property.fvi?.financialScore.toStringAsFixed(1) ?? 'N/A'}',
+                Colors.greenAccent[700]!,
+              ),
             ),
           ),
           // TODO: Reintegrate ROI if TaxLien provides it or it's derived.
@@ -218,7 +226,7 @@ class _PropertyCardBeginnerState extends State<PropertyCardBeginner> {
                         showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
-                          builder: (context) => FinancialDetailsSheet(property: widget.property),
+                          builder: (context) => FinancialDetailsSheet.fromTaxLien(lien: widget.property),
                         );
                       },
                     ),

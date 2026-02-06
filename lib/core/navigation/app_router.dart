@@ -5,7 +5,6 @@ import '../../features/details/screens/details_screen.dart';
 import '../../features/annotation/screens/annotation_screen.dart';
 import '../../features/family/screens/family_screen.dart';
 import '../../features/profile/screens/profile_screen.dart';
-// Onboarding screens
 import '../../features/onboarding/screens/welcome_screen.dart';
 import '../../features/onboarding/screens/mode_selection_screen.dart';
 import '../../features/onboarding/screens/role_selection_screen.dart';
@@ -13,11 +12,29 @@ import '../../features/onboarding/screens/geography_screen.dart';
 import '../../features/onboarding/screens/county_selection_screen.dart';
 import '../../features/onboarding/screens/tutorial_screen.dart';
 import '../../features/onboarding/screens/ready_screen.dart';
+import '../../features/onboarding/screens/oauth_screen.dart';
+import '../../features/onboarding/services/onboarding_service.dart';
 
 class AppRouter {
-  static final router = GoRouter(
-    initialLocation: '/',
-    routes: [
+  static final _onboardingService = OnboardingService();
+  static GoRouter? _router;
+
+  static GoRouter get router => _router!;
+
+  /// Creates the app router. Must be called once before using [router].
+  static GoRouter createRouter({List<NavigatorObserver>? observers}) {
+    _router = GoRouter(
+      initialLocation: '/',
+      observers: observers ?? [],
+      redirect: (context, state) async {
+        final loc = state.matchedLocation;
+        if (loc == '/' || loc.isEmpty) {
+          final show = await _onboardingService.shouldShowOnboarding();
+          if (show) return '/onboarding/welcome';
+        }
+        return null;
+      },
+      routes: [
       // Onboarding routes
       GoRoute(
         path: '/onboarding/welcome',
@@ -51,6 +68,11 @@ class AppRouter {
         path: '/onboarding/tutorial',
         name: 'onboarding_tutorial',
         builder: (context, state) => const TutorialScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding/oauth',
+        name: 'onboarding_oauth',
+        builder: (context, state) => const OAuthScreen(),
       ),
       GoRoute(
         path: '/onboarding/ready',
@@ -96,5 +118,7 @@ class AppRouter {
         builder: (context, state) => const ProfileScreen(),
       ),
     ],
-  );
+    );
+    return _router!;
+  }
 }

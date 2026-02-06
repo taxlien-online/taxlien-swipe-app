@@ -1,15 +1,15 @@
 # Specifications: Search Filters System
 
 **Version:** 1.0
-**Status:** 🟡 DRAFT
-**Last Updated:** 2026-02-02
+**Status:** ✅ APPROVED
+**Last Updated:** 2026-02-04
 
 ---
 
 ## 1. Data Models
 
 ### 1.1 `FilterOptions` Model
-A new model to encapsulate all filterable criteria.
+Model encapsulating all filterable criteria (already implemented).
 
 ```dart
 // lib/core/models/filter_options.dart
@@ -47,22 +47,8 @@ class FilterOptions {
 }
 ```
 
-### 1.2 `UserPreferences` Integration
-Update `UserPreferences` to include the current filter.
-
-```dart
-// lib/core/models/user_preferences.dart
-
-class UserPreferences {
-  // ... existing fields ...
-  final FilterOptions filter;
-
-  UserPreferences({
-    // ...
-    required this.filter,
-  });
-}
-```
+### 1.2 Filter Persistence
+Filter is persisted separately via `FilterProvider.loadFromPreferences()` / `saveToPreferences()` using `SharedPreferences` key `filter_options`. No change to `UserPreferences` required — filter state lives in `FilterProvider`.
 
 ---
 
@@ -112,15 +98,16 @@ The `FilterSheet` should trigger a lightweight `HEAD` request or a specific `/co
 
 ## 4. State Management
 
-### 4.1 `FilterController` (GetX/Riverpod/Provider)
-- Holds the temporary `FilterOptions` while the sheet is open.
-- Debounces count requests.
-- On "Apply", updates the global `UserPreferences` and triggers a refresh of the property stack.
+### 4.1 `FilterProvider` (Provider)
+- Holds `FilterOptions` state (already implemented in `lib/features/swipe/providers/filter_provider.dart`).
+- Load/save via `SharedPreferences`.
+- On "Apply", calls `setFilter()` and triggers refresh of property stack via `SwipeProvider`.
+- Optional: debounce count requests if `/count` or similar endpoint exists.
 
 ---
 
 ## 5. Persistence
-- Use `shared_preferences` or a local database to save `FilterOptions` as part of `UserPreferences`.
+- Implemented in `FilterProvider`: `SharedPreferences` key `filter_options`, JSON serialization via `FilterOptions.toJson/fromJson`.
 
 ---
 

@@ -23,6 +23,20 @@ class EnvConfig {
   static String get storeXiaomi => dotenv.env['STORE_XIAOMI'] ?? '';
   static String get storeRuStore => dotenv.env['STORE_RUSTORE'] ?? '';
 
+  // Facebook App Events (marketing analytics)
+  static const String facebookAppId = String.fromEnvironment(
+    'FACEBOOK_APP_ID',
+    defaultValue: '',
+  );
+
+  static const String facebookClientToken = String.fromEnvironment(
+    'FACEBOOK_CLIENT_TOKEN',
+    defaultValue: '',
+  );
+
+  static bool get isFacebookEnabled =>
+      facebookAppId.isNotEmpty && facebookClientToken.isNotEmpty;
+
   static List<Map<String, String>> get availableStores {
     final stores = <Map<String, String>>[];
     

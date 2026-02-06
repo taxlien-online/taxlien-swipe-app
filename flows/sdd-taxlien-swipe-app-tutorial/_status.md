@@ -2,11 +2,11 @@
 
 ## Current Phase
 
-**REQUIREMENTS** | SPECIFICATIONS | PLAN | IMPLEMENTATION
+REQUIREMENTS | SPECIFICATIONS | PLAN | **IMPLEMENTATION**
 
 ## Phase Status
 
-**DRAFTING** | REVIEW | APPROVED | BLOCKED
+APPROVED | APPROVED | APPROVED | **IN PROGRESS**
 
 ## Last Updated
 
@@ -20,11 +20,11 @@
 
 - [x] Requirements drafted
 - [ ] Requirements approved
-- [ ] Specifications drafted
+- [x] Specifications drafted
 - [ ] Specifications approved
-- [ ] Plan drafted
+- [x] Plan drafted
 - [ ] Plan approved
-- [ ] Implementation started
+- [x] Implementation started
 - [ ] Implementation complete
 
 ## Context Notes
@@ -62,6 +62,6 @@ TUTORIAL (this SDD):
 
 ## Next Actions
 
-1. Draft comprehensive tutorial requirements
-2. Design learning modules
-3. User review and approval
+1. Phase 1 & 2 done: TutorialService, tooltips, Disable-hints toggle, AchievementService, toast, Profile badges
+2. Optional: Add foreclosure % tooltip on Expert card (Task 1.5)
+3. Phase 3: Feature discovery nudges; Phase 4: Learning Center

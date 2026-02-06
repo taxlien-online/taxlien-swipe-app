@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import '../../../core/models/tax_lien_models.dart';
 import '../../../services/tax_lien_service.dart';
+import '../../analytics/facebook_app_events_service.dart';
 import '../../profile/services/expert_profile_service.dart';
 import '../models/annotation.dart';
 
@@ -21,6 +22,7 @@ class AnnotationScreen extends StatefulWidget {
 class _AnnotationScreenState extends State<AnnotationScreen> {
   late Future<TaxLien?> _propertyFuture;
   final List<Annotation> _annotations = [];
+  final Set<String> _loggedAnnotationIds = {};
   AnnotationType _currentType = AnnotationType.point;
   List<Offset> _currentDrawingPoints = [];
   bool _isDrawing = false;
@@ -109,10 +111,11 @@ class _AnnotationScreenState extends State<AnnotationScreen> {
           TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () {
-              // Update annotation with comment
-              final index = _annotations.indexOf(annotation);
-              if (index != -1) {
-                // In a real app we'd update the object
+              if (!_loggedAnnotationIds.contains(annotation.id)) {
+                _loggedAnnotationIds.add(annotation.id);
+                final profile = Provider.of<ExpertProfileService>(context, listen: false).currentProfile;
+                Provider.of<FacebookAppEventsService>(context, listen: false)
+                    .logAnnotationAdded(annotation.propertyId, profile.id);
               }
               Navigator.pop(context);
             },
@@ -135,7 +138,14 @@ class _AnnotationScreenState extends State<AnnotationScreen> {
           IconButton(
             icon: const Icon(Icons.check),
             onPressed: () {
-              // TODO: Sync _annotations to Gateway
+              final profile = Provider.of<ExpertProfileService>(context, listen: false).currentProfile;
+              final fbEvents = Provider.of<FacebookAppEventsService>(context, listen: false);
+              for (final a in _annotations) {
+                if (!_loggedAnnotationIds.contains(a.id)) {
+                  _loggedAnnotationIds.add(a.id);
+                  fbEvents.logAnnotationAdded(a.propertyId, profile.id);
+                }
+              }
               Navigator.pop(context);
             },
           ),

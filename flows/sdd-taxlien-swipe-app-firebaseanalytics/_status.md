@@ -2,15 +2,15 @@
 
 ## Current Phase
 
-**REQUIREMENTS** | SPECIFICATIONS | PLAN | IMPLEMENTATION
+REQUIREMENTS | SPECIFICATIONS | PLAN | **IMPLEMENTATION**
 
 ## Phase Status
 
-**DRAFTING** | REVIEW | APPROVED | BLOCKED
+DRAFTING | REVIEW | APPROVED | **IN PROGRESS**
 
 ## Last Updated
 
-2026-02-03 by Claude
+2026-02-04 by Claude
 
 ## Blockers
 
@@ -19,22 +19,23 @@
 ## Progress
 
 - [x] Requirements drafted
-- [ ] Requirements approved
-- [ ] Specifications drafted
-- [ ] Specifications approved
-- [ ] Plan drafted
-- [ ] Plan approved
-- [ ] Implementation started
-- [ ] Implementation complete
+- [x] Analytics abstraction: AnalyticsService + NoOpAnalyticsService
+- [x] Onboarding events: onboarding_start, mode_selected, onboarding_skipped, onboarding_complete
+- [x] Firebase SDK: firebase_core, firebase_analytics, firebase_crashlytics in pubspec
+- [x] FirebaseAnalyticsServiceImpl + optional init in main (no crash without config)
+- [x] Screen view observer via GoRouter (AnalyticsRouteObserver, createRouter(observers))
+- [x] Swipe events: swipe_action, property_liked, property_passed (SwipeProvider)
+- [x] Filter events: filter_changed, foreclosure_filter_toggled (FilterProvider)
+- [x] Sync/offline: offline_mode_entered, sync_completed (SyncManager)
+- [x] Crashlytics: FlutterError.onError, setCrashlyticsKey(last_screen)
+- [ ] Firebase config files (manual: google-services.json, GoogleService-Info.plist)
+- [ ] Deferred: details/FVI, annotation events, user properties, unit tests
 
 ## Context Notes
 
-Key decisions and context for resuming:
-
-- Firebase Analytics integration for Deal Detective app
-- Track user behavior for product improvement
-- User journey analytics (onboarding, swipe, conversion)
-- Funnel analysis for foreclosure discovery
+- App runs without Firebase when config files absent (NoOpAnalyticsService).
+- Router created in main with AppRouter.createRouter(observers: [AnalyticsRouteObserver(analytics)]).
+- Implementation log: [04-implementation-log.md](./04-implementation-log.md).
 
 ## References
 
@@ -43,6 +44,6 @@ Key decisions and context for resuming:
 
 ## Next Actions
 
-1. Draft requirements with key events to track
-2. Define event taxonomy
-3. User review and approval
+1. Add google-services.json / GoogleService-Info.plist for real Firebase (or use flutterfire configure)
+2. Optionally add fvi_viewed, share_initiated, annotation_created, user properties
+3. Add unit tests for FirebaseAnalyticsService

@@ -8,6 +8,7 @@ import '../../../core/repositories/data_repository.dart'; // New Import
 import '../../../core/models/device_capabilities.dart'; // New Import
 import '../../../services/image_cache_service.dart'; // New Import
 
+import '../../analytics/facebook_app_events_service.dart';
 import '../../deeplink/widgets/smart_banner.dart';
 import '../../profile/models/expert_profile.dart';
 import '../../swipe/widgets/share_sheet.dart';
@@ -30,6 +31,7 @@ class PropertyDetailsScreen extends StatefulWidget {
 
 class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
   late Future<TaxLien?> _propertyFuture; // Allow null
+  bool _viewContentLogged = false;
 
   @override
   void initState() {
@@ -37,6 +39,16 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
     // Fetch property from DataRepository
     _propertyFuture = Provider.of<IDataRepository>(context, listen: false)
         .getPropertyById(widget.propertyId);
+  }
+
+  void _logViewContentIfNeeded(BuildContext context, TaxLien? property) {
+    if (property != null && !_viewContentLogged) {
+      _viewContentLogged = true;
+      context.read<FacebookAppEventsService>().logViewContent(
+            property.id,
+            price: property.taxAmount,
+          );
+    }
   }
 
   @override
@@ -53,6 +65,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
           }
           
           final property = snapshot.data;
+          _logViewContentIfNeeded(context, property);
 
           if (property == null) {
             return Center(

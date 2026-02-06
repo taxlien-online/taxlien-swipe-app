@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taxlien_swipe_app/features/onboarding/models/state_info.dart';
 import 'package:taxlien_swipe_app/features/onboarding/widgets/state_chip.dart';
+import '../../../helpers/app_localization.dart';
 
 void main() {
   group('StateChip', () {
@@ -20,8 +21,8 @@ void main() {
       bool isSelected = false,
       VoidCallback? onTap,
     }) {
-      return MaterialApp(
-        home: Scaffold(
+      return wrapWithMaterialApp(
+        child: Scaffold(
           body: StateChip(
             stateInfo: stateInfo,
             isSelected: isSelected,
@@ -38,17 +39,13 @@ void main() {
     });
 
     testWidgets('shows state code when not selected', (tester) async {
-      await tester.pumpWidget(
-        buildTestWidget(isSelected: false),
-      );
+      await tester.pumpWidget(buildTestWidget(isSelected: false));
 
       expect(find.text('AZ'), findsOneWidget);
     });
 
     testWidgets('shows check icon when selected', (tester) async {
-      await tester.pumpWidget(
-        buildTestWidget(isSelected: true),
-      );
+      await tester.pumpWidget(buildTestWidget(isSelected: true));
 
       expect(find.byIcon(Icons.check), findsOneWidget);
     });
@@ -56,9 +53,7 @@ void main() {
     testWidgets('calls onTap when tapped', (tester) async {
       var tapped = false;
 
-      await tester.pumpWidget(
-        buildTestWidget(onTap: () => tapped = true),
-      );
+      await tester.pumpWidget(buildTestWidget(onTap: () => tapped = true));
 
       await tester.tap(find.byType(FilterChip));
       expect(tapped, isTrue);
@@ -71,9 +66,7 @@ void main() {
     });
 
     testWidgets('reflects selected state in FilterChip', (tester) async {
-      await tester.pumpWidget(
-        buildTestWidget(isSelected: true),
-      );
+      await tester.pumpWidget(buildTestWidget(isSelected: true));
 
       final chip = tester.widget<FilterChip>(find.byType(FilterChip));
       expect(chip.selected, isTrue);

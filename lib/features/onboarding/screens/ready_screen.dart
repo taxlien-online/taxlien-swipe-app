@@ -1,16 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import '../../../services/analytics_service.dart';
+import '../../analytics/facebook_app_events_service.dart';
+import '../providers/onboarding_provider.dart';
 
-class ReadyScreen extends StatelessWidget {
+class ReadyScreen extends StatefulWidget {
   const ReadyScreen({super.key});
 
   @override
+  State<ReadyScreen> createState() => _ReadyScreenState();
+}
+
+class _ReadyScreenState extends State<ReadyScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<OnboardingProvider>().loadStats();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // TODO: Get actual stats from provider
-    const region = 'Arizona';
-    const counties = 'Maricopa, Pinal';
-    const totalProperties = 15650;
-    const foreclosures = 2340;
+    final provider = context.watch<OnboardingProvider>();
+    final geoStats = provider.geoStats;
+    final region = provider.state.selectedStates.isEmpty
+        ? 'Везде'
+        : provider.state.selectedStates.join(', ');
+    final counties = provider.state.selectedCounties.isEmpty
+        ? 'Весь регион'
+        : provider.state.selectedCounties.join(', ');
+    final totalProperties = geoStats?.totalProperties ?? 0;
+    final foreclosures = geoStats?.foreclosureCandidates ?? 0;
 
     return Scaffold(
       body: SafeArea(
@@ -151,8 +173,10 @@ class ReadyScreen extends StatelessWidget {
     );
   }
 
-  void _startSearch(BuildContext context) {
-    // TODO: Complete onboarding via provider
-    context.go('/');
+  void _startSearch(BuildContext context) async {
+    context.read<AnalyticsService>().logEvent('onboarding_complete');
+    context.read<FacebookAppEventsService>().logCompleteRegistration();
+    await context.read<OnboardingProvider>().completeOnboarding();
+    if (context.mounted) context.go('/');
   }
 }

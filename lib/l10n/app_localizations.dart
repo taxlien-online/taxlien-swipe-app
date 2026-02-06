@@ -195,6 +195,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Foreclosure Mode'**
   String get foreclosureMode;
+
+  /// No description provided for @hintFviTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'FVI'**
+  String get hintFviTitle;
+
+  /// No description provided for @hintFviBody.
+  ///
+  /// In en, this message translates to:
+  /// **'FVI shows value for your family. Tap the badge for details.'**
+  String get hintFviBody;
+
+  /// No description provided for @hintForeclosureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Foreclosure %'**
+  String get hintForeclosureTitle;
+
+  /// No description provided for @hintForeclosureBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Probability of acquiring the property. 85%+ = high chance.'**
+  String get hintForeclosureBody;
+
+  /// No description provided for @hintFilterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get hintFilterTitle;
+
+  /// No description provided for @hintFilterBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Use filters to find the best foreclosure matches.'**
+  String get hintFilterBody;
+
+  /// No description provided for @hintGotIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get hintGotIt;
+
+  /// No description provided for @hintDontShowAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t show again'**
+  String get hintDontShowAgain;
+
+  /// No description provided for @disableAllHints.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable all hints'**
+  String get disableAllHints;
+
+  /// No description provided for @showHints.
+  ///
+  /// In en, this message translates to:
+  /// **'Show hints'**
+  String get showHints;
 }
 
 class _AppLocalizationsDelegate

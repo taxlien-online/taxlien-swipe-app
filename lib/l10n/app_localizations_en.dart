@@ -52,4 +52,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get foreclosureMode => 'Foreclosure Mode';
+
+  @override
+  String get hintFviTitle => 'FVI';
+
+  @override
+  String get hintFviBody =>
+      'FVI shows value for your family. Tap the badge for details.';
+
+  @override
+  String get hintForeclosureTitle => 'Foreclosure %';
+
+  @override
+  String get hintForeclosureBody =>
+      'Probability of acquiring the property. 85%+ = high chance.';
+
+  @override
+  String get hintFilterTitle => 'Filters';
+
+  @override
+  String get hintFilterBody =>
+      'Use filters to find the best foreclosure matches.';
+
+  @override
+  String get hintGotIt => 'Got it';
+
+  @override
+  String get hintDontShowAgain => 'Don\'t show again';
+
+  @override
+  String get disableAllHints => 'Disable all hints';
+
+  @override
+  String get showHints => 'Show hints';
 }

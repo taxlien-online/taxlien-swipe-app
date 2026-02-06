@@ -57,7 +57,8 @@
 | 4 | Geography | ✅ | ✅ |
 | 4.1 | County (optional) | ✅ | ✅ |
 | 5 | Mini-Tutorial | 2 steps | 3 steps |
-| 6 | Ready | ✅ | ✅ |
+| 6 | OAuth (optional) | ✅ | ✅ |
+| 7 | Ready | ✅ | ✅ |
 
 ---
 
@@ -73,9 +74,9 @@ None.
 2. [x] Get Specifications APPROVED
 3. [x] Create implementation plan
 4. [x] Implementation Complete
-5. [ ] Integration with main app flow (redirect logic)
+5. [x] Integration with main app flow (redirect logic) — 2026-02-04: GoRouter redirect to /onboarding/welcome when onboarding not completed; ReadyScreen calls completeOnboarding() then go('/')
 6. [x] ~~Connect to real Gateway API~~ → **REMOVED** (using local mock data)
-7. [ ] Add Analytics Events tracking (see specifications.md)
+7. [x] Add Analytics Events tracking — 2026-02-04: AnalyticsService (no-op), onboarding_start, mode_selected, onboarding_skipped, onboarding_complete
 
 ## Key Changes (2026-02-03)
 

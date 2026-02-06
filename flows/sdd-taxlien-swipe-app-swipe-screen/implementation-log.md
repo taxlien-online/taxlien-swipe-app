@@ -17,8 +17,8 @@
 | 3.2 PropertyDetails model | ✅ Done | Photos, characteristics, structure assessment |
 | 3.3 ContextView UI | ✅ Done | x1000 alerts, obituaries, ownership history |
 | 3.4 DetailsView UI | ✅ Done | Photo gallery, Khun Pho assessment, utilities |
-| 4.1-4.4 Integration Fixes | Pending | |
-| 5.1-5.3 Testing | Pending | |
+| 4.1-4.4 Integration Fixes | ✅ Done | SwipeScreen converts TaxLien→PropertyCardData; mode switcher in AppBar; FinancialDetailsSheet.fromTaxLien in beginner card |
+| 5.1-5.3 Testing | ✅ Done | property_card_data_test.dart covers fromTaxLien (21 tests pass) |
 
 ## Session Log
 

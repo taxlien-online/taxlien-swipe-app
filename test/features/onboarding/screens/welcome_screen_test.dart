@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taxlien_swipe_app/features/onboarding/providers/onboarding_provider.dart';
 import 'package:taxlien_swipe_app/features/onboarding/screens/welcome_screen.dart';
 import 'package:taxlien_swipe_app/features/onboarding/widgets/skip_button.dart';
+import 'package:taxlien_swipe_app/l10n/app_localizations.dart';
+import 'package:taxlien_swipe_app/services/analytics_service.dart';
+import '../../../helpers/app_localization.dart';
 
 void main() {
   group('WelcomeScreen', () {
@@ -10,6 +16,7 @@ void main() {
     String? lastRoute;
 
     setUp(() {
+      SharedPreferences.setMockInitialValues({});
       lastRoute = null;
       router = GoRouter(
         initialLocation: '/onboarding/welcome',
@@ -37,8 +44,17 @@ void main() {
     });
 
     Widget buildTestWidget() {
-      return MaterialApp.router(
-        routerConfig: router,
+      return MultiProvider(
+        providers: [
+          Provider<AnalyticsService>(create: (_) => NoOpAnalyticsService()),
+          ChangeNotifierProvider(create: (_) => OnboardingProvider()),
+        ],
+        child: MaterialApp.router(
+          locale: kTestLocaleEn,
+          localizationsDelegates: kTestLocalizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          routerConfig: router,
+        ),
       );
     }
 
@@ -75,8 +91,9 @@ void main() {
       expect(find.text('Я уже знаю как свайпать'), findsOneWidget);
     });
 
-    testWidgets('navigates to mode screen when "Начать настройку" tapped',
-        (tester) async {
+    testWidgets('navigates to mode screen when "Начать настройку" tapped', (
+      tester,
+    ) async {
       await tester.pumpWidget(buildTestWidget());
 
       await tester.tap(find.text('Начать настройку'));
@@ -87,18 +104,20 @@ void main() {
 
     testWidgets('navigates to home when skip button tapped', (tester) async {
       await tester.pumpWidget(buildTestWidget());
+      await tester.pump(); // allow initState postFrameCallback
 
       await tester.tap(find.byType(SkipButton));
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
       expect(lastRoute, '/');
     });
 
     testWidgets('navigates to home when "Я уже знаю" tapped', (tester) async {
       await tester.pumpWidget(buildTestWidget());
+      await tester.pump(); // allow initState postFrameCallback
 
       await tester.tap(find.text('Я уже знаю как свайпать'));
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
       expect(lastRoute, '/');
     });

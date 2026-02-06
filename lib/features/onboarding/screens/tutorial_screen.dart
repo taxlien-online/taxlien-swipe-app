@@ -129,7 +129,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
   }
 
   void _complete(BuildContext context) {
-    context.push('/onboarding/ready');
+    context.push('/onboarding/oauth');
   }
 }
 

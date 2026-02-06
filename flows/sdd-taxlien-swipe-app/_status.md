@@ -59,6 +59,7 @@ None.
 
 ## Next Actions
 1. [x] Phase 5: Offline Mode (P2) - SQLite caching and sync logic (Completed, with testing partially skipped as per user instruction)
-2. [ ] Integration: Connect to real Gateway API for foreclosure candidates
+2. [x] Swipe screen Phase 4–5 & Filter: integration fixes, Filter UI, FilterProvider (2026-02-04)
+3. [ ] Integration: Connect to real Gateway API for foreclosure candidates
 
 **Note:** Export to PDF (Property Analysis Sheet for Miw) is implemented in **taxlien-flutter-app**; see `flows/sdd-taxlien-flutter-app-export-pdf`.

@@ -1,9 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import '../../../services/analytics_service.dart';
+import '../providers/onboarding_provider.dart';
 import '../widgets/skip_button.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
+
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AnalyticsService>().logEvent('onboarding_start');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,8 +108,9 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-  void _skipOnboarding(BuildContext context) {
-    // TODO: Call onboarding provider skip
-    context.go('/');
+  void _skipOnboarding(BuildContext context) async {
+    context.read<AnalyticsService>().logEvent('onboarding_skipped');
+    await context.read<OnboardingProvider>().skipOnboarding();
+    if (context.mounted) context.go('/');
   }
 }

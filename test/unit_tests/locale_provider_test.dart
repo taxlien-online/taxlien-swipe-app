@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taxlien_swipe_app/core/localization/language_constants.dart';
 import 'package:taxlien_swipe_app/core/localization/locale_provider.dart';
 
 void main() {
@@ -14,16 +15,24 @@ void main() {
       provider = LocaleProvider();
     });
 
-    test('initial locale should be English (or system default fallback)', () async {
+    test('loadSavedLocale with no prefs yields a supported locale', () async {
       await provider.loadSavedLocale();
-      // Since we can't easily mock system locale in a pure unit test without more setup,
-      // and default fallback is often English in tests.
+      final supportedCodes = LanguageConstants.supportedLocales
+          .map((l) => l.languageCode)
+          .toList();
+      expect(supportedCodes, contains(provider.locale.languageCode));
+    });
+
+    test('loadSavedLocale with language_code en yields English', () async {
+      SharedPreferences.setMockInitialValues({'language_code': 'en'});
+      provider = LocaleProvider();
+      await provider.loadSavedLocale();
       expect(provider.locale.languageCode, 'en');
     });
 
     test('setLocale should update locale and persist it', () async {
       await provider.loadSavedLocale();
-      
+
       const newLocale = Locale('ru');
       await provider.setLocale(newLocale);
 
@@ -42,12 +51,12 @@ void main() {
 
       expect(provider.locale, initialLocale);
     });
-    
+
     test('loadSavedLocale should restore persisted locale', () async {
       SharedPreferences.setMockInitialValues({'language_code': 'th'});
-      
+
       await provider.loadSavedLocale();
-      
+
       expect(provider.locale.languageCode, 'th');
     });
   });

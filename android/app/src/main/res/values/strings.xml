@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Facebook App Events: set via CI secrets or local gradle.properties -->
+    <string name="facebook_app_id">0</string>
+    <string name="facebook_client_token">0</string>
+</resources>

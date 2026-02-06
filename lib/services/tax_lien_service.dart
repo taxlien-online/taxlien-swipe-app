@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../core/models/tax_lien_models.dart';
 import '../core/models/fvi.dart';
 import '../core/models/property_card_data.dart';
+import '../core/models/filter_options.dart';
 
 class TaxLienService {
   final String? _baseUrl = dotenv.env['API_URL'];
@@ -18,6 +19,7 @@ class TaxLienService {
     double? maxAmount,
     double? foreclosureProbMin = 0.7,
     int limit = 100,
+    FilterOptions? filter,
   }) async {
     if (_baseUrl == null) {
       return _getMockForeclosureCandidates();
@@ -35,6 +37,7 @@ class TaxLienService {
       if (maxAmount != null) {
         queryParams['max_amount'] = maxAmount.toString();
       }
+      _applyFilterToParams(queryParams, filter);
 
       final uri = Uri.parse('$_baseUrl/api/v1/liens/foreclosure-candidates')
           .replace(queryParameters: queryParams);
@@ -59,6 +62,7 @@ class TaxLienService {
     String? state,
     String? county,
     int limit = 50, // Default limit
+    FilterOptions? filter,
   }) async {
     if (_baseUrl == null) {
       return _getMockLiens();
@@ -70,6 +74,7 @@ class TaxLienService {
       };
       if (state != null) queryParams['state'] = state;
       if (county != null) queryParams['county'] = county;
+      _applyFilterToParams(queryParams, filter);
 
       final uri = Uri.parse('$_baseUrl/api/v1/liens/search')
           .replace(queryParameters: queryParams);
@@ -125,6 +130,26 @@ class TaxLienService {
     } catch (e) {
       debugPrint('Error loading lien $id: $e');
       return null;
+    }
+  }
+
+  void _applyFilterToParams(Map<String, String> queryParams, FilterOptions? filter) {
+    if (filter == null) return;
+    if (filter.states.isNotEmpty) {
+      queryParams['state'] = filter.states.first;
+      if (filter.counties.isNotEmpty) {
+        queryParams['county'] = filter.counties.join(',');
+      }
+    }
+    queryParams['max_amount'] = filter.maxPrice.toString();
+    queryParams['min_interest_rate'] = filter.minInterestRate.toString();
+    queryParams['foreclosure_score_min'] = filter.minForeclosureScore.toString();
+    queryParams['x1000_score_min'] = filter.minX1000Score.toString();
+    if (filter.propertyTypes.isNotEmpty) {
+      queryParams['property_type'] = filter.propertyTypes.join(',');
+    }
+    if (filter.saleTypes.isNotEmpty) {
+      queryParams['sale_type'] = filter.saleTypes.join(',');
     }
   }
 

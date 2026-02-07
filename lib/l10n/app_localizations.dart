@@ -255,6 +255,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show hints'**
   String get showHints;
+
+  /// No description provided for @nudgeExpertModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready for more?'**
+  String get nudgeExpertModeTitle;
+
+  /// No description provided for @nudgeExpertModeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Expert mode for more controls.'**
+  String get nudgeExpertModeBody;
+
+  /// No description provided for @nudgeAnnotationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark it up'**
+  String get nudgeAnnotationTitle;
+
+  /// No description provided for @nudgeAnnotationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add annotations on photos for your family.'**
+  String get nudgeAnnotationBody;
+
+  /// No description provided for @nudgeForeclosureFilterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Narrow it down'**
+  String get nudgeForeclosureFilterTitle;
+
+  /// No description provided for @nudgeForeclosureFilterBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the foreclosure filter for better matches.'**
+  String get nudgeForeclosureFilterBody;
+
+  /// No description provided for @nudgeFamilyBoardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'See what family found'**
+  String get nudgeFamilyBoardTitle;
+
+  /// No description provided for @nudgeFamilyBoardBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the Family Board for shared properties.'**
+  String get nudgeFamilyBoardBody;
+
+  /// No description provided for @nudgeTryIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Try it'**
+  String get nudgeTryIt;
+
+  /// No description provided for @nudgeNotNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get nudgeNotNow;
 }
 
 class _AppLocalizationsDelegate

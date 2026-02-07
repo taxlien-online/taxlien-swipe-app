@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/nudge_data.dart';
 import '../models/tutorial_state.dart';
 import '../models/user_stats.dart';
 
@@ -18,6 +19,10 @@ abstract class TutorialService {
   Future<void> incrementSwipes();
   Future<void> incrementLikes();
   Future<void> addUnlockedAchievement(String achievementId);
+
+  /// Returns the next nudge id to show, or null if none.
+  Future<String?> getNextNudge(UserStats stats, {bool isBeginnerMode = true});
+  Future<void> markNudgeShown(String nudgeId);
 }
 
 class TutorialServiceImpl implements TutorialService {
@@ -117,5 +122,25 @@ class TutorialServiceImpl implements TutorialService {
     final state = await _loadState();
     final newSet = {...state.unlockedAchievements, achievementId};
     await _saveState(state.copyWith(unlockedAchievements: newSet));
+  }
+
+  @override
+  Future<String?> getNextNudge(UserStats stats,
+      {bool isBeginnerMode = true}) async {
+    final state = await _loadState();
+    for (final def in nudgeDefinitions) {
+      if (state.shownNudges.contains(def.id)) continue;
+      if (def.condition(stats, isBeginnerMode: isBeginnerMode)) {
+        return def.id;
+      }
+    }
+    return null;
+  }
+
+  @override
+  Future<void> markNudgeShown(String nudgeId) async {
+    final state = await _loadState();
+    await _saveState(
+        state.copyWith(shownNudges: {...state.shownNudges, nudgeId}));
   }
 }

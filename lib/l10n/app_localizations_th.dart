@@ -85,4 +85,37 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get showHints => 'Show hints';
+
+  @override
+  String get nudgeExpertModeTitle => 'Ready for more?';
+
+  @override
+  String get nudgeExpertModeBody => 'Try Expert mode for more controls.';
+
+  @override
+  String get nudgeAnnotationTitle => 'Mark it up';
+
+  @override
+  String get nudgeAnnotationBody =>
+      'Add annotations on photos for your family.';
+
+  @override
+  String get nudgeForeclosureFilterTitle => 'Narrow it down';
+
+  @override
+  String get nudgeForeclosureFilterBody =>
+      'Use the foreclosure filter for better matches.';
+
+  @override
+  String get nudgeFamilyBoardTitle => 'See what family found';
+
+  @override
+  String get nudgeFamilyBoardBody =>
+      'Check the Family Board for shared properties.';
+
+  @override
+  String get nudgeTryIt => 'Try it';
+
+  @override
+  String get nudgeNotNow => 'Not now';
 }

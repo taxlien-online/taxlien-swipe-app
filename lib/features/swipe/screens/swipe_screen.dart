@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:taxlien_swipe_app/l10n/app_localizations.dart';
 import '../../tutorial/services/tutorial_service.dart';
+import '../../tutorial/widgets/nudge_banner.dart';
 import '../providers/swipe_provider.dart';
 import '../widgets/property_card_beginner.dart';
 import '../widgets/advanced_swipe_stack.dart';
@@ -19,12 +21,54 @@ class SwipeScreen extends StatefulWidget {
 }
 
 class _SwipeScreenState extends State<SwipeScreen> {
+  String? _nudgeId;
+  bool _nudgeCheckScheduled = false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<SwipeProvider>().loadProperties();
     });
+  }
+
+  void _scheduleNudgeCheck(SwipeProvider provider) {
+    if (_nudgeCheckScheduled) return;
+    _nudgeCheckScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final tutorial = context.read<TutorialService>();
+      final stats = await tutorial.getStats();
+      if (!mounted) return;
+      final id = await tutorial.getNextNudge(
+        stats,
+        isBeginnerMode: provider.swipeMode == SwipeMode.beginner,
+      );
+      if (mounted) setState(() => _nudgeId = id);
+    });
+  }
+
+  Future<void> _onNudgeTry(String nudgeId, SwipeProvider? provider) async {
+    final tutorial = context.read<TutorialService>();
+    await tutorial.markNudgeShown(nudgeId);
+    if (!mounted) return;
+    setState(() => _nudgeId = null);
+    if (nudgeId == 'expert_mode' && provider != null) {
+      provider.setSwipeMode(SwipeMode.advanced);
+    } else if (nudgeId == 'foreclosure_filter') {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) => const FilterSheet(),
+      );
+    } else if (nudgeId == 'family_board') {
+      context.push('/family');
+    }
+  }
+
+  Future<void> _onNudgeDismiss(String nudgeId) async {
+    final tutorial = context.read<TutorialService>();
+    await tutorial.markNudgeShown(nudgeId);
+    if (mounted) setState(() => _nudgeId = null);
   }
 
   @override
@@ -52,13 +96,16 @@ class _SwipeScreenState extends State<SwipeScreen> {
             return const OfflineEmptyState();
           }
 
+          _scheduleNudgeCheck(provider);
+
+          Widget content;
           if (provider.swipeMode == SwipeMode.beginner) {
-            return _buildBeginnerModeStack(provider);
+            content = _buildBeginnerModeStack(provider);
           } else {
             final cardData = provider.properties
                 .map((l) => PropertyCardData.fromTaxLien(l))
                 .toList();
-            return AdvancedSwipeStack(
+            content = AdvancedSwipeStack(
               properties: cardData,
               currentIndex: provider.currentIndex,
               onLike: (id) => provider.handleLike(id),
@@ -66,6 +113,23 @@ class _SwipeScreenState extends State<SwipeScreen> {
               onPageChanged: (index) => provider.setCurrentIndex(index),
             );
           }
+
+          if (_nudgeId == null) return content;
+          return Stack(
+            children: [
+              content,
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: NudgeBanner(
+                  nudgeId: _nudgeId!,
+                  onTry: () => _onNudgeTry(_nudgeId!, provider),
+                  onDismiss: () => _onNudgeDismiss(_nudgeId!),
+                ),
+              ),
+            ],
+          );
         },
       ),
     );

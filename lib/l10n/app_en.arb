@@ -27,5 +27,15 @@
   "hintGotIt": "Got it",
   "hintDontShowAgain": "Don't show again",
   "disableAllHints": "Disable all hints",
-  "showHints": "Show hints"
+  "showHints": "Show hints",
+  "nudgeExpertModeTitle": "Ready for more?",
+  "nudgeExpertModeBody": "Try Expert mode for more controls.",
+  "nudgeAnnotationTitle": "Mark it up",
+  "nudgeAnnotationBody": "Add annotations on photos for your family.",
+  "nudgeForeclosureFilterTitle": "Narrow it down",
+  "nudgeForeclosureFilterBody": "Use the foreclosure filter for better matches.",
+  "nudgeFamilyBoardTitle": "See what family found",
+  "nudgeFamilyBoardBody": "Check the Family Board for shared properties.",
+  "nudgeTryIt": "Try it",
+  "nudgeNotNow": "Not now"
 }

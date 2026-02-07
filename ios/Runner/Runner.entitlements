@@ -2,9 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<!-- Associated Domains временно отключены: включите в App ID на developer.apple.com и верните сюда:
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:deal.taxlien.online</string>
 	</array>
+	-->
 </dict>
 </plist>

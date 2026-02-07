@@ -62,6 +62,6 @@ TUTORIAL (this SDD):
 
 ## Next Actions
 
-1. Phase 1 & 2 done: TutorialService, tooltips, Disable-hints toggle, AchievementService, toast, Profile badges
-2. Optional: Add foreclosure % tooltip on Expert card (Task 1.5)
-3. Phase 3: Feature discovery nudges; Phase 4: Learning Center
+1. Phase 1–3 done: tooltips, achievements, nudges (banner + getNextNudge)
+2. Optional: Foreclosure % tooltip on Expert card (Task 1.5)
+3. Phase 4: Learning Center (screen, lessons, route)

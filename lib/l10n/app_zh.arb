@@ -1,18 +1,1 @@
-{
-  "@@locale": "zh",
-  "appTitle": "TaxLien Swipe",
-  "profileTitle": "专家个人资料",
-  "language": "语言",
-  "settings": "设置",
-  "roles": "角色",
-  "switchProfile": "切换个人资料",
-  "retry": "重试",
-  "startOver": "重新开始",
-  "noMoreProperties": "没有更多房产！",
-  "checkBackLater": "稍后回来查看新列表",
-  "dailyLimitReached": "达到每日限制",
-  "maybeLater": "以后再说",
-  "upgradeNow": "现在升级",
-  "expert": "专家",
-  "foreclosureMode": "法拍模式"
-}
+{"@@locale":"zh","appTitle":"TaxLien Swipe","profileTitle":"专家个人资料","language":"语言","settings":"设置","roles":"角色","switchProfile":"切换个人资料","retry":"重试","startOver":"重新开始","noMoreProperties":"没有更多房产！","checkBackLater":"稍后回来查看新列表","dailyLimitReached":"达到每日限制","maybeLater":"以后再说","upgradeNow":"现在升级","expert":"专家","foreclosureMode":"法拍模式","hintFviTitle":"FVI","hintFviBody":"FVI 显示对您家庭的价值。点击徽章查看详情。","hintForeclosureTitle":"法拍 %","hintForeclosureBody":"获得房产的概率。85%+ = 高概率。","hintFilterTitle":"筛选","hintFilterBody":"使用筛选找到最佳法拍匹配。","hintGotIt":"知道了","hintDontShowAgain":"不再显示","disableAllHints":"禁用所有提示","showHints":"显示提示","nudgeExpertModeTitle":"想要更多？","nudgeExpertModeBody":"试试专家模式获得更多控制。","nudgeAnnotationTitle":"做标记","nudgeAnnotationBody":"在照片上为家人添加标注。","nudgeForeclosureFilterTitle":"缩小范围","nudgeForeclosureFilterBody":"用法拍筛选获得更好匹配。","nudgeFamilyBoardTitle":"看看家人找到了什么","nudgeFamilyBoardBody":"在家庭看板查看共享房产。","nudgeTryIt":"试试","nudgeNotNow":"暂不","nudgeDefaultTitle":"提示","nudgeDefaultBody":"试试这个功能。","dealDetective":"DEAL DETECTIVE","welcomeSubtitle":"以最佳价格\n找到法拍房产","startSetup":"开始设置","orDivider":"或","skipKnowSwipe":"我已经会滑动了","hintsOff":"提示已关闭","tapToTurnOffHints":"点击关闭所有提示","expertProfileSwitcher":"专家档案切换","rolesList":"角色：Khun Pho, Denis, Anton, Vasilisa","account":"账户","notSignedIn":"未登录","signIn":"登录","signOut":"退出","deleteAccount":"删除账户","signedOut":"已退出","deleteAccountConfirm":"确定吗？这将删除您的账户和云端数据。本地数据可能保留。","cancel":"取消","delete":"删除","accountDeleted":"账户已删除","signInAgain":"重新登录","deleteAccountSignInAgain":"要删除账户，请先退出，再重新登录后尝试「删除账户」。","ok":"确定","couldNotDeleteAccount":"无法删除账户，请重试。","achievements":"成就","undoLimitReached":"已达撤销上限","upgradeToPremium":"升级至高级版","resetIn":"重置时间：{time}","foreclosureModeOn":"法拍模式：开","foreclosureModeOff":"法拍模式：关"}

@@ -8,3 +8,4 @@
 ## Context
 - Этот проект не имеет доступа к БД напрямую.
 - Все данные поступают от API Gateway (порт :8080).
+- UI/UX main language is English

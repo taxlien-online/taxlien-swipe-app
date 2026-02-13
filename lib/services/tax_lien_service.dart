@@ -22,7 +22,11 @@ class TaxLienService {
     FilterOptions? filter,
   }) async {
     if (_baseUrl == null) {
-      return _getMockForeclosureCandidates();
+      var list = _getMockForeclosureCandidates();
+      if (filter != null && filter.listingStages.isNotEmpty) {
+        list = list.where((l) => filter.listingStages.contains(l.listingStage)).toList();
+      }
+      return list;
     }
 
     try {
@@ -46,13 +50,21 @@ class TaxLienService {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body)['liens'] ?? [];
-        return data.map((json) => TaxLien.fromJson(json)).toList();
+        var list = data.map((json) => TaxLien.fromJson(json)).toList();
+        if (filter != null && filter.listingStages.isNotEmpty) {
+          list = list.where((l) => filter!.listingStages.contains(l.listingStage)).toList();
+        }
+        return list;
       } else {
         throw Exception('Failed to load foreclosure candidates: ${response.statusCode}');
       }
     } catch (e) {
       debugPrint('Error loading foreclosure candidates: $e');
-      return _getMockForeclosureCandidates();
+      var list = _getMockForeclosureCandidates();
+      if (filter != null && filter.listingStages.isNotEmpty) {
+        list = list.where((l) => filter.listingStages.contains(l.listingStage)).toList();
+      }
+      return list;
     }
   }
 
@@ -65,7 +77,11 @@ class TaxLienService {
     FilterOptions? filter,
   }) async {
     if (_baseUrl == null) {
-      return _getMockLiens();
+      var list = _getMockLiens();
+      if (filter != null && filter.listingStages.isNotEmpty) {
+        list = list.where((l) => filter.listingStages.contains(l.listingStage)).toList();
+      }
+      return list;
     }
 
     try {
@@ -83,13 +99,21 @@ class TaxLienService {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body)['liens'] ?? [];
-        return data.map((json) => TaxLien.fromJson(json)).toList();
+        var list = data.map((json) => TaxLien.fromJson(json)).toList();
+        if (filter != null && filter.listingStages.isNotEmpty) {
+          list = list.where((l) => filter!.listingStages.contains(l.listingStage)).toList();
+        }
+        return list;
       } else {
         throw Exception('Failed to load liens: ${response.statusCode}');
       }
     } catch (e) {
       debugPrint('Error loading liens: $e');
-      return _getMockLiens();
+      var list = _getMockLiens();
+      if (filter != null && filter.listingStages.isNotEmpty) {
+        list = list.where((l) => filter.listingStages.contains(l.listingStage)).toList();
+      }
+      return list;
     }
   }
 
@@ -151,6 +175,12 @@ class TaxLienService {
     if (filter.saleTypes.isNotEmpty) {
       queryParams['sale_type'] = filter.saleTypes.join(',');
     }
+    if (filter.listingStages.isNotEmpty) {
+      queryParams['listing_stage'] = filter.listingStages.join(',');
+    }
+    if (filter.noHeirsOnly) {
+      queryParams['no_heirs'] = 'true';
+    }
   }
 
   // Helper for mock foreclosure candidates (sdd-miw-gift)
@@ -189,6 +219,7 @@ class TaxLienService {
           expertScores: {'khun_pho': 7.5, 'anton': 9.5},
           propertyCost: 450.0,
         ),
+        noHeirs: true,
         metadata: {
           'hasVintageCar': true,
           'x1000Hint': 'Ford Mustang 1967 spotted in garage photo',
@@ -308,6 +339,7 @@ class TaxLienService {
           expertScores: {'anton': 10.0, 'khun_pho': 7.0},
           propertyCost: 890.0,
         ),
+        noHeirs: true,
         metadata: {
           'hasScientificEquipment': true,
           'ownerWasCollector': true,
@@ -351,6 +383,7 @@ class TaxLienService {
           expertScores: {'denis': 8.5, 'miw': 7.0},
           propertyCost: 150.0,
         ),
+        noHeirs: true,
         metadata: {
           'nearDenisFamily': true,
           'structureScore': 0.0, // vacant land

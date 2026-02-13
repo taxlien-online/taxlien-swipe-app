@@ -315,6 +315,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not now'**
   String get nudgeNotNow;
+
+  /// No description provided for @nudgeDefaultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tip'**
+  String get nudgeDefaultTitle;
+
+  /// No description provided for @nudgeDefaultBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Try this feature.'**
+  String get nudgeDefaultBody;
+
+  /// No description provided for @dealDetective.
+  ///
+  /// In en, this message translates to:
+  /// **'DEAL DETECTIVE'**
+  String get dealDetective;
+
+  /// No description provided for @welcomeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Find foreclosure properties\nat the best price'**
+  String get welcomeSubtitle;
+
+  /// No description provided for @startSetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Start setup'**
+  String get startSetup;
+
+  /// No description provided for @orDivider.
+  ///
+  /// In en, this message translates to:
+  /// **'or'**
+  String get orDivider;
+
+  /// No description provided for @skipKnowSwipe.
+  ///
+  /// In en, this message translates to:
+  /// **'I already know how to swipe'**
+  String get skipKnowSwipe;
+
+  /// No description provided for @hintsOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Hints are off'**
+  String get hintsOff;
+
+  /// No description provided for @tapToTurnOffHints.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to turn off all hints'**
+  String get tapToTurnOffHints;
+
+  /// No description provided for @expertProfileSwitcher.
+  ///
+  /// In en, this message translates to:
+  /// **'Expert Profile Switcher'**
+  String get expertProfileSwitcher;
+
+  /// No description provided for @rolesList.
+  ///
+  /// In en, this message translates to:
+  /// **'Roles: Khun Pho, Denis, Anton, Vasilisa'**
+  String get rolesList;
+
+  /// No description provided for @account.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get account;
+
+  /// No description provided for @notSignedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Not signed in'**
+  String get notSignedIn;
+
+  /// No description provided for @signIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get signIn;
+
+  /// No description provided for @signOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out'**
+  String get signOut;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get deleteAccount;
+
+  /// No description provided for @signedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed out'**
+  String get signedOut;
+
+  /// No description provided for @deleteAccountConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure? This will remove your account and cloud data. Local data may be kept.'**
+  String get deleteAccountConfirm;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @accountDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Account deleted'**
+  String get accountDeleted;
+
+  /// No description provided for @signInAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in again'**
+  String get signInAgain;
+
+  /// No description provided for @deleteAccountSignInAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'To delete your account, please sign out, then sign in again and try Delete Account.'**
+  String get deleteAccountSignInAgain;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @couldNotDeleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not delete account. Try again.'**
+  String get couldNotDeleteAccount;
+
+  /// No description provided for @achievements.
+  ///
+  /// In en, this message translates to:
+  /// **'Achievements'**
+  String get achievements;
+
+  /// No description provided for @undoLimitReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo limit reached'**
+  String get undoLimitReached;
+
+  /// No description provided for @upgradeToPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Premium'**
+  String get upgradeToPremium;
+
+  /// No description provided for @resetIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Resets in: {time}'**
+  String resetIn(String time);
+
+  /// No description provided for @foreclosureModeOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Foreclosure Mode: ON'**
+  String get foreclosureModeOn;
+
+  /// No description provided for @foreclosureModeOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Foreclosure Mode: OFF'**
+  String get foreclosureModeOff;
 }
 
 class _AppLocalizationsDelegate

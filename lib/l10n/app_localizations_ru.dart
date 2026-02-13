@@ -58,64 +58,161 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get hintFviBody =>
-      'FVI shows value for your family. Tap the badge for details.';
+      'FVI показывает ценность для вашей семьи. Нажмите на значок для деталей.';
 
   @override
-  String get hintForeclosureTitle => 'Foreclosure %';
+  String get hintForeclosureTitle => '% Foreclosure';
 
   @override
   String get hintForeclosureBody =>
-      'Probability of acquiring the property. 85%+ = high chance.';
+      'Вероятность приобретения объекта. 85%+ = высокая вероятность.';
 
   @override
-  String get hintFilterTitle => 'Filters';
+  String get hintFilterTitle => 'Фильтры';
 
   @override
   String get hintFilterBody =>
-      'Use filters to find the best foreclosure matches.';
+      'Используйте фильтры для лучших совпадений по foreclosure.';
 
   @override
-  String get hintGotIt => 'Got it';
+  String get hintGotIt => 'Понятно';
 
   @override
-  String get hintDontShowAgain => 'Don\'t show again';
+  String get hintDontShowAgain => 'Больше не показывать';
 
   @override
-  String get disableAllHints => 'Disable all hints';
+  String get disableAllHints => 'Отключить все подсказки';
 
   @override
-  String get showHints => 'Show hints';
+  String get showHints => 'Показывать подсказки';
 
   @override
-  String get nudgeExpertModeTitle => 'Ready for more?';
+  String get nudgeExpertModeTitle => 'Готовы к большему?';
 
   @override
-  String get nudgeExpertModeBody => 'Try Expert mode for more controls.';
+  String get nudgeExpertModeBody =>
+      'Попробуйте режим Эксперт для дополнительного контроля.';
 
   @override
-  String get nudgeAnnotationTitle => 'Mark it up';
+  String get nudgeAnnotationTitle => 'Пометки';
 
   @override
-  String get nudgeAnnotationBody =>
-      'Add annotations on photos for your family.';
+  String get nudgeAnnotationBody => 'Добавляйте пометки на фото для семьи.';
 
   @override
-  String get nudgeForeclosureFilterTitle => 'Narrow it down';
+  String get nudgeForeclosureFilterTitle => 'Сузьте поиск';
 
   @override
   String get nudgeForeclosureFilterBody =>
-      'Use the foreclosure filter for better matches.';
+      'Используйте фильтр foreclosure для лучших совпадений.';
 
   @override
-  String get nudgeFamilyBoardTitle => 'See what family found';
+  String get nudgeFamilyBoardTitle => 'Что нашла семья';
 
   @override
-  String get nudgeFamilyBoardBody =>
-      'Check the Family Board for shared properties.';
+  String get nudgeFamilyBoardBody => 'Смотрите общую доску семьи с объектами.';
 
   @override
-  String get nudgeTryIt => 'Try it';
+  String get nudgeTryIt => 'Попробовать';
 
   @override
-  String get nudgeNotNow => 'Not now';
+  String get nudgeNotNow => 'Не сейчас';
+
+  @override
+  String get nudgeDefaultTitle => 'Подсказка';
+
+  @override
+  String get nudgeDefaultBody => 'Попробуйте эту функцию.';
+
+  @override
+  String get dealDetective => 'DEAL DETECTIVE';
+
+  @override
+  String get welcomeSubtitle => 'Найдите объекты foreclosure\nпо лучшей цене';
+
+  @override
+  String get startSetup => 'Начать настройку';
+
+  @override
+  String get orDivider => 'или';
+
+  @override
+  String get skipKnowSwipe => 'Я уже знаю как свайпать';
+
+  @override
+  String get hintsOff => 'Подсказки выключены';
+
+  @override
+  String get tapToTurnOffHints => 'Нажмите, чтобы отключить все подсказки';
+
+  @override
+  String get expertProfileSwitcher => 'Переключатель профиля эксперта';
+
+  @override
+  String get rolesList => 'Роли: Khun Pho, Denis, Anton, Vasilisa';
+
+  @override
+  String get account => 'Аккаунт';
+
+  @override
+  String get notSignedIn => 'Не выполнен вход';
+
+  @override
+  String get signIn => 'Войти';
+
+  @override
+  String get signOut => 'Выйти';
+
+  @override
+  String get deleteAccount => 'Удалить аккаунт';
+
+  @override
+  String get signedOut => 'Вы вышли';
+
+  @override
+  String get deleteAccountConfirm =>
+      'Вы уверены? Это удалит ваш аккаунт и облачные данные. Локальные данные могут сохраниться.';
+
+  @override
+  String get cancel => 'Отмена';
+
+  @override
+  String get delete => 'Удалить';
+
+  @override
+  String get accountDeleted => 'Аккаунт удалён';
+
+  @override
+  String get signInAgain => 'Войдите снова';
+
+  @override
+  String get deleteAccountSignInAgain =>
+      'Чтобы удалить аккаунт, выйдите, затем снова войдите и нажмите «Удалить аккаунт».';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get couldNotDeleteAccount =>
+      'Не удалось удалить аккаунт. Попробуйте снова.';
+
+  @override
+  String get achievements => 'Достижения';
+
+  @override
+  String get undoLimitReached => 'Достигнут лимит отмен';
+
+  @override
+  String get upgradeToPremium => 'Перейти на Premium';
+
+  @override
+  String resetIn(String time) {
+    return 'Сброс через: $time';
+  }
+
+  @override
+  String get foreclosureModeOn => 'Режим Foreclosure: ВКЛ';
+
+  @override
+  String get foreclosureModeOff => 'Режим Foreclosure: ВЫКЛ';
 }

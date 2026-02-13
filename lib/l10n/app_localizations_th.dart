@@ -58,64 +58,161 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get hintFviBody =>
-      'FVI shows value for your family. Tap the badge for details.';
+      'FVI แสดงคุณค่าสำหรับครอบครัวของคุณ แตะตราเพื่อดูรายละเอียด';
 
   @override
-  String get hintForeclosureTitle => 'Foreclosure %';
+  String get hintForeclosureTitle => '% บังคับคดี';
 
   @override
   String get hintForeclosureBody =>
-      'Probability of acquiring the property. 85%+ = high chance.';
+      'ความน่าจะเป็นในการได้ทรัพย์สิน 85%+ = โอกาสสูง';
 
   @override
-  String get hintFilterTitle => 'Filters';
+  String get hintFilterTitle => 'ตัวกรอง';
 
   @override
   String get hintFilterBody =>
-      'Use filters to find the best foreclosure matches.';
+      'ใช้ตัวกรองเพื่อหาความตรงกันบังคับคดีที่ดีที่สุด';
 
   @override
-  String get hintGotIt => 'Got it';
+  String get hintGotIt => 'เข้าใจแล้ว';
 
   @override
-  String get hintDontShowAgain => 'Don\'t show again';
+  String get hintDontShowAgain => 'ไม่แสดงอีก';
 
   @override
-  String get disableAllHints => 'Disable all hints';
+  String get disableAllHints => 'ปิดคำใบ้ทั้งหมด';
 
   @override
-  String get showHints => 'Show hints';
+  String get showHints => 'แสดงคำใบ้';
 
   @override
-  String get nudgeExpertModeTitle => 'Ready for more?';
+  String get nudgeExpertModeTitle => 'พร้อมสำหรับมากขึ้น?';
 
   @override
-  String get nudgeExpertModeBody => 'Try Expert mode for more controls.';
+  String get nudgeExpertModeBody =>
+      'ลองโหมดผู้เชี่ยวชาญเพื่อการควบคุมเพิ่มเติม';
 
   @override
-  String get nudgeAnnotationTitle => 'Mark it up';
+  String get nudgeAnnotationTitle => 'ทำเครื่องหมาย';
 
   @override
-  String get nudgeAnnotationBody =>
-      'Add annotations on photos for your family.';
+  String get nudgeAnnotationBody => 'เพิ่มคำอธิบายบนรูปสำหรับครอบครัวของคุณ';
 
   @override
-  String get nudgeForeclosureFilterTitle => 'Narrow it down';
+  String get nudgeForeclosureFilterTitle => 'จำกัดลง';
 
   @override
   String get nudgeForeclosureFilterBody =>
-      'Use the foreclosure filter for better matches.';
+      'ใช้ตัวกรองบังคับคดีเพื่อความตรงกันที่ดีขึ้น';
 
   @override
-  String get nudgeFamilyBoardTitle => 'See what family found';
+  String get nudgeFamilyBoardTitle => 'ดูว่าครอบครัวเจออะไร';
 
   @override
   String get nudgeFamilyBoardBody =>
-      'Check the Family Board for shared properties.';
+      'ตรวจสอบบอร์ดครอบครัวสำหรับทรัพย์สินที่แชร์';
 
   @override
-  String get nudgeTryIt => 'Try it';
+  String get nudgeTryIt => 'ลองเลย';
 
   @override
-  String get nudgeNotNow => 'Not now';
+  String get nudgeNotNow => 'ไม่ใช่ตอนนี้';
+
+  @override
+  String get nudgeDefaultTitle => 'เคล็ดลับ';
+
+  @override
+  String get nudgeDefaultBody => 'ลองฟีเจอร์นี้';
+
+  @override
+  String get dealDetective => 'DEAL DETECTIVE';
+
+  @override
+  String get welcomeSubtitle => 'ค้นหาทรัพย์สินบังคับคดี\nในราคาดีที่สุด';
+
+  @override
+  String get startSetup => 'เริ่มการตั้งค่า';
+
+  @override
+  String get orDivider => 'หรือ';
+
+  @override
+  String get skipKnowSwipe => 'ฉันรู้วิธีสไลด์แล้ว';
+
+  @override
+  String get hintsOff => 'ปิดคำใบ้แล้ว';
+
+  @override
+  String get tapToTurnOffHints => 'แตะเพื่อปิดคำใบ้ทั้งหมด';
+
+  @override
+  String get expertProfileSwitcher => 'สลับโปรไฟล์ผู้เชี่ยวชาญ';
+
+  @override
+  String get rolesList => 'บทบาท: Khun Pho, Denis, Anton, Vasilisa';
+
+  @override
+  String get account => 'บัญชี';
+
+  @override
+  String get notSignedIn => 'ยังไม่ได้ลงชื่อเข้าใช้';
+
+  @override
+  String get signIn => 'ลงชื่อเข้าใช้';
+
+  @override
+  String get signOut => 'ลงชื่อออก';
+
+  @override
+  String get deleteAccount => 'ลบบัญชี';
+
+  @override
+  String get signedOut => 'ลงชื่อออกแล้ว';
+
+  @override
+  String get deleteAccountConfirm =>
+      'แน่ใจหรือไม่? การดำเนินการนี้จะลบบัญชีและข้อมูลบนคลาวด์ ข้อมูลท้องถิ่นอาจยังอยู่';
+
+  @override
+  String get cancel => 'ยกเลิก';
+
+  @override
+  String get delete => 'ลบ';
+
+  @override
+  String get accountDeleted => 'ลบบัญชีแล้ว';
+
+  @override
+  String get signInAgain => 'ลงชื่อเข้าใช้อีกครั้ง';
+
+  @override
+  String get deleteAccountSignInAgain =>
+      'เพื่อลบบัญชี กรุณาลงชื่อออก แล้วลงชื่อเข้าใช้ใหม่และลองลบบัญชี';
+
+  @override
+  String get ok => 'ตกลง';
+
+  @override
+  String get couldNotDeleteAccount => 'ลบบัญชีไม่ได้ ลองอีกครั้ง';
+
+  @override
+  String get achievements => 'ความสำเร็จ';
+
+  @override
+  String get undoLimitReached => 'ถึงขีดจำกัดการยกเลิก';
+
+  @override
+  String get upgradeToPremium => 'อัปเกรดเป็นพรีเมียม';
+
+  @override
+  String resetIn(String time) {
+    return 'รีเซ็ตใน: $time';
+  }
+
+  @override
+  String get foreclosureModeOn => 'โหมดบังคับคดี: เปิด';
+
+  @override
+  String get foreclosureModeOff => 'โหมดบังคับคดี: ปิด';
 }

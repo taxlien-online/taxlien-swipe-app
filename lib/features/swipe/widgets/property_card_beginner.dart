@@ -124,7 +124,7 @@ class _PropertyCardBeginnerState extends State<PropertyCardBeginner> {
             ),
           ),
           
-          // Top Badges (FVI with first-time hint)
+          // Top Badges (FVI with first-time hint, Listing stage)
           Positioned(
             top: 20,
             left: 20,
@@ -136,6 +136,14 @@ class _PropertyCardBeginnerState extends State<PropertyCardBeginner> {
                 'FVI: ${widget.property.fvi?.financialScore.toStringAsFixed(1) ?? 'N/A'}',
                 Colors.greenAccent[700]!,
               ),
+            ),
+          ),
+          Positioned(
+            top: 20,
+            right: widget.property.images.length > 1 ? 60 : 20,
+            child: _buildBadge(
+              widget.property.listingStageLabel,
+              _listingStageColor(widget.property.listingStage),
             ),
           ),
           // TODO: Reintegrate ROI if TaxLien provides it or it's derived.
@@ -264,6 +272,16 @@ class _PropertyCardBeginnerState extends State<PropertyCardBeginner> {
         ],
       ),
     );
+  }
+
+  Color _listingStageColor(String stage) {
+    return switch (stage) {
+      'sold' => Colors.grey[700]!,
+      'otc' => Colors.orange[700]!,
+      'listed' => Colors.blue[700]!,
+      'pre_auction' => Colors.amber[700]!,
+      _ => Colors.blueGrey[700]!,
+    };
   }
 
   Widget _buildBadge(String text, Color color) {

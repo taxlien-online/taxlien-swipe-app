@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// Static map of state -> counties for filter drill-down.
-const Map<String, List<String>> _stateCounties = {
-  'AZ': ['Maricopa', 'Pinal', 'Pima', 'Yavapai', 'Mohave', 'Yuma', 'Coconino'],
-  'FL': ['Miami-Dade', 'Broward', 'Palm Beach', 'Hillsborough', 'Pinellas', 'Orange', 'Duval'],
-  'TX': ['Harris', 'Dallas', 'Tarrant', 'Bexar', 'Travis', 'Collin', 'Denton'],
-  'NV': ['Clark', 'Washoe', 'Carson City', 'Elko', 'Nye'],
-  'CO': ['Denver', 'El Paso', 'Arapahoe', 'Jefferson', 'Adams', 'Boulder'],
-};
+import '../../../core/data/state_counties.dart';
 
+/// Full list of counties per state from StateCounties (sdd-miw-gift).
 class CountySelectorScreen extends StatefulWidget {
   final List<String> selectedCounties;
   final String state;
@@ -33,7 +27,7 @@ class _CountySelectorScreenState extends State<CountySelectorScreen> {
   }
 
   List<String> get _counties =>
-      _stateCounties[widget.state] ?? ['Unknown'];
+      StateCounties.getCountiesForState(widget.state);
 
   @override
   Widget build(BuildContext context) {
@@ -47,26 +41,37 @@ class _CountySelectorScreenState extends State<CountySelectorScreen> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: _counties.length,
-        itemBuilder: (context, index) {
-          final county = _counties[index];
-          final isSelected = _selected.contains(county);
-          return CheckboxListTile(
-            title: Text(county),
-            value: isSelected,
-            onChanged: (v) {
-              setState(() {
-                if (v == true) {
-                  _selected.add(county);
-                } else {
-                  _selected.remove(county);
-                }
-              });
-            },
-          );
-        },
-      ),
+      body: _counties.isEmpty
+          ? Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Text(
+                  'No county data for ${widget.state}. Full lists are in StateCounties.',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ),
+            )
+          : ListView.builder(
+              itemCount: _counties.length,
+              itemBuilder: (context, index) {
+                final county = _counties[index];
+                final isSelected = _selected.contains(county);
+                return CheckboxListTile(
+                  title: Text(county),
+                  value: isSelected,
+                  onChanged: (v) {
+                    setState(() {
+                      if (v == true) {
+                        _selected.add(county);
+                      } else {
+                        _selected.remove(county);
+                      }
+                    });
+                  },
+                );
+              },
+            ),
     );
   }
 }

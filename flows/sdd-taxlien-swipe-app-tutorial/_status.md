@@ -62,6 +62,6 @@ TUTORIAL (this SDD):
 
 ## Next Actions
 
-1. Phase 1–3 done: tooltips, achievements, nudges (banner + getNextNudge)
+1. Phase 1–4 done: tooltips, achievements, nudges, Learning Center (screen, lessons, progress, route, Profile link)
 2. Optional: Foreclosure % tooltip on Expert card (Task 1.5)
-3. Phase 4: Learning Center (screen, lessons, route)
+3. Phase 5: Coach marks (guided tours); Phase 6: Help Center

@@ -1,18 +1,1 @@
-{
-  "@@locale": "th",
-  "appTitle": "TaxLien Swipe",
-  "profileTitle": "โปรไฟล์ผู้เชี่ยวชาญ",
-  "language": "ภาษา",
-  "settings": "การตั้งค่า",
-  "roles": "บทบาท",
-  "switchProfile": "เปลี่ยนโปรไฟล์",
-  "retry": "ลองใหม่",
-  "startOver": "เริ่มใหม่",
-  "noMoreProperties": "ไม่มีทรัพย์สินเพิ่มเติม!",
-  "checkBackLater": "กลับมาตรวจสอบรายการใหม่ในภายหลัง",
-  "dailyLimitReached": "ถึงขีดจำกัดรายวันแล้ว",
-  "maybeLater": "ไว้วันหลัง",
-  "upgradeNow": "อัปเกรดตอนนี้",
-  "expert": "ผู้เชี่ยวชาญ",
-  "foreclosureMode": "โหมดบังคับคดี"
-}
+{"@@locale":"th","appTitle":"TaxLien Swipe","profileTitle":"โปรไฟล์ผู้เชี่ยวชาญ","language":"ภาษา","settings":"การตั้งค่า","roles":"บทบาท","switchProfile":"เปลี่ยนโปรไฟล์","retry":"ลองใหม่","startOver":"เริ่มใหม่","noMoreProperties":"ไม่มีทรัพย์สินเพิ่มเติม!","checkBackLater":"กลับมาตรวจสอบรายการใหม่ในภายหลัง","dailyLimitReached":"ถึงขีดจำกัดรายวันแล้ว","maybeLater":"ไว้วันหลัง","upgradeNow":"อัปเกรดตอนนี้","expert":"ผู้เชี่ยวชาญ","foreclosureMode":"โหมดบังคับคดี","hintFviTitle":"FVI","hintFviBody":"FVI แสดงคุณค่าสำหรับครอบครัวของคุณ แตะตราเพื่อดูรายละเอียด","hintForeclosureTitle":"% บังคับคดี","hintForeclosureBody":"ความน่าจะเป็นในการได้ทรัพย์สิน 85%+ = โอกาสสูง","hintFilterTitle":"ตัวกรอง","hintFilterBody":"ใช้ตัวกรองเพื่อหาความตรงกันบังคับคดีที่ดีที่สุด","hintGotIt":"เข้าใจแล้ว","hintDontShowAgain":"ไม่แสดงอีก","disableAllHints":"ปิดคำใบ้ทั้งหมด","showHints":"แสดงคำใบ้","nudgeExpertModeTitle":"พร้อมสำหรับมากขึ้น?","nudgeExpertModeBody":"ลองโหมดผู้เชี่ยวชาญเพื่อการควบคุมเพิ่มเติม","nudgeAnnotationTitle":"ทำเครื่องหมาย","nudgeAnnotationBody":"เพิ่มคำอธิบายบนรูปสำหรับครอบครัวของคุณ","nudgeForeclosureFilterTitle":"จำกัดลง","nudgeForeclosureFilterBody":"ใช้ตัวกรองบังคับคดีเพื่อความตรงกันที่ดีขึ้น","nudgeFamilyBoardTitle":"ดูว่าครอบครัวเจออะไร","nudgeFamilyBoardBody":"ตรวจสอบบอร์ดครอบครัวสำหรับทรัพย์สินที่แชร์","nudgeTryIt":"ลองเลย","nudgeNotNow":"ไม่ใช่ตอนนี้","nudgeDefaultTitle":"เคล็ดลับ","nudgeDefaultBody":"ลองฟีเจอร์นี้","dealDetective":"DEAL DETECTIVE","welcomeSubtitle":"ค้นหาทรัพย์สินบังคับคดี\nในราคาดีที่สุด","startSetup":"เริ่มการตั้งค่า","orDivider":"หรือ","skipKnowSwipe":"ฉันรู้วิธีสไลด์แล้ว","hintsOff":"ปิดคำใบ้แล้ว","tapToTurnOffHints":"แตะเพื่อปิดคำใบ้ทั้งหมด","expertProfileSwitcher":"สลับโปรไฟล์ผู้เชี่ยวชาญ","rolesList":"บทบาท: Khun Pho, Denis, Anton, Vasilisa","account":"บัญชี","notSignedIn":"ยังไม่ได้ลงชื่อเข้าใช้","signIn":"ลงชื่อเข้าใช้","signOut":"ลงชื่อออก","deleteAccount":"ลบบัญชี","signedOut":"ลงชื่อออกแล้ว","deleteAccountConfirm":"แน่ใจหรือไม่? การดำเนินการนี้จะลบบัญชีและข้อมูลบนคลาวด์ ข้อมูลท้องถิ่นอาจยังอยู่","cancel":"ยกเลิก","delete":"ลบ","accountDeleted":"ลบบัญชีแล้ว","signInAgain":"ลงชื่อเข้าใช้อีกครั้ง","deleteAccountSignInAgain":"เพื่อลบบัญชี กรุณาลงชื่อออก แล้วลงชื่อเข้าใช้ใหม่และลองลบบัญชี","ok":"ตกลง","couldNotDeleteAccount":"ลบบัญชีไม่ได้ ลองอีกครั้ง","achievements":"ความสำเร็จ","undoLimitReached":"ถึงขีดจำกัดการยกเลิก","upgradeToPremium":"อัปเกรดเป็นพรีเมียม","resetIn":"รีเซ็ตใน: {time}","foreclosureModeOn":"โหมดบังคับคดี: เปิด","foreclosureModeOff":"โหมดบังคับคดี: ปิด"}

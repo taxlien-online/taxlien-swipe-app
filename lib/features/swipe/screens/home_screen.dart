@@ -267,6 +267,7 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
 
   void _handleUndo() async {
     if (_swipeHistory.isEmpty) return;
+    final undoLimitMessage = AppLocalizations.of(context)!.undoLimitReached;
 
     // Check undo limit for free users
     final canUndo = await DailyLimitService.instance.canUndo(
@@ -274,7 +275,8 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
     );
 
     if (!canUndo) {
-      _showUpgradeDialog('Undo limit reached');
+      if (!mounted) return;
+      _showUpgradeDialog(undoLimitMessage);
       return;
     }
 
@@ -313,24 +315,25 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
 
     if (!mounted) return;
 
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Daily Limit Reached'),
+        title: Text(l10n.dailyLimitReached),
         content: Text(
-          '${SwipeConstants.errorDailyLimitReached}\n\nResets in: $timeUntilReset',
+          '${SwipeConstants.errorDailyLimitReached}\n\n${l10n.resetIn(timeUntilReset)}',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Maybe Later'),
+            child: Text(l10n.maybeLater),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
               // TODO: Navigate to paywall
             },
-            child: const Text('Upgrade Now'),
+            child: Text(l10n.upgradeNow),
           ),
         ],
       ),
@@ -338,11 +341,12 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
   }
 
   void _showNoMoreCardsDialog() {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('No More Properties'),
-        content: const Text(SwipeConstants.errorNoMoreCards),
+        title: Text(l10n.noMoreProperties),
+        content: Text(SwipeConstants.errorNoMoreCards),
         actions: [
           ElevatedButton(
             onPressed: () {
@@ -354,7 +358,7 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
               });
               _loadProperties();
             },
-            child: const Text('Start Over'),
+            child: Text(l10n.startOver),
           ),
         ],
       ),
@@ -362,22 +366,23 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
   }
 
   void _showUpgradeDialog(String reason) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Upgrade to Premium'),
+        title: Text(l10n.upgradeToPremium),
         content: Text(reason),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
               // TODO: Navigate to paywall
             },
-            child: const Text('Upgrade'),
+            child: Text(l10n.upgradeNow),
           ),
         ],
       ),
@@ -448,45 +453,55 @@ class _SwipeHomeScreenState extends State<SwipeHomeScreen> {
             )
           ).toList(),
         ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(l10n.appTitle, style: const TextStyle(fontSize: 16)),
-            Text(
-              '${l10n.expert}: ${currentProfile.name}',
-              style: TextStyle(fontSize: 11, color: currentProfile.color),
-            ),
-          ],
+        title: LayoutBuilder(
+          builder: (context, constraints) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.appTitle,
+                  style: const TextStyle(fontSize: 16),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                Text(
+                  '${l10n.expert}: ${currentProfile.name}',
+                  style: TextStyle(fontSize: 11, color: currentProfile.color),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ],
+            );
+          },
         ),
         actions: [
-          // Foreclosure Filter Toggle (sdd-miw-gift)
           IconButton(
             icon: Icon(
               _foreclosureFilterMode ? Icons.filter_alt : Icons.filter_alt_outlined,
               color: _foreclosureFilterMode ? Colors.orange : null,
             ),
-            tooltip: _foreclosureFilterMode 
-                ? 'Foreclosure Mode: ON (High foreclosure probability)' 
-                : 'Foreclosure Mode: OFF',
+            tooltip: _foreclosureFilterMode
+                ? AppLocalizations.of(context)!.foreclosureModeOn
+                : AppLocalizations.of(context)!.foreclosureModeOff,
             onPressed: _toggleForeclosureFilter,
           ),
-          // Share button
           IconButton(
             icon: const Icon(Icons.share),
             onPressed: _shareCurrentProperty,
           ),
-          // Preferences button
           IconButton(
             icon: const Icon(Icons.tune),
             onPressed: _openPreferences,
           ),
-          // Swipe counter
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: Text(
-                '$_swipeCount/${widget.isPremium ? '∞' : SwipeConstants.freeDailySwipeLimit}',
-                style: const TextStyle(fontSize: 16),
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: Center(
+              child: FittedBox(
+                child: Text(
+                  '$_swipeCount/${widget.isPremium ? '∞' : SwipeConstants.freeDailySwipeLimit}',
+                  style: const TextStyle(fontSize: 14),
+                ),
               ),
             ),
           ),

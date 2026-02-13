@@ -82,10 +82,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if (_hintsLoaded)
             SwitchListTile(
               title: Text(_hintsDisabled ? l10n.showHints : l10n.disableAllHints),
-              subtitle: Text(_hintsDisabled ? 'Hints are off' : 'Tap to turn off all hints'),
+              subtitle: Text(_hintsDisabled ? l10n.hintsOff : l10n.tapToTurnOffHints),
               value: _hintsDisabled,
               onChanged: _toggleHints,
             ),
+          ListTile(
+            title: const Text('Learning Center'),
+            subtitle: const Text('Lessons and tutorials'),
+            leading: const Icon(Icons.school),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.push('/learning'),
+          ),
           const Divider(),
           const _AchievementsSection(),
           const Divider(),
@@ -96,9 +103,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
-          const ListTile(
-            title: Text('Expert Profile Switcher'),
-            subtitle: Text('Roles: Khun Pho, Denis, Anton, Vasilisa'),
+          ListTile(
+            title: Text(l10n.expertProfileSwitcher),
+            subtitle: Text(l10n.rolesList),
           ),
         ],
       ),
@@ -147,13 +154,13 @@ class _AccountSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'Account',
+            AppLocalizations.of(context)!.account,
             style: theme.textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
           if (!auth.isSignedIn) ...[
             Text(
-              'Not signed in',
+              AppLocalizations.of(context)!.notSignedIn,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -162,7 +169,7 @@ class _AccountSection extends StatelessWidget {
             FilledButton.icon(
               onPressed: () => context.push('/onboarding/oauth?returnTo=profile'),
               icon: const Icon(Icons.login, size: 20),
-              label: const Text('Sign In'),
+              label: Text(AppLocalizations.of(context)!.signIn),
             ),
           ] else ...[
             if (auth.state?.displayName != null)
@@ -181,14 +188,14 @@ class _AccountSection extends StatelessWidget {
             OutlinedButton.icon(
               onPressed: () => _signOut(context),
               icon: const Icon(Icons.logout, size: 20),
-              label: const Text('Sign Out'),
+              label: Text(AppLocalizations.of(context)!.signOut),
             ),
             const SizedBox(height: 4),
             TextButton.icon(
               onPressed: () => _deleteAccount(context),
               icon: Icon(Icons.delete_outline, size: 20, color: theme.colorScheme.error),
               label: Text(
-                'Delete Account',
+                AppLocalizations.of(context)!.deleteAccount,
                 style: TextStyle(color: theme.colorScheme.error),
               ),
             ),
@@ -202,31 +209,29 @@ class _AccountSection extends StatelessWidget {
     await auth.signOut();
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Signed out')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.signedOut)),
       );
     }
   }
 
   Future<void> _deleteAccount(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete Account'),
-        content: const Text(
-          'Are you sure? This will remove your account and cloud data. '
-          'Local data may be kept.',
-        ),
+        title: Text(l10n.deleteAccount),
+        content: Text(l10n.deleteAccountConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
             style: FilledButton.styleFrom(
               backgroundColor: Theme.of(ctx).colorScheme.error,
             ),
-            child: const Text('Delete'),
+            child: Text(l10n.delete),
           ),
         ],
       ),
@@ -239,21 +244,20 @@ class _AccountSection extends StatelessWidget {
     switch (result) {
       case AuthResult.success:
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Account deleted')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.accountDeleted)),
         );
         break;
       case AuthResult.requiresRecentLogin:
+        final l10n = AppLocalizations.of(context)!;
         await showDialog<void>(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: const Text('Sign in again'),
-            content: const Text(
-              'To delete your account, please sign out, then sign in again and try Delete Account.',
-            ),
+            title: Text(l10n.signInAgain),
+            content: Text(l10n.deleteAccountSignInAgain),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: const Text('OK'),
+                child: Text(l10n.ok),
               ),
             ],
           ),
@@ -262,7 +266,7 @@ class _AccountSection extends StatelessWidget {
       case AuthResult.cancelled:
       case AuthResult.error:
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Could not delete account. Try again.')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.couldNotDeleteAccount)),
         );
         break;
     }
@@ -296,7 +300,7 @@ class _AchievementsSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Achievements',
+                AppLocalizations.of(context)!.achievements,
                 style: theme.textTheme.titleMedium,
               ),
               const SizedBox(height: 12),

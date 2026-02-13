@@ -10,11 +10,15 @@ class FilterOptions {
   final double maxLtvRatio;
   final List<String> propertyTypes;
   final List<String> saleTypes;
+  /// Lifecycle stage: pre_auction, listed, otc, sold. Empty = any.
+  final List<String> listingStages;
   final DateTimeRange? auctionDateRange;
   final double minForeclosureScore;
   final double minX1000Score;
   final bool hasPhotos;
   final bool hasStreetView;
+  /// Only properties with no known heirs (higher foreclosure certainty).
+  final bool noHeirsOnly;
 
   const FilterOptions({
     this.states = const [],
@@ -24,11 +28,13 @@ class FilterOptions {
     this.maxLtvRatio = 0.10,
     this.propertyTypes = const ['Residential', 'Vacant Land'],
     this.saleTypes = const ['Auction', 'OTC'],
+    this.listingStages = const [],
     this.auctionDateRange,
     this.minForeclosureScore = 0.0,
     this.minX1000Score = 0.0,
     this.hasPhotos = true,
     this.hasStreetView = false,
+    this.noHeirsOnly = false,
   });
 
   FilterOptions copyWith({
@@ -39,11 +45,13 @@ class FilterOptions {
     double? maxLtvRatio,
     List<String>? propertyTypes,
     List<String>? saleTypes,
+    List<String>? listingStages,
     DateTimeRange? auctionDateRange,
     double? minForeclosureScore,
     double? minX1000Score,
     bool? hasPhotos,
     bool? hasStreetView,
+    bool? noHeirsOnly,
   }) {
     return FilterOptions(
       states: states ?? this.states,
@@ -53,11 +61,13 @@ class FilterOptions {
       maxLtvRatio: maxLtvRatio ?? this.maxLtvRatio,
       propertyTypes: propertyTypes ?? this.propertyTypes,
       saleTypes: saleTypes ?? this.saleTypes,
+      listingStages: listingStages ?? this.listingStages,
       auctionDateRange: auctionDateRange ?? this.auctionDateRange,
       minForeclosureScore: minForeclosureScore ?? this.minForeclosureScore,
       minX1000Score: minX1000Score ?? this.minX1000Score,
       hasPhotos: hasPhotos ?? this.hasPhotos,
       hasStreetView: hasStreetView ?? this.hasStreetView,
+      noHeirsOnly: noHeirsOnly ?? this.noHeirsOnly,
     );
   }
 
@@ -70,6 +80,7 @@ class FilterOptions {
       'maxLtvRatio': maxLtvRatio,
       'propertyTypes': propertyTypes,
       'saleTypes': saleTypes,
+      'listingStages': listingStages,
       'auctionDateRange': auctionDateRange != null
           ? {
               'start': auctionDateRange!.start.toIso8601String(),
@@ -80,6 +91,7 @@ class FilterOptions {
       'minX1000Score': minX1000Score,
       'hasPhotos': hasPhotos,
       'hasStreetView': hasStreetView,
+      'noHeirsOnly': noHeirsOnly,
     };
   }
 
@@ -100,11 +112,13 @@ class FilterOptions {
       maxLtvRatio: (json['maxLtvRatio'] as num?)?.toDouble() ?? 0.10,
       propertyTypes: List<String>.from(json['propertyTypes'] ?? ['Residential', 'Vacant Land']),
       saleTypes: List<String>.from(json['saleTypes'] ?? ['Auction', 'OTC']),
+      listingStages: List<String>.from(json['listingStages'] ?? []),
       auctionDateRange: range,
       minForeclosureScore: (json['minForeclosureScore'] as num?)?.toDouble() ?? 0.0,
       minX1000Score: (json['minX1000Score'] as num?)?.toDouble() ?? 0.0,
       hasPhotos: json['hasPhotos'] as bool? ?? true,
       hasStreetView: json['hasStreetView'] as bool? ?? false,
+      noHeirsOnly: json['noHeirsOnly'] as bool? ?? false,
     );
   }
 
@@ -115,6 +129,8 @@ class FilterOptions {
       counties.join(','),
       maxPrice.toStringAsFixed(0),
       minForeclosureScore.toStringAsFixed(2),
+      noHeirsOnly.toString(),
+      listingStages.join(','),
     ];
     return parts.join('|');
   }

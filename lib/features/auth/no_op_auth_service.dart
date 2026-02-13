@@ -35,5 +35,16 @@ class NoOpAuthService implements AuthService {
   Future<AuthResult> linkWithGoogle() async => AuthResult.cancelled;
 
   @override
+  Future<AuthResult> completeLinkBySigningInWithGoogle() async =>
+      AuthResult.cancelled;
+
+  @override
+  Future<AuthResult> completeLinkBySigningInWithFacebook() async =>
+      AuthResult.cancelled;
+
+  @override
+  String? get pendingLinkExistingProvider => null;
+
+  @override
   void dispose() {}
 }

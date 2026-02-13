@@ -1,18 +1,1 @@
-{
-  "@@locale": "ru",
-  "appTitle": "TaxLien Swipe",
-  "profileTitle": "Профиль эксперта",
-  "language": "Язык",
-  "settings": "Настройки",
-  "roles": "Роли",
-  "switchProfile": "Сменить профиль",
-  "retry": "Повторить",
-  "startOver": "Начать заново",
-  "noMoreProperties": "Объекты закончились!",
-  "checkBackLater": "Зайдите позже для новых объявлений",
-  "dailyLimitReached": "Дневной лимит исчерпан",
-  "maybeLater": "Возможно позже",
-  "upgradeNow": "Обновить сейчас",
-  "expert": "Эксперт",
-  "foreclosureMode": "Режим Foreclosure"
-}
+{"@@locale":"ru","appTitle":"TaxLien Swipe","profileTitle":"Профиль эксперта","language":"Язык","settings":"Настройки","roles":"Роли","switchProfile":"Сменить профиль","retry":"Повторить","startOver":"Начать заново","noMoreProperties":"Объекты закончились!","checkBackLater":"Зайдите позже для новых объявлений","dailyLimitReached":"Дневной лимит исчерпан","maybeLater":"Возможно позже","upgradeNow":"Обновить сейчас","expert":"Эксперт","foreclosureMode":"Режим Foreclosure","hintFviTitle":"FVI","hintFviBody":"FVI показывает ценность для вашей семьи. Нажмите на значок для деталей.","hintForeclosureTitle":"% Foreclosure","hintForeclosureBody":"Вероятность приобретения объекта. 85%+ = высокая вероятность.","hintFilterTitle":"Фильтры","hintFilterBody":"Используйте фильтры для лучших совпадений по foreclosure.","hintGotIt":"Понятно","hintDontShowAgain":"Больше не показывать","disableAllHints":"Отключить все подсказки","showHints":"Показывать подсказки","nudgeExpertModeTitle":"Готовы к большему?","nudgeExpertModeBody":"Попробуйте режим Эксперт для дополнительного контроля.","nudgeAnnotationTitle":"Пометки","nudgeAnnotationBody":"Добавляйте пометки на фото для семьи.","nudgeForeclosureFilterTitle":"Сузьте поиск","nudgeForeclosureFilterBody":"Используйте фильтр foreclosure для лучших совпадений.","nudgeFamilyBoardTitle":"Что нашла семья","nudgeFamilyBoardBody":"Смотрите общую доску семьи с объектами.","nudgeTryIt":"Попробовать","nudgeNotNow":"Не сейчас","nudgeDefaultTitle":"Подсказка","nudgeDefaultBody":"Попробуйте эту функцию.","dealDetective":"DEAL DETECTIVE","welcomeSubtitle":"Найдите объекты foreclosure\nпо лучшей цене","startSetup":"Начать настройку","orDivider":"или","skipKnowSwipe":"Я уже знаю как свайпать","hintsOff":"Подсказки выключены","tapToTurnOffHints":"Нажмите, чтобы отключить все подсказки","expertProfileSwitcher":"Переключатель профиля эксперта","rolesList":"Роли: Khun Pho, Denis, Anton, Vasilisa","account":"Аккаунт","notSignedIn":"Не выполнен вход","signIn":"Войти","signOut":"Выйти","deleteAccount":"Удалить аккаунт","signedOut":"Вы вышли","deleteAccountConfirm":"Вы уверены? Это удалит ваш аккаунт и облачные данные. Локальные данные могут сохраниться.","cancel":"Отмена","delete":"Удалить","accountDeleted":"Аккаунт удалён","signInAgain":"Войдите снова","deleteAccountSignInAgain":"Чтобы удалить аккаунт, выйдите, затем снова войдите и нажмите «Удалить аккаунт».","ok":"OK","couldNotDeleteAccount":"Не удалось удалить аккаунт. Попробуйте снова.","achievements":"Достижения","undoLimitReached":"Достигнут лимит отмен","upgradeToPremium":"Перейти на Premium","resetIn":"Сброс через: {time}","foreclosureModeOn":"Режим Foreclosure: ВКЛ","foreclosureModeOff":"Режим Foreclosure: ВЫКЛ"}

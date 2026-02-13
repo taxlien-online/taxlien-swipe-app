@@ -58,64 +58,162 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get hintFviBody =>
-      'FVI shows value for your family. Tap the badge for details.';
+      'FVI आपके परिवार के लिए मूल्य दिखाता है। विवरण के लिए बैज टैप करें।';
 
   @override
-  String get hintForeclosureTitle => 'Foreclosure %';
+  String get hintForeclosureTitle => 'फोरक्लोज़र %';
 
   @override
   String get hintForeclosureBody =>
-      'Probability of acquiring the property. 85%+ = high chance.';
+      'संपत्ति प्राप्त करने की संभावना। 85%+ = उच्च मौका।';
 
   @override
-  String get hintFilterTitle => 'Filters';
+  String get hintFilterTitle => 'फ़िल्टर';
 
   @override
   String get hintFilterBody =>
-      'Use filters to find the best foreclosure matches.';
+      'सर्वोत्तम फोरक्लोज़र मिलान के लिए फ़िल्टर का उपयोग करें।';
 
   @override
-  String get hintGotIt => 'Got it';
+  String get hintGotIt => 'समझ गया';
 
   @override
-  String get hintDontShowAgain => 'Don\'t show again';
+  String get hintDontShowAgain => 'दोबारा न दिखाएं';
 
   @override
-  String get disableAllHints => 'Disable all hints';
+  String get disableAllHints => 'सभी संकेत बंद करें';
 
   @override
-  String get showHints => 'Show hints';
+  String get showHints => 'संकेत दिखाएं';
 
   @override
-  String get nudgeExpertModeTitle => 'Ready for more?';
+  String get nudgeExpertModeTitle => 'और चाहिए?';
 
   @override
-  String get nudgeExpertModeBody => 'Try Expert mode for more controls.';
+  String get nudgeExpertModeBody =>
+      'अधिक नियंत्रण के लिए एक्सपर्ट मोड आज़माएं।';
 
   @override
-  String get nudgeAnnotationTitle => 'Mark it up';
+  String get nudgeAnnotationTitle => 'नोट जोड़ें';
 
   @override
   String get nudgeAnnotationBody =>
-      'Add annotations on photos for your family.';
+      'अपने परिवार के लिए फोटो पर एनोटेशन जोड़ें।';
 
   @override
-  String get nudgeForeclosureFilterTitle => 'Narrow it down';
+  String get nudgeForeclosureFilterTitle => 'सीमित करें';
 
   @override
   String get nudgeForeclosureFilterBody =>
-      'Use the foreclosure filter for better matches.';
+      'बेहतर मिलान के लिए फोरक्लोज़र फ़िल्टर का उपयोग करें।';
 
   @override
-  String get nudgeFamilyBoardTitle => 'See what family found';
+  String get nudgeFamilyBoardTitle => 'परिवार ने क्या ढूंढा';
 
   @override
   String get nudgeFamilyBoardBody =>
-      'Check the Family Board for shared properties.';
+      'साझा संपत्तियों के लिए फैमिली बोर्ड देखें।';
 
   @override
-  String get nudgeTryIt => 'Try it';
+  String get nudgeTryIt => 'आज़माएं';
 
   @override
-  String get nudgeNotNow => 'Not now';
+  String get nudgeNotNow => 'अभी नहीं';
+
+  @override
+  String get nudgeDefaultTitle => 'सुझाव';
+
+  @override
+  String get nudgeDefaultBody => 'इस सुविधा को आज़माएं।';
+
+  @override
+  String get dealDetective => 'DEAL DETECTIVE';
+
+  @override
+  String get welcomeSubtitle => 'सर्वोत्तम कीमत पर\nफोरक्लोज़र संपत्ति खोजें';
+
+  @override
+  String get startSetup => 'सेटअप शुरू करें';
+
+  @override
+  String get orDivider => 'या';
+
+  @override
+  String get skipKnowSwipe => 'मुझे पहले से स्वाइप आता है';
+
+  @override
+  String get hintsOff => 'संकेत बंद हैं';
+
+  @override
+  String get tapToTurnOffHints => 'सभी संकेत बंद करने के लिए टैप करें';
+
+  @override
+  String get expertProfileSwitcher => 'एक्सपर्ट प्रोफ़ाइल स्विचर';
+
+  @override
+  String get rolesList => 'भूमिकाएं: Khun Pho, Denis, Anton, Vasilisa';
+
+  @override
+  String get account => 'खाता';
+
+  @override
+  String get notSignedIn => 'साइन इन नहीं';
+
+  @override
+  String get signIn => 'साइन इन';
+
+  @override
+  String get signOut => 'साइन आउट';
+
+  @override
+  String get deleteAccount => 'खाता हटाएं';
+
+  @override
+  String get signedOut => 'साइन आउट हो गया';
+
+  @override
+  String get deleteAccountConfirm =>
+      'क्या आप सुनिश्चित हैं? इससे आपका खाता और क्लाउड डेटा हट जाएगा। स्थानीय डेटा रह सकता है।';
+
+  @override
+  String get cancel => 'रद्द करें';
+
+  @override
+  String get delete => 'हटाएं';
+
+  @override
+  String get accountDeleted => 'खाता हटा दिया गया';
+
+  @override
+  String get signInAgain => 'फिर से साइन इन करें';
+
+  @override
+  String get deleteAccountSignInAgain =>
+      'खाता हटाने के लिए पहले साइन आउट करें, फिर साइन इन करके Delete Account आज़माएं।';
+
+  @override
+  String get ok => 'ठीक है';
+
+  @override
+  String get couldNotDeleteAccount => 'खाता हटा नहीं सके। पुनः प्रयास करें।';
+
+  @override
+  String get achievements => 'उपलब्धियां';
+
+  @override
+  String get undoLimitReached => 'अनडू सीमा पूरी';
+
+  @override
+  String get upgradeToPremium => 'प्रीमियम में अपग्रेड करें';
+
+  @override
+  String resetIn(String time) {
+    return 'रीसेट: $time';
+  }
+
+  @override
+  String get foreclosureModeOn => 'फोरक्लोज़र मोड: ऑन';
+
+  @override
+  String get foreclosureModeOff => 'फोरक्लोज़र मोड: ऑफ';
 }

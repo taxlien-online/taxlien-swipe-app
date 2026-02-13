@@ -5,6 +5,8 @@ enum AuthResult {
   error,
   /// Delete account failed because Firebase requires recent login (re-auth).
   requiresRecentLogin,
+  /// Same email exists with different provider; caller should offer linking.
+  accountExistsWithDifferentCredential,
 }
 
 /// Current auth state (signed-in user info or signed out).

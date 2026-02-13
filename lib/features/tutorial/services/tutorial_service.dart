@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/lesson.dart';
 import '../models/nudge_data.dart';
 import '../models/tutorial_state.dart';
 import '../models/user_stats.dart';
@@ -23,6 +24,9 @@ abstract class TutorialService {
   /// Returns the next nudge id to show, or null if none.
   Future<String?> getNextNudge(UserStats stats, {bool isBeginnerMode = true});
   Future<void> markNudgeShown(String nudgeId);
+
+  /// Mark lesson at [lessonIndex] in module [moduleId] as completed. Updates progress and modulesCompleted.
+  Future<void> setLessonCompleted(String moduleId, int lessonIndex);
 }
 
 class TutorialServiceImpl implements TutorialService {
@@ -142,5 +146,22 @@ class TutorialServiceImpl implements TutorialService {
     final state = await _loadState();
     await _saveState(
         state.copyWith(shownNudges: {...state.shownNudges, nudgeId}));
+  }
+
+  @override
+  Future<void> setLessonCompleted(String moduleId, int lessonIndex) async {
+    final state = await _loadState();
+    final current = state.lessonProgress[moduleId] ?? -1;
+    final newIndex = current > lessonIndex ? current : lessonIndex;
+    final newProgress = {...state.lessonProgress, moduleId: newIndex};
+    int completedCount = 0;
+    for (final m in learningModules) {
+      final last = (newProgress[m.id] ?? -1);
+      if (last >= m.lessonCount - 1) completedCount++;
+    }
+    await _saveState(state.copyWith(
+      lessonProgress: newProgress,
+      modulesCompleted: completedCount,
+    ));
   }
 }

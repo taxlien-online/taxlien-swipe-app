@@ -1,18 +1,1 @@
-{
-  "@@locale": "bn",
-  "appTitle": "TaxLien Swipe",
-  "profileTitle": "বিশেষজ্ঞ প্রোফাইল",
-  "language": "ভাষা",
-  "settings": "সেটিংস",
-  "roles": "ভূমিকা",
-  "switchProfile": "প্রোফাইল পরিবর্তন করুন",
-  "retry": "আবার চেষ্টা করুন",
-  "startOver": "আবার শুরু করুন",
-  "noMoreProperties": "আর কোন সম্পত্তি নেই!",
-  "checkBackLater": "নতুন তালিকার জন্য পরে আবার আসুন",
-  "dailyLimitReached": "দৈনিক সীমা পৌঁছে গেছে",
-  "maybeLater": "পরে হতে পারে",
-  "upgradeNow": "এখনই আপগ্রেড করুন",
-  "expert": "বিশেষজ্ঞ",
-  "foreclosureMode": "ফোরক্লোজার মোড"
-}
+{"@@locale":"bn","appTitle":"TaxLien Swipe","profileTitle":"বিশেষজ্ঞ প্রোফাইল","language":"ভাষা","settings":"সেটিংস","roles":"ভূমিকা","switchProfile":"প্রোফাইল পরিবর্তন করুন","retry":"আবার চেষ্টা করুন","startOver":"আবার শুরু করুন","noMoreProperties":"আর কোন সম্পত্তি নেই!","checkBackLater":"নতুন তালিকার জন্য পরে আবার আসুন","dailyLimitReached":"দৈনিক সীমা পৌঁছে গেছে","maybeLater":"পরে হতে পারে","upgradeNow":"এখনই আপগ্রেড করুন","expert":"বিশেষজ্ঞ","foreclosureMode":"ফোরক্লোজার মোড","hintFviTitle":"FVI","hintFviBody":"FVI আপনার পরিবারের জন্য মান দেখায়। বিস্তারিত জানতে ব্যাজ ট্যাপ করুন।","hintForeclosureTitle":"ফোরক্লোজার %","hintForeclosureBody":"সম্পত্তি অর্জনের সম্ভাবনা। ৮৫%+ = উচ্চ সুযোগ।","hintFilterTitle":"ফিল্টার","hintFilterBody":"সেরা ফোরক্লোজার ম্যাচের জন্য ফিল্টার ব্যবহার করুন।","hintGotIt":"বুঝেছি","hintDontShowAgain":"আর দেখাবেন না","disableAllHints":"সমস্ত ইঙ্গিত বন্ধ করুন","showHints":"ইঙ্গিত দেখান","nudgeExpertModeTitle":"আরো চান?","nudgeExpertModeBody":"আরো নিয়ন্ত্রণের জন্য এক্সপার্ট মোড চেষ্টা করুন।","nudgeAnnotationTitle":"নোট যোগ করুন","nudgeAnnotationBody":"আপনার পরিবারের জন্য ছবিতে অ্যানোটেশন যোগ করুন।","nudgeForeclosureFilterTitle":"সীমিত করুন","nudgeForeclosureFilterBody":"ভালো ম্যাচের জন্য ফোরক্লোজার ফিল্টার ব্যবহার করুন।","nudgeFamilyBoardTitle":"পরিবার কী পেয়েছে","nudgeFamilyBoardBody":"শেয়ার করা সম্পত্তির জন্য ফ্যামিলি বোর্ড দেখুন।","nudgeTryIt":"চেষ্টা করুন","nudgeNotNow":"এখন না","nudgeDefaultTitle":"টিপ","nudgeDefaultBody":"এই বৈশিষ্ট্য চেষ্টা করুন।","dealDetective":"DEAL DETECTIVE","welcomeSubtitle":"সেরা দামে\nফোরক্লোজার সম্পত্তি খুঁজুন","startSetup":"সেটআপ শুরু করুন","orDivider":"অথবা","skipKnowSwipe":"আমি ইতিমধ্যে সোয়াইপ জানি","hintsOff":"ইঙ্গিত বন্ধ","tapToTurnOffHints":"সমস্ত ইঙ্গিত বন্ধ করতে ট্যাপ করুন","expertProfileSwitcher":"এক্সপার্ট প্রোফাইল সুইচার","rolesList":"ভূমিকা: Khun Pho, Denis, Anton, Vasilisa","account":"অ্যাকাউন্ট","notSignedIn":"সাইন ইন নেই","signIn":"সাইন ইন","signOut":"সাইন আউট","deleteAccount":"অ্যাকাউন্ট মুছুন","signedOut":"সাইন আউট হয়েছে","deleteAccountConfirm":"নিশ্চিত? এটি আপনার অ্যাকাউন্ট এবং ক্লাউড ডেটা সরাবে। স্থানীয় ডেটা থাকতে পারে।","cancel":"বাতিল","delete":"মুছুন","accountDeleted":"অ্যাকাউন্ট মুছে ফেলা হয়েছে","signInAgain":"আবার সাইন ইন করুন","deleteAccountSignInAgain":"অ্যাকাউন্ট মুছতে সাইন আউট করুন, তারপর আবার সাইন ইন করে Delete Account চেষ্টা করুন।","ok":"ঠিক আছে","couldNotDeleteAccount":"অ্যাকাউন্ট মুছতে পারা যায়নি। আবার চেষ্টা করুন।","achievements":"অর্জন","undoLimitReached":"আনডু সীমা পূর্ণ","upgradeToPremium":"প্রিমিয়ামে আপগ্রেড করুন","resetIn":"রিসেট: {time}","foreclosureModeOn":"ফোরক্লোজার মোড: চালু","foreclosureModeOff":"ফোরক্লোজার মোড: বন্ধ"}

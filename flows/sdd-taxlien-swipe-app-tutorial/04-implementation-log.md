@@ -20,6 +20,10 @@
 | 2.4 Profile — Achievement badges | ✅ Done | _AchievementsSection in ProfileScreen |
 | 3.1 Nudge definitions and logic | ✅ Done | nudge_data.dart, TutorialService.getNextNudge, markNudgeShown |
 | 3.2 Nudge UI (banner) | ✅ Done | nudge_banner.dart, SwipeScreen Stack + NudgeBanner |
+| 4.1 Learning Center screen | ✅ Done | learning_center_screen.dart, progress + module list |
+| 4.2 Lesson content and format | ✅ Done | lesson.dart, LearningModule + Lesson, learningModules |
+| 4.3 Lesson screen | ✅ Done | lesson_screen.dart, Mark Complete, Try It Now, dots |
+| 4.4 Route and Profile link | ✅ Done | /learning, /learning/:moduleId/:lessonIndex, Profile tile |
 
 ## Session 2026-02-04 (Phase 1)
 
@@ -50,3 +54,12 @@
 - l10n: nudgeExpertModeTitle/Body, nudgeAnnotation*, nudgeForeclosureFilter*, nudgeFamilyBoard*, nudgeTryIt, nudgeNotNow (en + ru + bn/hi/th/zh fallback).
 - NudgeBanner widget: title/body from l10n by nudgeId, Try it / Not now buttons.
 - SwipeScreen: _nudgeId, _scheduleNudgeCheck(provider), getNextNudge after frame; Stack with NudgeBanner at bottom; onTry switches to advanced / opens FilterSheet / pushes /family, onDismiss marks shown.
+
+## Session 2026-02-04 (Phase 4)
+
+- Lesson + LearningModule models; learningModules catalog (basics 3, foreclosure 2, fvi 1 lessons).
+- TutorialService.setLessonCompleted(moduleId, lessonIndex): updates lessonProgress, recomputes modulesCompleted.
+- LearningCenterScreen: FutureBuilder on getState().lessonProgress, progress bar, list of modules with Start/Continue, navigates to /learning/:moduleId/:lessonIndex.
+- LessonScreen: title, body, progress dots, Try It Now (go tryItPath), Mark complete & Next; on complete calls setLessonCompleted + checkAndUnlock(stats) then go next or pop.
+- Routes: /learning, /learning/:moduleId/:lessonIndex in app_router.
+- Profile: ListTile "Learning Center" → context.push('/learning').

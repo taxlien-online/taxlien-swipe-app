@@ -299,9 +299,11 @@ class _SwipeablePropertyCardState extends State<SwipeablePropertyCard>
       right: 0,
       child: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
             // Foreclosure Score Badge (sdd-miw-gift)
             if (widget.property.foreclosureProbability != null && 
                 widget.property.foreclosureProbability! >= 0.7)
@@ -350,6 +352,8 @@ class _SwipeablePropertyCardState extends State<SwipeablePropertyCard>
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 8),
 
@@ -358,14 +362,18 @@ class _SwipeablePropertyCardState extends State<SwipeablePropertyCard>
               children: [
                 const Icon(Icons.location_on, color: Colors.white70, size: 16),
                 const SizedBox(width: 4),
-                Text(
-                  '${widget.property.county}, ${widget.property.state}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white70,
+                Flexible(
+                  child: Text(
+                    '${widget.property.county}, ${widget.property.state}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white70,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(width: 8),
                 // Miw Score Badge (sdd-miw-gift)
                 if (widget.property.miwScore != null)
                   Container(
@@ -399,38 +407,42 @@ class _SwipeablePropertyCardState extends State<SwipeablePropertyCard>
             ),
             const SizedBox(height: 16),
 
-            // Stats row
-            Row(
-              children: [
-                _buildStatChip(
-                  icon: Icons.attach_money,
-                  label: '\$${widget.property.taxAmount.toStringAsFixed(0)}',
-                  color: Colors.blue,
-                ),
-                const SizedBox(width: 8),
-                _buildStatChip(
-                  icon: Icons.trending_up,
-                  label: '$roi% ROI',
-                  color: Colors.green,
-                ),
-                const SizedBox(width: 8),
-                _buildStatChip(
-                  icon: Icons.percent,
-                  label: '${widget.property.interestRate}% APR',
-                  color: Colors.orange,
-                ),
-                // Prior Years Owed (sdd-miw-gift)
-                if (widget.property.priorYearsOwed != null && widget.property.priorYearsOwed! >= 2)
-                  const SizedBox(width: 8),
-                if (widget.property.priorYearsOwed != null && widget.property.priorYearsOwed! >= 2)
+            // Stats row (horizontal scroll on narrow screens)
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
                   _buildStatChip(
-                    icon: Icons.calendar_today,
-                    label: '${widget.property.priorYearsOwed}yr',
-                    color: Colors.red,
+                    icon: Icons.attach_money,
+                    label: '\$${widget.property.taxAmount.toStringAsFixed(0)}',
+                    color: Colors.blue,
                   ),
-              ],
+                  const SizedBox(width: 8),
+                  _buildStatChip(
+                    icon: Icons.trending_up,
+                    label: '$roi% ROI',
+                    color: Colors.green,
+                  ),
+                  const SizedBox(width: 8),
+                  _buildStatChip(
+                    icon: Icons.percent,
+                    label: '${widget.property.interestRate}% APR',
+                    color: Colors.orange,
+                  ),
+                  if (widget.property.priorYearsOwed != null && widget.property.priorYearsOwed! >= 2)
+                    const SizedBox(width: 8),
+                  if (widget.property.priorYearsOwed != null && widget.property.priorYearsOwed! >= 2)
+                    _buildStatChip(
+                      icon: Icons.calendar_today,
+                      label: '${widget.property.priorYearsOwed}yr',
+                      color: Colors.red,
+                    ),
+                ],
+              ),
             ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -1,18 +1,1 @@
-{
-  "@@locale": "hi",
-  "appTitle": "TaxLien Swipe",
-  "profileTitle": "विशेषज्ञ प्रोफ़ाइल",
-  "language": "भाषा",
-  "settings": "सेटिंग्स",
-  "roles": "भूमिकाएं",
-  "switchProfile": "प्रोफ़ाइल बदलें",
-  "retry": "पुनः प्रयास करें",
-  "startOver": "फिर से शुरू करें",
-  "noMoreProperties": "कोई और संपत्ति नहीं!",
-  "checkBackLater": "नई लिस्टिंग के लिए बाद में वापस आएं",
-  "dailyLimitReached": "दैनिक सीमा समाप्त",
-  "maybeLater": "बाद में",
-  "upgradeNow": "अभी अपग्रेड करें",
-  "expert": "विशेषज्ञ",
-  "foreclosureMode": "फोरक्लोज़र मोड"
-}
+{"@@locale":"hi","appTitle":"TaxLien Swipe","profileTitle":"विशेषज्ञ प्रोफ़ाइल","language":"भाषा","settings":"सेटिंग्स","roles":"भूमिकाएं","switchProfile":"प्रोफ़ाइल बदलें","retry":"पुनः प्रयास करें","startOver":"फिर से शुरू करें","noMoreProperties":"कोई और संपत्ति नहीं!","checkBackLater":"नई लिस्टिंग के लिए बाद में वापस आएं","dailyLimitReached":"दैनिक सीमा समाप्त","maybeLater":"बाद में","upgradeNow":"अभी अपग्रेड करें","expert":"विशेषज्ञ","foreclosureMode":"फोरक्लोज़र मोड","hintFviTitle":"FVI","hintFviBody":"FVI आपके परिवार के लिए मूल्य दिखाता है। विवरण के लिए बैज टैप करें।","hintForeclosureTitle":"फोरक्लोज़र %","hintForeclosureBody":"संपत्ति प्राप्त करने की संभावना। 85%+ = उच्च मौका।","hintFilterTitle":"फ़िल्टर","hintFilterBody":"सर्वोत्तम फोरक्लोज़र मिलान के लिए फ़िल्टर का उपयोग करें।","hintGotIt":"समझ गया","hintDontShowAgain":"दोबारा न दिखाएं","disableAllHints":"सभी संकेत बंद करें","showHints":"संकेत दिखाएं","nudgeExpertModeTitle":"और चाहिए?","nudgeExpertModeBody":"अधिक नियंत्रण के लिए एक्सपर्ट मोड आज़माएं।","nudgeAnnotationTitle":"नोट जोड़ें","nudgeAnnotationBody":"अपने परिवार के लिए फोटो पर एनोटेशन जोड़ें।","nudgeForeclosureFilterTitle":"सीमित करें","nudgeForeclosureFilterBody":"बेहतर मिलान के लिए फोरक्लोज़र फ़िल्टर का उपयोग करें।","nudgeFamilyBoardTitle":"परिवार ने क्या ढूंढा","nudgeFamilyBoardBody":"साझा संपत्तियों के लिए फैमिली बोर्ड देखें।","nudgeTryIt":"आज़माएं","nudgeNotNow":"अभी नहीं","nudgeDefaultTitle":"सुझाव","nudgeDefaultBody":"इस सुविधा को आज़माएं।","dealDetective":"DEAL DETECTIVE","welcomeSubtitle":"सर्वोत्तम कीमत पर\nफोरक्लोज़र संपत्ति खोजें","startSetup":"सेटअप शुरू करें","orDivider":"या","skipKnowSwipe":"मुझे पहले से स्वाइप आता है","hintsOff":"संकेत बंद हैं","tapToTurnOffHints":"सभी संकेत बंद करने के लिए टैप करें","expertProfileSwitcher":"एक्सपर्ट प्रोफ़ाइल स्विचर","rolesList":"भूमिकाएं: Khun Pho, Denis, Anton, Vasilisa","account":"खाता","notSignedIn":"साइन इन नहीं","signIn":"साइन इन","signOut":"साइन आउट","deleteAccount":"खाता हटाएं","signedOut":"साइन आउट हो गया","deleteAccountConfirm":"क्या आप सुनिश्चित हैं? इससे आपका खाता और क्लाउड डेटा हट जाएगा। स्थानीय डेटा रह सकता है।","cancel":"रद्द करें","delete":"हटाएं","accountDeleted":"खाता हटा दिया गया","signInAgain":"फिर से साइन इन करें","deleteAccountSignInAgain":"खाता हटाने के लिए पहले साइन आउट करें, फिर साइन इन करके Delete Account आज़माएं।","ok":"ठीक है","couldNotDeleteAccount":"खाता हटा नहीं सके। पुनः प्रयास करें।","achievements":"उपलब्धियां","undoLimitReached":"अनडू सीमा पूरी","upgradeToPremium":"प्रीमियम में अपग्रेड करें","resetIn":"रीसेट: {time}","foreclosureModeOn":"फोरक्लोज़र मोड: ऑन","foreclosureModeOff":"फोरक्लोज़र मोड: ऑफ"}

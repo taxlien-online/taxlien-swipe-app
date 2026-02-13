@@ -118,4 +118,102 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nudgeNotNow => 'Not now';
+
+  @override
+  String get nudgeDefaultTitle => 'Tip';
+
+  @override
+  String get nudgeDefaultBody => 'Try this feature.';
+
+  @override
+  String get dealDetective => 'DEAL DETECTIVE';
+
+  @override
+  String get welcomeSubtitle =>
+      'Find foreclosure properties\nat the best price';
+
+  @override
+  String get startSetup => 'Start setup';
+
+  @override
+  String get orDivider => 'or';
+
+  @override
+  String get skipKnowSwipe => 'I already know how to swipe';
+
+  @override
+  String get hintsOff => 'Hints are off';
+
+  @override
+  String get tapToTurnOffHints => 'Tap to turn off all hints';
+
+  @override
+  String get expertProfileSwitcher => 'Expert Profile Switcher';
+
+  @override
+  String get rolesList => 'Roles: Khun Pho, Denis, Anton, Vasilisa';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get notSignedIn => 'Not signed in';
+
+  @override
+  String get signIn => 'Sign In';
+
+  @override
+  String get signOut => 'Sign Out';
+
+  @override
+  String get deleteAccount => 'Delete Account';
+
+  @override
+  String get signedOut => 'Signed out';
+
+  @override
+  String get deleteAccountConfirm =>
+      'Are you sure? This will remove your account and cloud data. Local data may be kept.';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get accountDeleted => 'Account deleted';
+
+  @override
+  String get signInAgain => 'Sign in again';
+
+  @override
+  String get deleteAccountSignInAgain =>
+      'To delete your account, please sign out, then sign in again and try Delete Account.';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get couldNotDeleteAccount => 'Could not delete account. Try again.';
+
+  @override
+  String get achievements => 'Achievements';
+
+  @override
+  String get undoLimitReached => 'Undo limit reached';
+
+  @override
+  String get upgradeToPremium => 'Upgrade to Premium';
+
+  @override
+  String resetIn(String time) {
+    return 'Resets in: $time';
+  }
+
+  @override
+  String get foreclosureModeOn => 'Foreclosure Mode: ON';
+
+  @override
+  String get foreclosureModeOff => 'Foreclosure Mode: OFF';
 }

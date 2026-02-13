@@ -58,64 +58,163 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get hintFviBody =>
-      'FVI shows value for your family. Tap the badge for details.';
+      'FVI আপনার পরিবারের জন্য মান দেখায়। বিস্তারিত জানতে ব্যাজ ট্যাপ করুন।';
 
   @override
-  String get hintForeclosureTitle => 'Foreclosure %';
+  String get hintForeclosureTitle => 'ফোরক্লোজার %';
 
   @override
   String get hintForeclosureBody =>
-      'Probability of acquiring the property. 85%+ = high chance.';
+      'সম্পত্তি অর্জনের সম্ভাবনা। ৮৫%+ = উচ্চ সুযোগ।';
 
   @override
-  String get hintFilterTitle => 'Filters';
+  String get hintFilterTitle => 'ফিল্টার';
 
   @override
   String get hintFilterBody =>
-      'Use filters to find the best foreclosure matches.';
+      'সেরা ফোরক্লোজার ম্যাচের জন্য ফিল্টার ব্যবহার করুন।';
 
   @override
-  String get hintGotIt => 'Got it';
+  String get hintGotIt => 'বুঝেছি';
 
   @override
-  String get hintDontShowAgain => 'Don\'t show again';
+  String get hintDontShowAgain => 'আর দেখাবেন না';
 
   @override
-  String get disableAllHints => 'Disable all hints';
+  String get disableAllHints => 'সমস্ত ইঙ্গিত বন্ধ করুন';
 
   @override
-  String get showHints => 'Show hints';
+  String get showHints => 'ইঙ্গিত দেখান';
 
   @override
-  String get nudgeExpertModeTitle => 'Ready for more?';
+  String get nudgeExpertModeTitle => 'আরো চান?';
 
   @override
-  String get nudgeExpertModeBody => 'Try Expert mode for more controls.';
+  String get nudgeExpertModeBody =>
+      'আরো নিয়ন্ত্রণের জন্য এক্সপার্ট মোড চেষ্টা করুন।';
 
   @override
-  String get nudgeAnnotationTitle => 'Mark it up';
+  String get nudgeAnnotationTitle => 'নোট যোগ করুন';
 
   @override
   String get nudgeAnnotationBody =>
-      'Add annotations on photos for your family.';
+      'আপনার পরিবারের জন্য ছবিতে অ্যানোটেশন যোগ করুন।';
 
   @override
-  String get nudgeForeclosureFilterTitle => 'Narrow it down';
+  String get nudgeForeclosureFilterTitle => 'সীমিত করুন';
 
   @override
   String get nudgeForeclosureFilterBody =>
-      'Use the foreclosure filter for better matches.';
+      'ভালো ম্যাচের জন্য ফোরক্লোজার ফিল্টার ব্যবহার করুন।';
 
   @override
-  String get nudgeFamilyBoardTitle => 'See what family found';
+  String get nudgeFamilyBoardTitle => 'পরিবার কী পেয়েছে';
 
   @override
   String get nudgeFamilyBoardBody =>
-      'Check the Family Board for shared properties.';
+      'শেয়ার করা সম্পত্তির জন্য ফ্যামিলি বোর্ড দেখুন।';
 
   @override
-  String get nudgeTryIt => 'Try it';
+  String get nudgeTryIt => 'চেষ্টা করুন';
 
   @override
-  String get nudgeNotNow => 'Not now';
+  String get nudgeNotNow => 'এখন না';
+
+  @override
+  String get nudgeDefaultTitle => 'টিপ';
+
+  @override
+  String get nudgeDefaultBody => 'এই বৈশিষ্ট্য চেষ্টা করুন।';
+
+  @override
+  String get dealDetective => 'DEAL DETECTIVE';
+
+  @override
+  String get welcomeSubtitle => 'সেরা দামে\nফোরক্লোজার সম্পত্তি খুঁজুন';
+
+  @override
+  String get startSetup => 'সেটআপ শুরু করুন';
+
+  @override
+  String get orDivider => 'অথবা';
+
+  @override
+  String get skipKnowSwipe => 'আমি ইতিমধ্যে সোয়াইপ জানি';
+
+  @override
+  String get hintsOff => 'ইঙ্গিত বন্ধ';
+
+  @override
+  String get tapToTurnOffHints => 'সমস্ত ইঙ্গিত বন্ধ করতে ট্যাপ করুন';
+
+  @override
+  String get expertProfileSwitcher => 'এক্সপার্ট প্রোফাইল সুইচার';
+
+  @override
+  String get rolesList => 'ভূমিকা: Khun Pho, Denis, Anton, Vasilisa';
+
+  @override
+  String get account => 'অ্যাকাউন্ট';
+
+  @override
+  String get notSignedIn => 'সাইন ইন নেই';
+
+  @override
+  String get signIn => 'সাইন ইন';
+
+  @override
+  String get signOut => 'সাইন আউট';
+
+  @override
+  String get deleteAccount => 'অ্যাকাউন্ট মুছুন';
+
+  @override
+  String get signedOut => 'সাইন আউট হয়েছে';
+
+  @override
+  String get deleteAccountConfirm =>
+      'নিশ্চিত? এটি আপনার অ্যাকাউন্ট এবং ক্লাউড ডেটা সরাবে। স্থানীয় ডেটা থাকতে পারে।';
+
+  @override
+  String get cancel => 'বাতিল';
+
+  @override
+  String get delete => 'মুছুন';
+
+  @override
+  String get accountDeleted => 'অ্যাকাউন্ট মুছে ফেলা হয়েছে';
+
+  @override
+  String get signInAgain => 'আবার সাইন ইন করুন';
+
+  @override
+  String get deleteAccountSignInAgain =>
+      'অ্যাকাউন্ট মুছতে সাইন আউট করুন, তারপর আবার সাইন ইন করে Delete Account চেষ্টা করুন।';
+
+  @override
+  String get ok => 'ঠিক আছে';
+
+  @override
+  String get couldNotDeleteAccount =>
+      'অ্যাকাউন্ট মুছতে পারা যায়নি। আবার চেষ্টা করুন।';
+
+  @override
+  String get achievements => 'অর্জন';
+
+  @override
+  String get undoLimitReached => 'আনডু সীমা পূর্ণ';
+
+  @override
+  String get upgradeToPremium => 'প্রিমিয়ামে আপগ্রেড করুন';
+
+  @override
+  String resetIn(String time) {
+    return 'রিসেট: $time';
+  }
+
+  @override
+  String get foreclosureModeOn => 'ফোরক্লোজার মোড: চালু';
+
+  @override
+  String get foreclosureModeOff => 'ফোরক্লোজার মোড: বন্ধ';
 }

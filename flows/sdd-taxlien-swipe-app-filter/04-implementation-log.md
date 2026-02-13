@@ -16,6 +16,14 @@
 | 3.3 Filter button in SwipeScreen | ✅ Done | AppBar filter icon opens FilterSheet |
 | 4.1 Save/Load filters | ✅ Done | FilterProvider.saveToPreferences, loadFromPreferences |
 | 4.2 UX polishing | ✅ Done | DraggableScrollableSheet, sliders, chips |
+| Listing Status (Lien/Deed/OTC) | ✅ Done | listingStages, Sale type, TaxLien.listingStage, card badge |
+
+## Session 2026-02-04 (Listing Status)
+- **FilterOptions:** added `listingStages` (pre_auction, listed, otc, sold); toJson/fromJson, contextHash.
+- **FilterSheet:** section "Sale & listing" with Sale type chips (Auction, OTC) and Listing stage chips (Pre-auction, Listed, OTC, Sold).
+- **TaxLien:** getter `listingStage` (derived from status + auctionDate), `listingStageLabel` for UI.
+- **TaxLienService:** _applyFilterToParams sends `listing_stage`; mock and API response filtered by listingStages when set.
+- **PropertyCardBeginner:** badge with listing stage (Listed, OTC, Sold, Pre-auction) and color by stage.
 
 ## Session 2026-02-04
 

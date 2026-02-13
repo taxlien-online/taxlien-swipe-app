@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/data/state_counties.dart';
 import '../../../core/models/filter_options.dart';
 import '../providers/filter_provider.dart';
 import '../providers/swipe_provider.dart';
@@ -104,6 +105,40 @@ class _FilterSheetState extends State<FilterSheet> {
                       onChanged: (v) => setState(() => _temp = _temp.copyWith(minInterestRate: v / 100)),
                     ),
                     const SizedBox(height: 16),
+                    _buildSectionHeader(context, 'Sale & listing'),
+                    const Text('Sale type', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+                    const SizedBox(height: 4),
+                    Wrap(
+                      spacing: 8,
+                      children: ['Auction', 'OTC'].map((t) {
+                        final selected = _temp.saleTypes.contains(t);
+                        return FilterChip(
+                          label: Text(t),
+                          selected: selected,
+                          onSelected: (v) {
+                            setState(() {
+                              final list = List<String>.from(_temp.saleTypes);
+                              if (v) list.add(t); else list.remove(t);
+                              if (list.isEmpty) list.addAll(['Auction', 'OTC']);
+                              _temp = _temp.copyWith(saleTypes: list);
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text('Listing stage', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+                    const SizedBox(height: 4),
+                    Wrap(
+                      spacing: 8,
+                      children: [
+                        _buildListingChip('Pre-auction', 'pre_auction'),
+                        _buildListingChip('Listed', 'listed'),
+                        _buildListingChip('OTC', 'otc'),
+                        _buildListingChip('Sold', 'sold'),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
                     _buildSectionHeader(context, 'Property type'),
                     Wrap(
                       spacing: 8,
@@ -126,6 +161,19 @@ class _FilterSheetState extends State<FilterSheet> {
                         }).toList(),
                     ),
                     const SizedBox(height: 16),
+                    ListTile(
+                      title: const Text('No heirs only'),
+                      subtitle: Text(
+                        _temp.noHeirsOnly
+                            ? 'Only properties with no known heirs (higher foreclosure certainty)'
+                            : 'Any',
+                        style: TextStyle(fontSize: 12, color: Theme.of(context).hintColor),
+                      ),
+                      trailing: Switch(
+                        value: _temp.noHeirsOnly,
+                        onChanged: (v) => setState(() => _temp = _temp.copyWith(noHeirsOnly: v)),
+                      ),
+                    ),
                     ExpansionTile(
                       title: const Text('Expert scores'),
                       children: [
@@ -187,8 +235,23 @@ class _FilterSheetState extends State<FilterSheet> {
     );
   }
 
+  Widget _buildListingChip(String label, String value) {
+    final selected = _temp.listingStages.contains(value);
+    return FilterChip(
+      label: Text(label),
+      selected: selected,
+      onSelected: (_) {
+        setState(() {
+          final list = List<String>.from(_temp.listingStages);
+          if (list.contains(value)) list.remove(value); else list.add(value);
+          _temp = _temp.copyWith(listingStages: list);
+        });
+      },
+    );
+  }
+
   Widget _buildStateChips(BuildContext context) {
-    const states = ['AZ', 'FL', 'TX', 'NV', 'CO'];
+    final states = StateCounties.supportedStates;
     return Wrap(
       spacing: 8,
       children: [

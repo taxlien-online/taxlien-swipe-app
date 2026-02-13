@@ -76,7 +76,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text('Deal Detective'),
+        title: Text(AppLocalizations.of(context)!.dealDetective),
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_list),

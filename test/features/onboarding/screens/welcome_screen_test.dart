@@ -68,7 +68,7 @@ void main() {
       await tester.pumpWidget(buildTestWidget());
 
       expect(
-        find.text('Найдите foreclosure properties\nпо лучшей цене'),
+        find.text('Find foreclosure properties\nat the best price'),
         findsOneWidget,
       );
     });
@@ -79,24 +79,24 @@ void main() {
       expect(find.byType(SkipButton), findsOneWidget);
     });
 
-    testWidgets('renders "Начать настройку" button', (tester) async {
+    testWidgets('renders "Start setup" button', (tester) async {
       await tester.pumpWidget(buildTestWidget());
 
-      expect(find.text('Начать настройку'), findsOneWidget);
+      expect(find.text('Start setup'), findsOneWidget);
     });
 
-    testWidgets('renders "Я уже знаю как свайпать" link', (tester) async {
+    testWidgets('renders "I already know how to swipe" link', (tester) async {
       await tester.pumpWidget(buildTestWidget());
 
-      expect(find.text('Я уже знаю как свайпать'), findsOneWidget);
+      expect(find.text('I already know how to swipe'), findsOneWidget);
     });
 
-    testWidgets('navigates to mode screen when "Начать настройку" tapped', (
+    testWidgets('navigates to mode screen when "Start setup" tapped', (
       tester,
     ) async {
       await tester.pumpWidget(buildTestWidget());
 
-      await tester.tap(find.text('Начать настройку'));
+      await tester.tap(find.text('Start setup'));
       await tester.pumpAndSettle();
 
       expect(lastRoute, '/onboarding/mode');
@@ -112,11 +112,11 @@ void main() {
       expect(lastRoute, '/');
     });
 
-    testWidgets('navigates to home when "Я уже знаю" tapped', (tester) async {
+    testWidgets('navigates to home when "I already know how to swipe" tapped', (tester) async {
       await tester.pumpWidget(buildTestWidget());
       await tester.pump(); // allow initState postFrameCallback
 
-      await tester.tap(find.text('Я уже знаю как свайпать'));
+      await tester.tap(find.text('I already know how to swipe'));
       await tester.pumpAndSettle(const Duration(seconds: 5));
 
       expect(lastRoute, '/');
@@ -128,10 +128,10 @@ void main() {
       expect(find.byIcon(Icons.home_work_outlined), findsOneWidget);
     });
 
-    testWidgets('renders "или" divider', (tester) async {
+    testWidgets('renders "or" divider', (tester) async {
       await tester.pumpWidget(buildTestWidget());
 
-      expect(find.text('или'), findsOneWidget);
+      expect(find.text('or'), findsOneWidget);
     });
   });
 }

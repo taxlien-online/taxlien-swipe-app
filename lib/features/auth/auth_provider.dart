@@ -59,6 +59,22 @@ class AuthProvider extends ChangeNotifier {
     return result;
   }
 
+  /// Provider to use when [accountExistsWithDifferentCredential] (e.g. 'google').
+  String? get pendingLinkExistingProvider =>
+      _authService.pendingLinkExistingProvider;
+
+  Future<AuthResult> completeLinkBySigningInWithGoogle() async {
+    final result = await _authService.completeLinkBySigningInWithGoogle();
+    if (result == AuthResult.success) notifyListeners();
+    return result;
+  }
+
+  Future<AuthResult> completeLinkBySigningInWithFacebook() async {
+    final result = await _authService.completeLinkBySigningInWithFacebook();
+    if (result == AuthResult.success) notifyListeners();
+    return result;
+  }
+
   @override
   void dispose() {
     _subscription?.cancel();

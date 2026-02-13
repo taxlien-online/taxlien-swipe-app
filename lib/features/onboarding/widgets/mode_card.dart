@@ -62,10 +62,11 @@ class _ModeCardState extends State<ModeCard> with SingleTickerProviderStateMixin
         borderRadius: BorderRadius.circular(16),
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Animated preview
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
               SizedBox(
                 height: 60,
                 child: AnimatedBuilder(
@@ -93,8 +94,6 @@ class _ModeCardState extends State<ModeCard> with SingleTickerProviderStateMixin
                 ),
               ),
               const SizedBox(height: 16),
-
-              // Title
               Text(
                 widget.title,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -102,16 +101,17 @@ class _ModeCardState extends State<ModeCard> with SingleTickerProviderStateMixin
                     ),
               ),
               const SizedBox(height: 8),
-
-              // Description
               Text(
                 widget.description,
                 textAlign: TextAlign.center,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Colors.grey[600],
                     ),
               ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

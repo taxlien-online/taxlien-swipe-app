@@ -26,7 +26,7 @@ class NudgeBanner extends StatelessWidget {
       case 'family_board':
         return (l10n.nudgeFamilyBoardTitle, l10n.nudgeFamilyBoardBody);
       default:
-        return ('Tip', 'Try this feature.');
+        return (l10n.nudgeDefaultTitle, l10n.nudgeDefaultBody);
     }
   }
 

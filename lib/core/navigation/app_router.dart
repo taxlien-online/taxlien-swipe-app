@@ -14,6 +14,8 @@ import '../../features/onboarding/screens/tutorial_screen.dart';
 import '../../features/onboarding/screens/ready_screen.dart';
 import '../../features/onboarding/screens/oauth_screen.dart';
 import '../../features/onboarding/services/onboarding_service.dart';
+import '../../features/tutorial/screens/learning_center_screen.dart';
+import '../../features/tutorial/screens/lesson_screen.dart';
 
 class AppRouter {
   static final _onboardingService = OnboardingService();
@@ -116,6 +118,20 @@ class AppRouter {
         path: '/profile',
         name: 'profile',
         builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: '/learning',
+        name: 'learning',
+        builder: (context, state) => const LearningCenterScreen(),
+      ),
+      GoRoute(
+        path: '/learning/:moduleId/:lessonIndex',
+        name: 'lesson',
+        builder: (context, state) {
+          final moduleId = state.pathParameters['moduleId']!;
+          final lessonIndex = int.tryParse(state.pathParameters['lessonIndex'] ?? '0') ?? 0;
+          return LessonScreen(moduleId: moduleId, lessonIndex: lessonIndex);
+        },
       ),
     ],
     );

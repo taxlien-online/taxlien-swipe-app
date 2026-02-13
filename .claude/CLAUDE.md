@@ -11,3 +11,4 @@
 ## Implementation Targets
 - **Tech:** Flutter (Dart), GoRouter, Dio.
 - **Features:** Annotation Canvas, FVI Score display, Gateway Integration.
+- UI/UX main language is English

@@ -43,6 +43,23 @@
 **Ended at**: Phase 5 complete  
 **Handoff notes**: Flow complete. Optional: localize remaining Profile strings; expand ARB coverage to onboarding/swipe/annotation per requirements.
 
+### Session 2026-02-07 – Complete translations everywhere
+
+**Started at**: Resume flow `sdd-taxlien-swipe-app-localizations`  
+**Context**: User requested to finish translating everywhere («допереводи везде»).
+
+#### Completed
+- **ARB coverage (non-en)**: Added missing `hint*` and `nudge*` keys to `app_ru.arb`, `app_zh.arb`, `app_hi.arb`, `app_bn.arb`, `app_th.arb` (FVI, Foreclosure, Filter hints; all nudge titles/bodies; Got it, Don’t show again; Disable/Show hints; Try it, Not now).
+- **New l10n keys (en + all locales)**: Onboarding (dealDetective, welcomeSubtitle, startSetup, orDivider, skipKnowSwipe), profile (hintsOff, tapToTurnOffHints, expertProfileSwitcher, rolesList, account, notSignedIn, signIn, signOut, deleteAccount, signedOut, deleteAccountConfirm, cancel, delete, accountDeleted, signInAgain, deleteAccountSignInAgain, ok, couldNotDeleteAccount, achievements), dialogs (undoLimitReached, upgradeToPremium, resetIn with `{time}` placeholder, foreclosureModeOn/Off), nudge default (nudgeDefaultTitle, nudgeDefaultBody). Translated in ru, zh, hi, bn, th.
+- **Dart**: Replaced hardcoded strings with `AppLocalizations`: `welcome_screen` (title, subtitle, start setup, or, skip link), `profile_screen` (account, hints, expert switcher, roles, sign in/out, delete account, dialogs, achievements), `home_screen` (limit/upgrade/no-more dialogs, tooltip Foreclosure ON/OFF, undo message), `swipe_screen` (app bar Deal Detective), `nudge_banner` (default tip text). Fixed `use_build_context_synchronously` in `_handleUndo` by resolving undo message before async.
+- **Tests**: Updated `welcome_screen_test.dart` to expect English l10n strings (test locale is en) instead of previous hardcoded Russian.
+
+#### Deviations from Plan
+- None.
+
+**Ended at**: Localization coverage complete for onboarding, profile, swipe dialogs, nudges, hints.  
+**Handoff notes**: Remaining optional: localize `SwipeConstants` messages (errorDailyLimitReached, errorNoMoreCards, successUndo, etc.), annotation_screen, details_screen, achievement titles/descriptions.
+
 ---
 
 ## Completion Checklist

@@ -27,6 +27,8 @@ class FirebaseAuthService implements AuthService {
       StreamController<AuthState>.broadcast();
 
   AuthState? _cachedState;
+  OAuthCredential? _pendingLinkCredential;
+  String? _pendingLinkExistingProvider;
 
   void _onAuthStateChanged(User? user) {
     final state = user == null
@@ -62,20 +64,24 @@ class FirebaseAuthService implements AuthService {
 
   @override
   Future<AuthResult> signInWithGoogle() async {
+    OAuthCredential? credential;
     try {
       final googleUser = await _googleSignIn.signIn();
       if (googleUser == null) return AuthResult.cancelled;
 
       final googleAuth = await googleUser.authentication;
-      final credential = GoogleAuthProvider.credential(
+      credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      await _auth.signInWithCredential(credential);
+      await _auth.signInWithCredential(credential!);
       return AuthResult.success;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'account-exists-with-different-credential') {
-        return AuthResult.error; // Caller may offer linking
+      if (e.code == 'account-exists-with-different-credential' &&
+          credential != null) {
+        _pendingLinkCredential = credential;
+        _pendingLinkExistingProvider = 'google';
+        return AuthResult.accountExistsWithDifferentCredential;
       }
       return AuthResult.error;
     } catch (_) {
@@ -85,6 +91,7 @@ class FirebaseAuthService implements AuthService {
 
   @override
   Future<AuthResult> signInWithFacebook() async {
+    OAuthCredential? credential;
     try {
       final loginResult = await FacebookAuth.instance.login();
       if (loginResult.status != LoginStatus.success) {
@@ -95,11 +102,17 @@ class FirebaseAuthService implements AuthService {
       final accessToken = loginResult.accessToken;
       if (accessToken == null) return AuthResult.error;
 
-      final credential =
+      credential =
           FacebookAuthProvider.credential(accessToken.tokenString);
-      await _auth.signInWithCredential(credential);
+      await _auth.signInWithCredential(credential!);
       return AuthResult.success;
-    } on FirebaseAuthException catch (_) {
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'account-exists-with-different-credential' &&
+          credential != null) {
+        _pendingLinkCredential = credential;
+        _pendingLinkExistingProvider = 'facebook';
+        return AuthResult.accountExistsWithDifferentCredential;
+      }
       return AuthResult.error;
     } catch (_) {
       return AuthResult.error;
@@ -167,6 +180,56 @@ class FirebaseAuthService implements AuthService {
       return AuthResult.error;
     }
   }
+
+  @override
+  Future<AuthResult> completeLinkBySigningInWithGoogle() async {
+    final pending = _pendingLinkCredential;
+    if (pending == null) return AuthResult.error;
+    try {
+      final googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) return AuthResult.cancelled;
+      final googleAuth = await googleUser.authentication;
+      final cred = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      await _auth.signInWithCredential(cred);
+      await _auth.currentUser?.linkWithCredential(pending);
+      _pendingLinkCredential = null;
+      _pendingLinkExistingProvider = null;
+      return AuthResult.success;
+    } catch (_) {
+      return AuthResult.error;
+    }
+  }
+
+  @override
+  Future<AuthResult> completeLinkBySigningInWithFacebook() async {
+    final pending = _pendingLinkCredential;
+    if (pending == null) return AuthResult.error;
+    try {
+      final loginResult = await FacebookAuth.instance.login();
+      if (loginResult.status != LoginStatus.success ||
+          loginResult.accessToken == null) {
+        return loginResult.status == LoginStatus.cancelled
+            ? AuthResult.cancelled
+            : AuthResult.error;
+      }
+      final cred = FacebookAuthProvider.credential(
+        loginResult.accessToken!.tokenString,
+      );
+      await _auth.signInWithCredential(cred);
+      await _auth.currentUser?.linkWithCredential(pending);
+      _pendingLinkCredential = null;
+      _pendingLinkExistingProvider = null;
+      return AuthResult.success;
+    } catch (_) {
+      return AuthResult.error;
+    }
+  }
+
+  @override
+  String? get pendingLinkExistingProvider => _pendingLinkExistingProvider;
 
   @override
   void dispose() {

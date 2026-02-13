@@ -37,5 +37,43 @@
   "nudgeFamilyBoardTitle": "See what family found",
   "nudgeFamilyBoardBody": "Check the Family Board for shared properties.",
   "nudgeTryIt": "Try it",
-  "nudgeNotNow": "Not now"
+  "nudgeNotNow": "Not now",
+  "nudgeDefaultTitle": "Tip",
+  "nudgeDefaultBody": "Try this feature.",
+  "dealDetective": "DEAL DETECTIVE",
+  "welcomeSubtitle": "Find foreclosure properties\nat the best price",
+  "startSetup": "Start setup",
+  "orDivider": "or",
+  "skipKnowSwipe": "I already know how to swipe",
+  "hintsOff": "Hints are off",
+  "tapToTurnOffHints": "Tap to turn off all hints",
+  "expertProfileSwitcher": "Expert Profile Switcher",
+  "rolesList": "Roles: Khun Pho, Denis, Anton, Vasilisa",
+  "account": "Account",
+  "notSignedIn": "Not signed in",
+  "signIn": "Sign In",
+  "signOut": "Sign Out",
+  "deleteAccount": "Delete Account",
+  "signedOut": "Signed out",
+  "deleteAccountConfirm": "Are you sure? This will remove your account and cloud data. Local data may be kept.",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "accountDeleted": "Account deleted",
+  "signInAgain": "Sign in again",
+  "deleteAccountSignInAgain": "To delete your account, please sign out, then sign in again and try Delete Account.",
+  "ok": "OK",
+  "couldNotDeleteAccount": "Could not delete account. Try again.",
+  "achievements": "Achievements",
+  "undoLimitReached": "Undo limit reached",
+  "upgradeToPremium": "Upgrade to Premium",
+  "resetIn": "Resets in: {time}",
+  "@resetIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "foreclosureModeOn": "Foreclosure Mode: ON",
+  "foreclosureModeOff": "Foreclosure Mode: OFF"
 }

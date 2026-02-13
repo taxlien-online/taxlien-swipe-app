@@ -16,6 +16,13 @@ abstract class AuthService {
   Future<AuthResult> linkWithFacebook();
   Future<AuthResult> linkWithGoogle();
 
+  /// When [accountExistsWithDifferentCredential], sign in with existing provider then link.
+  Future<AuthResult> completeLinkBySigningInWithGoogle();
+  Future<AuthResult> completeLinkBySigningInWithFacebook();
+
+  /// Provider to use for linking when pending (e.g. 'google' when user tried Facebook).
+  String? get pendingLinkExistingProvider;
+
   /// Release resources (e.g. stream subscriptions). No-op for stateless implementations.
   void dispose();
 }

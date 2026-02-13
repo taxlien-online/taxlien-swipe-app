@@ -56,6 +56,10 @@ class TaxLien {
   @JsonKey(includeFromJson: false, includeToJson: false)
   final int? priorYearsOwed; // Years of delinquency
 
+  /// No known heirs → higher foreclosure certainty (sdd-miw-gift).
+  @JsonKey(name: 'no_heirs')
+  final bool? noHeirs;
+
   const TaxLien({
     required this.id,
     required this.propertyAddress,
@@ -93,10 +97,18 @@ class TaxLien {
     this.miwScore,
     this.karmaScore,
     this.priorYearsOwed,
+    this.noHeirs,
   });
 
-  factory TaxLien.fromJson(Map<String, dynamic> json) =>
-      _$TaxLienFromJson(json);
+  factory TaxLien.fromJson(Map<String, dynamic> json) {
+    final lien = _$TaxLienFromJson(json);
+    // Fallback: read noHeirs from metadata for backward compatibility
+    final fromMeta = json['metadata'] is Map ? (json['metadata'] as Map)['noHeirs'] as bool? : null;
+    if (lien.noHeirs == null && fromMeta != null) {
+      return lien.copyWith(noHeirs: fromMeta);
+    }
+    return lien;
+  }
   Map<String, dynamic> toJson() => _$TaxLienToJson(this);
 
   TaxLien copyWith({
@@ -136,6 +148,7 @@ class TaxLien {
     double? miwScore,
     double? karmaScore,
     int? priorYearsOwed,
+    bool? noHeirs,
   }) {
     return TaxLien(
       id: id ?? this.id,
@@ -174,6 +187,7 @@ class TaxLien {
       miwScore: miwScore ?? this.miwScore,
       karmaScore: karmaScore ?? this.karmaScore,
       priorYearsOwed: priorYearsOwed ?? this.priorYearsOwed,
+      noHeirs: noHeirs ?? this.noHeirs,
     );
   }
 
@@ -181,6 +195,27 @@ class TaxLien {
   double get lienAmount => taxAmount;
   bool get canBeTokenized => !isLocked && status == 'active';
   bool get isTokenized => lockedForNFT != null;
+
+  /// Lifecycle stage for filter/display: pre_auction, listed, otc, sold.
+  /// Derived from status + auctionDate when API does not send listing_stage.
+  String get listingStage {
+    if (isSold == true || status.toLowerCase() == 'sold') return 'sold';
+    final otc = status.toLowerCase();
+    if (otc == 'otc' || otc == 'over_the_counter') return 'otc';
+    final now = DateTime.now();
+    if (auctionDate.isAfter(now)) return 'listed'; // scheduled for auction
+    if (auctionDate.isBefore(now)) return 'otc'; // auction passed, typically OTC
+    return 'listed';
+  }
+
+  /// Human-readable label for listing stage (for card badge).
+  String get listingStageLabel => switch (listingStage) {
+    'sold' => 'Sold',
+    'otc' => 'OTC',
+    'listed' => 'Listed',
+    'pre_auction' => 'Pre-auction',
+    _ => listingStage,
+  };
 
   // Computed properties for compatibility
   String get address => propertyAddress;

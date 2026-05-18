@@ -22,6 +22,7 @@ REQUIREMENTS → SPECIFICATIONS → PLAN → IMPLEMENTATION
 **Input**: User describes the feature/change they want  
 **Output**: `flows/sdd-[name]/01-requirements.md`
 
+Elicit what user wants to build and why. Ask clarifying questions.
 Requirements capture the **what** and **why**:
 - Problem being solved
 - User stories (As a... I want... So that...)
@@ -60,6 +61,7 @@ Plan breaks down into actionable implementation:
 
 Implementation executes the plan:
 - Track progress against plan
+- Log progress in `04-implementation-log.md`
 - Document deviations and why
 - Capture learnings for spec refinement
 
@@ -190,6 +192,15 @@ When ending a session mid-flow:
 4. Note any context that might be lost
 
 New session reads `_status.md` first to reconstruct context.
+
+---
+
+## Always
+
+- Update `_status.md` after every significant change
+- Never skip phases or assume approval
+- When uncertain, ask rather than assume
+- Before ending session, ensure handoff notes are complete
 
 ---
 

@@ -9,6 +9,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:taxlien_swipe_app/l10n/app_localizations.dart';
 
+import 'design/design.dart';
 import 'core/navigation/app_router.dart';
 import 'core/localization/locale_provider.dart';
 import 'features/analytics/analytics_route_observer.dart';
@@ -186,9 +187,9 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp.router(
       title: 'TaxLien Swipe - Deal Detective',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: ThemeMode.system,
       routerConfig: widget.router,
       locale: localeProvider.locale,
       localizationsDelegates: const [

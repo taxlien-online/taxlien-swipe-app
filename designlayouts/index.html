@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tax Lien Galaxy — VPN Pro design</title>
+<link rel="stylesheet" href="styles/tokens.css">
+<link rel="stylesheet" href="styles/app.css">
+<style>
+  body {
+    margin: 0;
+    background: #EEF1F5;
+    overflow: hidden;
+  }
+  .canvas-header {
+    position: fixed; top: 12px; left: 16px; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(20px);
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(20,35,50,0.10);
+    padding: 12px 16px;
+    font-family: var(--font-family);
+    max-width: 440px;
+  }
+  .canvas-header__eyebrow {
+    font-size: 10px; color: var(--brand-blue);
+    font-weight: 700; letter-spacing: 0.10em;
+    text-transform: uppercase;
+  }
+  .canvas-header__title {
+    font-size: 17px; font-weight: 700; color: var(--fg-1);
+    margin-top: 2px;
+    letter-spacing: -0.01em;
+  }
+  .canvas-header__sub {
+    font-size: 11.5px; color: var(--fg-2); margin-top: 4px;
+    line-height: 1.4;
+  }
+  .canvas-header__meta {
+    display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;
+  }
+  .canvas-header__pill {
+    font-size: 10px; padding: 3px 7px; border-radius: 999px;
+    background: rgba(0,91,234,0.08); color: var(--brand-blue);
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="canvas-header">
+  <div class="canvas-header__eyebrow">Tax Lien Galaxy · v3 — adaptive</div>
+  <div class="canvas-header__title">Spatial intelligence for tax liens, deeds &amp; foreclosures</div>
+  <div class="canvas-header__sub">25 mechanics rebuilt on the VPN Client Pro design system. iPhone, iPad with split-view, macOS — pan and zoom to inspect.</div>
+  <div class="canvas-header__meta">
+    <span class="canvas-header__pill">📱 Phone · 35 screens</span>
+    <span class="canvas-header__pill">📲 Tablet · 5 layouts</span>
+    <span class="canvas-header__pill">💻 Desktop · 4 surfaces</span>
+  </div>
+</div>
+
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="ios-frame.jsx"></script>
+
+<script type="text/babel" src="screens/common.jsx"></script>
+<script type="text/babel" src="screens/common2.jsx"></script>
+
+<script type="text/babel" src="screens/galaxy.jsx"></script>
+<script type="text/babel" src="screens/property.jsx"></script>
+<script type="text/babel" src="screens/other.jsx"></script>
+
+<script type="text/babel" src="screens/onboarding.jsx"></script>
+<script type="text/babel" src="screens/notifications.jsx"></script>
+<script type="text/babel" src="screens/mechanics-phone.jsx"></script>
+<script type="text/babel" src="screens/ssr-features.jsx"></script>
+
+<script type="text/babel" src="screens/tablet.jsx"></script>
+<script type="text/babel" src="screens/desktop.jsx"></script>
+
+<script type="text/babel">
+const PHONE_W = 402;
+const PHONE_H = 874;
+
+const Phone = ({ children }) => (
+  <IOSDevice width={PHONE_W} height={PHONE_H}>
+    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+      {children}
+    </div>
+  </IOSDevice>
+);
+
+const phone = (id, label, screen) => (
+  <DCArtboard id={id} label={label} width={PHONE_W} height={PHONE_H}>
+    <Phone>{screen}</Phone>
+  </DCArtboard>
+);
+
+const tablet = (id, label, screen, w = 1180, h = 820) => (
+  <DCArtboard id={id} label={label} width={w + 28} height={h + 28}>
+    <TabletDevice width={w} height={h}>{screen}</TabletDevice>
+  </DCArtboard>
+);
+
+const desktop = (id, label, screen, title = "Tax Lien Galaxy", w = 1440, h = 900) => (
+  <DCArtboard id={id} label={label} width={w} height={h}>
+    <DesktopFrame width={w} height={h} title={title}>{screen}</DesktopFrame>
+  </DCArtboard>
+);
+
+function App() {
+  return (
+    <DesignCanvas>
+      {/* ───────── Onboarding ───────── */}
+      <DCSection id="onboarding" title="01 · Onboarding" subtitle="First-launch flow → tour spotlight">
+        {phone("onb-welcome", "1 · Welcome",       <OnbWelcomeScreen/>)}
+        {phone("onb-persona", "2 · Pick a strategy", <OnbPersonaScreen/>)}
+        {phone("onb-juris",   "3 · Jurisdictions", <OnbJurisdictionsScreen/>)}
+        {phone("onb-perms",   "4 · Permissions",   <OnbPermissionsScreen/>)}
+        {phone("onb-tour",    "5 · Tour spotlight",<OnbTourScreen/>)}
+      </DCSection>
+
+      {/* ───────── Notifications & tray ───────── */}
+      <DCSection id="notifications" title="02 · Notifications & tray" subtitle="Lock-screen · in-app inbox · settings · macOS tray">
+        {phone("notif-lock", "6 · iOS lock screen · stacked",  <NotifLockScreen/>)}
+        {phone("notif-inbox", "7 · In-app inbox · grouped",     <NotifInboxScreen/>)}
+        {phone("notif-set",  "8 · Triggers + channels",        <NotifSettingsScreen/>)}
+        {desktop("notif-tray", "9 · macOS tray dropdown",
+                 <DesktopTrayScreen/>, "macOS desktop · tray open", 1440, 900)}
+      </DCSection>
+
+      {/* ───────── Galaxy core ───────── */}
+      <DCSection id="galaxy" title="03 · Property Galaxy" subtitle="Spatial map · dimensions · lasso">
+        {phone("galaxy-default",   "10 · Default · ROI",                <GalaxyScreen/>)}
+        {phone("galaxy-zoomed",    "11 · Zoomed · Maricopa cluster",    <GalaxyZoomedScreen/>)}
+        {phone("galaxy-dimension", "12 · Dimension wheel · 12 axes",    <DimensionWheelScreen/>)}
+        {phone("lasso-draw",       "13 · Lasso · drawing",              <LassoDrawingScreen/>)}
+        {phone("lasso-done",       "14 · Lasso · stats panel",          <LassoSelectedScreen/>)}
+      </DCSection>
+
+      {/* ───────── Property + X-Ray + Living ───────── */}
+      <DCSection id="property" title="04 · Property detail · X-Ray · Badges" subtitle="Per-property mechanics">
+        {phone("prop-detail", "15 · Detail · stat tiles + auction",        <PropertyDetailScreen/>)}
+        {phone("prop-xray",   "16 · X-Ray · 4-tone insights",              <XRayScreen/>)}
+        {phone("prop-layered","17 · Layered card · stack",                 <LayeredCardScreen/>)}
+        {phone("prop-loupe",  "18 · AI Loupe · field magnification",       <AILoupeScreen/>)}
+        {phone("prop-badges", "19 · Badges & living-object states",        <BadgesScreen/>)}
+      </DCSection>
+
+      {/* ───────── AI Copilot + Command + Voice ───────── */}
+      <DCSection id="ai" title="05 · AI Copilot · Command · Voice" subtitle="Natural-language and gesture-driven discovery">
+        {phone("ai-pill",   "20 · Collapsed pill",          <CopilotCollapsedScreen/>)}
+        {phone("ai-sheet",  "21 · Expanded · suggestions",  <CopilotExpandedScreen/>)}
+        {phone("ai-result", "22 · Result · 23 highlighted", <CopilotResultScreen/>)}
+        {phone("ai-cmd",    "23 · Command palette · ⌘K",    <CommandPaletteScreen/>)}
+        {phone("ai-voice",  "24 · Voice + lasso refinement", <VoiceGestureScreen/>)}
+      </DCSection>
+
+      {/* ───────── Selection / Focus / Compare / Gravity / Magnetic ───────── */}
+      <DCSection id="select" title="06 · Selection · Compare · Gravity · Magnetic" subtitle="Group, compare, contaminate">
+        {phone("swipe-focus", "25 · Swipe focus · Tinder",        <SwipeFocusScreen/>)}
+        {phone("compare",     "26 · Comparison bridge · A vs B",  <ComparisonScreen/>)}
+        {phone("gravity",     "27 · Risk gravity · orbits",       <GravityScreen/>)}
+        {phone("magnetic",    "28 · Magnetic groups · by relation", <MagneticGroupsScreen/>)}
+        {phone("orbit",       "29 · Orbit favorites · radial drops", <OrbitFavoritesScreen/>)}
+      </DCSection>
+
+      {/* ───────── Time, geography, graph ───────── */}
+      <DCSection id="time" title="07 · Time, maps, graph" subtitle="Replay · heatmap · layers · radar · graph">
+        {phone("timeline", "30 · Timeline replay · scrubber",   <TimelineReplayScreen/>)}
+        {phone("heatmap",  "31 · Heatmap · county × month",     <HeatmapScreen/>)}
+        {phone("layers",   "32 · Map · toggleable layers",      <MapLayersScreen/>)}
+        {phone("radar",    "33 · Tax Radar · hub-spoke",        <TaxRadarScreen/>)}
+        {phone("graph",    "34 · Tax graph · entities + edges", <TaxGraphScreen/>)}
+      </DCSection>
+
+      {/* ───────── ML / SSR-site features ───────── */}
+      <DCSection id="ml" title="08 · ML predictions (ported from web)" subtitle="Persona, grade, radar, embeddings, what-if, attention">
+        {phone("ml-persona",   "35 · Persona top picks · 4 strategies", <PersonaToggleScreen/>)}
+        {phone("ml-risk",      "36 · Risk Radar · 6 factors",           <RiskRadarScreen/>)}
+        {phone("ml-galaxy",    "37 · Similarity Galaxy · 3D embeddings", <SimilarityGalaxyScreen/>)}
+        {phone("ml-whatif",    "38 · What-If · sliders → grade",        <WhatIfScreen/>)}
+        {phone("ml-sweetspot", "39 · The AI Sweet Spot",                <SweetSpotScreen/>)}
+        {phone("ml-attention", "40 · Neural attention map",             <AttentionMapScreen/>)}
+      </DCSection>
+
+      {/* ───────── Account: owner, pricing, API ───────── */}
+      <DCSection id="account" title="09 · Owner · Pricing · API" subtitle="Account-level surfaces and monetization">
+        {phone("acct-owner",   "41 · Owner dashboard · PRO blur",  <OwnerDashScreen/>)}
+        {phone("acct-pricing", "42 · Pricing · 4 tiers",            <PricingScreen/>)}
+        {phone("acct-api",     "43 · API keys · ELITE",             <ApiKeyScreen/>)}
+        {phone("acct-list",    "44 · List · filterable",            <ListScreen/>)}
+        {phone("acct-watch",   "45 · Watchlist · boards",           <WatchlistScreen/>)}
+        {phone("acct-profile", "46 · Profile · ethics filter",      <ProfileScreen/>)}
+      </DCSection>
+
+      {/* ───────── Tablet — adaptive layouts ───────── */}
+      <DCSection id="tablet" title="10 · Tablet (iPad)" subtitle="Landscape · split view · Kanban · comparison wall">
+        {tablet("tab-galaxy",   "47 · Galaxy · rail + right pane",    <TabletGalaxyScreen/>)}
+        {tablet("tab-multi",    "48 · 3-pane workspace · synced",     <TabletMultiPaneScreen/>)}
+        {tablet("tab-kanban",   "49 · Pipeline · drag between cols",  <TabletKanbanScreen/>)}
+        {tablet("tab-compare",  "50 · Comparison wall · 4 props",     <TabletCompareScreen/>)}
+        {tablet("tab-split",    "51 · Split View · Safari + Galaxy",  <TabletSplitScreen/>)}
+      </DCSection>
+
+      {/* ───────── Desktop ───────── */}
+      <DCSection id="desktop" title="11 · Desktop (macOS)" subtitle="Command center · 3D cube · AR concept">
+        {desktop("desk-command", "52 · Command center · 5-pane",
+                 <DesktopCommandCenter/>, "Galaxy — Tax Lien Galaxy")}
+        {desktop("desk-3d",      "53 · 3D dimension cube",
+                 <Desktop3DCubeScreen/>,  "Dimension Cube · Tax Lien Galaxy")}
+        {desktop("desk-ar",      "54 · AR concept · iPad / Vision",
+                 <DesktopARConcept/>, "AR session · scene 'investor table'")}
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+
+</body>
+</html>

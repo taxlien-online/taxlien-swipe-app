@@ -2,11 +2,11 @@
 
 ## Current Phase
 
-REQUIREMENTS
+IMPLEMENTATION
 
 ## Phase Status
 
-DRAFTING
+COMPLETE
 
 ## Last Updated
 
@@ -19,15 +19,15 @@ DRAFTING
 ## Progress
 
 - [x] Requirements drafted
-- [ ] Requirements approved
-- [ ] Visual mockups drafted
-- [ ] Visual mockups approved
-- [ ] Specifications drafted
-- [ ] Specifications approved
-- [ ] Plan drafted
-- [ ] Plan approved
-- [ ] Implementation started
-- [ ] Implementation complete
+- [x] Requirements approved
+- [x] Visual mockups drafted
+- [x] Visual mockups approved
+- [x] Specifications drafted
+- [x] Specifications approved
+- [x] Plan drafted
+- [x] Plan approved
+- [x] Implementation started
+- [x] Implementation complete
 - [ ] Documentation drafted
 - [ ] Documentation approved
 
@@ -40,6 +40,10 @@ Key decisions and context for resuming:
 - Design system from /designsystem/ (VPN Client Pro style) needs Flutter implementation
 - Current app has: 4-way swipe, annotation canvas, role-based views, FVI scoring
 - Target: spatial document intelligence for tax lien discovery
+- **v2.0**: Updated with 90+ field data schema from vendor flows (ETL pipeline analysis)
+- Field corrections: use `redemption_probability` (not foreclosureProbability), `risk_score`, `expected_roi`, `payback_months`
+- Added: exemption flags (homestead, veteran, senior, disability), enrichment data (Zillow, WalkScore, school ratings, flood zones)
+- Extended dimensions: 7 MVP + 5 post-MVP (prior years, exemptions, owner tenure, payback, tax year)
 
 ## Domain Adaptation Notes
 

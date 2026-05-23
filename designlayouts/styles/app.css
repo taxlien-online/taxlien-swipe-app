@@ -1,0 +1,258 @@
+/* Tax Lien — app-specific extensions to VPN Pro tokens */
+
+:root {
+  /* Stage palette (extends semantic) */
+  --stage-pre:    #FFB020;   /* warning */
+  --stage-listed: #005BEA;   /* brand-blue */
+  --stage-otc:    #00C6FB;   /* brand-cyan */
+  --stage-sold:   #B6B6B6;   /* fg-2 */
+
+  /* Risk gradient */
+  --risk-low:    #1FB67A;
+  --risk-mid:    #FFB020;
+  --risk-high:   #E5484D;
+
+  /* Xray insight tints */
+  --xray-warn:   #E5484D;
+  --xray-opp:    #1FB67A;
+  --xray-eth:    #7B5BEA;
+  --xray-info:   #005BEA;
+
+  --pad: 30px;
+}
+
+* { box-sizing: border-box; }
+
+/* Phone shell content: starts below status bar, ends above home indicator */
+.phone-content {
+  position: absolute;
+  inset: 54px 0 34px 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+/* Top bar */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px var(--pad) 14px;
+  background: var(--bg);
+}
+.topbar__title {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--fg-1);
+}
+.topbar__sub {
+  font-size: 13px;
+  color: var(--fg-2);
+  margin-top: 2px;
+}
+.topbar__icons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--fg-1);
+  border: 0;
+  cursor: pointer;
+}
+
+/* Bottom nav, frosted */
+.tabbar {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 58px;
+  background: rgba(248,249,250,0.78);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 6px 12px 0;
+}
+.tabbar__btn {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px;
+  color: var(--fg-2);
+  font-size: 11px;
+  font-weight: 500;
+}
+.tabbar__btn.is-active { color: var(--brand-blue); }
+.tabbar__btn svg { width: 22px; height: 22px; }
+
+/* Galaxy canvas */
+.galaxy {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  margin: 0 16px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #F1F4F8 0%, #F8F9FA 60%);
+  box-shadow: var(--shadow-card);
+}
+.galaxy::before,
+.galaxy::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+.galaxy::before {
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(48,63,73,0.07) 1px, transparent 1.5px);
+  background-size: 24px 24px;
+  background-position: 12px 12px;
+  mask: linear-gradient(180deg, #000, transparent);
+  opacity: 0.55;
+}
+
+.dot {
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform .25s ease;
+}
+.dot--ring {
+  border: 2px solid currentColor;
+  background: rgba(255,255,255,0.6);
+}
+.dot__halo {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  opacity: 0.35;
+}
+
+/* Stat tile (card with stacked icon + value + label) */
+.stile {
+  flex: 1;
+  background: var(--surface);
+  border-radius: 10px;
+  box-shadow: var(--shadow-card);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.stile__label {
+  font-size: 12px;
+  color: var(--fg-2);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+.stile__value {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--fg-1);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.stile__delta {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Pill / badge */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(48,63,73,0.06);
+  color: var(--fg-1);
+  white-space: nowrap;
+}
+.badge--hot { background: rgba(229,72,77,0.10); color: var(--danger); }
+.badge--good { background: rgba(31,182,122,0.12); color: var(--success); }
+.badge--info { background: rgba(0,91,234,0.10); color: var(--brand-blue); }
+.badge--warn { background: rgba(255,176,32,0.15); color: #B07000; }
+.badge--purple { background: rgba(123,91,234,0.13); color: var(--xray-eth); }
+.badge--cyan { background: rgba(0,198,251,0.13); color: #007AA8; }
+.badge--neutral { background: rgba(48,63,73,0.07); color: var(--fg-1); }
+
+/* CTA */
+.cta {
+  background: var(--brand-gradient);
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  border: 0;
+  border-radius: 12px;
+  padding: 14px 18px;
+  box-shadow: 0 8px 24px rgba(0,91,234,0.22);
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+}
+.cta--ghost {
+  background: var(--surface);
+  color: var(--fg-1);
+  box-shadow: var(--shadow-card);
+}
+
+/* HUD pills inside galaxy */
+.hud {
+  position: absolute;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 10px 6px 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.86);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-card);
+  font-size: 13px;
+  color: var(--fg-1);
+  font-weight: 500;
+}
+.hud__dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+
+/* Section labels above artboards */
+.dc-tag {
+  font-size: 11px;
+  color: var(--fg-2);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+/* Floating panel (selection summary etc) */
+.floatpanel {
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: 0 14px 40px rgba(20,35,50,0.12), var(--shadow-card);
+  padding: 14px;
+}
+
+/* Tap target tiny dot for Galaxy */
+.gdot {
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.divider {
+  height: 1px;
+  background: var(--line);
+  border: 0;
+  margin: 12px 0;
+}

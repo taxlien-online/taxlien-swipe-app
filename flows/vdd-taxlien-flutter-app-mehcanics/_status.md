@@ -65,10 +65,23 @@ From user's 25 mechanics, prioritizing for MVP:
 4. X-Ray Mode (highlight issues/opportunities)
 5. AI Copilot (voice + gesture property search)
 
+## Extended Mechanics (from designlayouts)
+
+Added 2026-05-24 from `designlayouts/screens/mechanics-phone.jsx`:
+- See `02-visual-extended.md` for 9 additional mechanics:
+  1. Layered Card (document stack)
+  2. Orbit Favorites (radial triage)
+  3. Magnetic Groups (relation clustering)
+  4. AI Loupe (field magnifier)
+  5. Command Palette (power-user access)
+  6. Voice + Gesture (combined input)
+  7. Map Layers (geographic overlay)
+  8. Tax Radar (portfolio hub)
+  9. Tax Graph (knowledge graph)
+
 ## Next Actions
 
-1. Complete requirements document with user story mapping
-2. Create ASCII visual mockups for each core mechanic
-3. Get user approval on requirements
-4. Get user approval on visuals
-5. Proceed to specifications phase
+1. Review extended mechanics in 02-visual-extended.md
+2. Get user approval on extended visuals
+3. Update specifications to include new mechanics
+4. Update plan to include new mechanics implementation
